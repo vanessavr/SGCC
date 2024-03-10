@@ -1,3 +1,6 @@
+![260shots_so](https://github.com/vanessavr/SGCC/assets/110788192/7ca75409-3517-40cd-84cc-f283728357a0)
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
