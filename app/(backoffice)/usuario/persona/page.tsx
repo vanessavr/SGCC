@@ -1,11 +1,11 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
-import { Button } from '@/components/ui/button'
 import ViewIcon from '../../components/svg/ViewIcon'
 import EditIcon from '../../components/svg/EditIcon'
 import DeleteIcon from '../../components/svg/DeleteIcon'
 import PlusIcon from '../../components/svg/PlusIcon'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Link from 'next/link'
 
 export default function Persona() {
     return (
@@ -15,10 +15,10 @@ export default function Persona() {
             </header>
 
             <div className="my-6">
-                <Button className="rounded-full pr-8">
-                    <PlusIcon />
-                    <span className="ml-2">Registrar</span>
-                </Button>
+                <Link href="/usuario/persona/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                    <PlusIcon className="mr-2 inline-block" />
+                    Registrar
+                </Link>
             </div>
 
             <Table>

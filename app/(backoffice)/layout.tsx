@@ -3,6 +3,12 @@ import './backoffice.css'
 import HomeIcon from './components/svg/HomeIcon'
 import UserIcon from './components/svg/UserIcon'
 import CalendarIcon from './components/svg/CalendarIcon'
+import UsersIcon from './components/svg/UsersIcon'
+import DocumentIcon from './components/svg/DocumentIcon'
+import EmpresaIcon from './components/svg/EmpresaIcon'
+import AmbienteIcon from './components/svg/AmbienteIcon'
+import LoadIcon from './components/svg/LoadIcon'
+import Link from 'next/link'
 
 export default function BackofficeLayout({
     children, // will be a page or nested layout
@@ -21,29 +27,68 @@ export default function BackofficeLayout({
                 </div>
                 <div className="flex flex-col items-start justify-center">
                     <div>Bienvenido(a) JORGE ARIAS OSORIO</div>
-                    <button className="mt-4 ">Cerrar sesión</button>
+                    <Link href="/iniciar-sesion" className='mt-4'>Cerrar sesión</Link>
+                    {/* <button className="mt-4 ">Cerrar sesión</button> */}
                 </div>
             </div>
             <div className="sidebar bg-sena-600 rounded-md ml-2">
                 <nav className="p-6">
                     <ul className="flex flex-col space-y-7 text-sm">
                         <li>
-                            <a href="#" className="flex items-center text-white">
+                            <Link href="/panel-principal" className="flex items-center text-white">
                                 <HomeIcon className=" mr-2 size-6" /> Inicio
-                            </a>
+                            </Link>
                         </li>
 
                         <li>
-                            <a href="#" className="flex items-center text-white">
+                            <Link href="/perfil" className="flex items-center text-white">
                                 <UserIcon className="mr-2 size-6" /> Perfil
-                            </a>
+                            </Link>
                         </li>
 
                         <li>
-                            <a href="#" className="flex items-center text-white">
+                            <Link href="/usuario" className="flex items-center text-white">
+                                <UsersIcon className="mr-2 size-6" />
+                                Usuarios
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link href="/curso-asignado" className="flex items-center text-white">
                                 <CalendarIcon className="mr-2 size-6" />
                                 Cursos asignados
-                            </a>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link href="/curso-complementario" className="flex items-center text-white">
+                                <DocumentIcon className="mr-2 size-6" />
+                                Cursos complementarios
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/solicitud" className="flex items-center text-white">
+                                <CalendarIcon className="mr-2 size-6" />
+                                Solicitudes
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/empresa" className="flex items-center text-white">
+                                <EmpresaIcon className="mr-2 size-6" />
+                                Empresas
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/ambiente" className="flex items-center text-white">
+                                <AmbienteIcon className="mr-2 size-6" />
+                                Ambientes
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="#" className="flex items-center text-white">
+                                <LoadIcon className="mr-2 size-6" />
+                                Carga de archivos
+                            </Link>
                         </li>
                     </ul>
                 </nav>

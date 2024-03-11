@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button'
 import PlusIcon from '../components/svg/PlusIcon'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import CheckIcon from '../components/svg/CheckIcon'
-import EditEstadoIcon from '../components/EditEstadoIcon'
+import EditEstadoIcon from '../components/svg/EditEstadoIcon'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Link from 'next/link'
 
 export default function Solicitud() {
     return (
@@ -19,10 +20,10 @@ export default function Solicitud() {
             </header>
 
             <div className="my-6">
-                <Button className="rounded-full pr-8">
-                    <PlusIcon />
-                    <span className="ml-2">Registrar</span>
-                </Button>
+                <Link href="/solicitud/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                    <PlusIcon className="mr-2 inline-block" />
+                    Registrar
+                </Link>
             </div>
 
             <Table>

@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import FormularioPersona from './_form-persona'
 import FormularioEmpresa from './_form-empresa'
+import Link from 'next/link'
 
 export default function InicioSesion() {
     return (
@@ -25,7 +26,10 @@ export default function InicioSesion() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button className="rounded-full px-6">Iniciar sesión</Button>
+                    {/* <Button className="rounded-full px-6">Iniciar sesión</Button> */}
+                    <Link href="/panel-principal" className="rounded-full px-6 py-2 text-white bg-sena-800">
+                        Iniciar sesión
+                    </Link>
                     <Dialog>
                         <DialogTrigger className="rounded-full px-6 py-2 text-white bg-sena-800">Crear cuenta</DialogTrigger>
 

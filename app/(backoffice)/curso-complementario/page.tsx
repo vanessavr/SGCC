@@ -2,9 +2,10 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import DeleteIcon from '../components/svg/DeleteIcon'
 import ViewIcon from '../components/svg/ViewIcon'
 import EditIcon from '../components/svg/EditIcon'
-import { Button } from '@/components/ui/button'
 import PlusIcon from '../components/svg/PlusIcon'
 import CalendarIcon from '../components/svg/CalendarIcon'
+import Link from 'next/link'
+
 export default function CursoComplementario() {
     return (
         <div>
@@ -13,10 +14,10 @@ export default function CursoComplementario() {
             </header>
 
             <div className="my-6">
-                <Button className="rounded-full pr-8">
-                    <PlusIcon />
-                    <span className="ml-2">Registrar</span>
-                </Button>
+                <Link href="/curso-complementario/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                    <PlusIcon className="mr-2 inline-block" />
+                    Registrar
+                </Link>
             </div>
 
             <Table>
