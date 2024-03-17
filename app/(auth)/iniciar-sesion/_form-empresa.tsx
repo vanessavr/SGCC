@@ -8,19 +8,33 @@ import { Button } from '@/components/ui/button'
 export default function FormularioEmpresa() {
     return (
         <form action="" className="p-8 grid grid-cols-2 space-y-4">
-            <Label htmlFor="">Nombre</Label>
+            <Label htmlFor="" className="self-center">
+                Nombre
+            </Label>
             <Input type="text" placeholder="Nombre de la empresa" className="!mt-0 rounded-full" />
-            <Label htmlFor="">NIT</Label>
+            <Label htmlFor="" className="self-center">
+                NIT
+            </Label>
             <Input type="number" placeholder="NIT (Sin dígito de verificación)" className="rounded-full" />
-            <Label htmlFor="">Representante legal</Label>
+            <Label htmlFor="" className="self-center">
+                Representante legal
+            </Label>
             <Input type="number" placeholder="Número de identificación" className="rounded-full" />
-            <Label htmlFor="">Correo electrónico</Label>
+            <Label htmlFor="" className="self-center">
+                Correo electrónico
+            </Label>
             <Input type="email" placeholder="Correo electrónico" className="rounded-full" />
-            <Label htmlFor="">Celular</Label>
+            <Label htmlFor="" className="self-center">
+                Celular
+            </Label>
             <Input type="number" placeholder="Celular" className="rounded-full" />
-            <Label htmlFor="">Dirección</Label>
+            <Label htmlFor="" className="self-center">
+                Dirección
+            </Label>
             <Input type="text" placeholder="Dirección" className="rounded-full" />
-            <Label htmlFor="">Actividad económica</Label>
+            <Label htmlFor="" className="self-center">
+                Actividad económica
+            </Label>
             <Select>
                 <SelectTrigger>
                     <SelectValue placeholder="Theme" />
@@ -32,7 +46,9 @@ export default function FormularioEmpresa() {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Departamento</Label>
+            <Label htmlFor="" className="self-center">
+                Departamento
+            </Label>
             <Select>
                 <SelectTrigger>
                     <SelectValue placeholder="Theme" />
@@ -43,7 +59,9 @@ export default function FormularioEmpresa() {
                     <SelectItem value="system">System</SelectItem>
                 </SelectContent>
             </Select>
-            <Label htmlFor="">Ciudad</Label>
+            <Label htmlFor="" className="self-center">
+                Ciudad
+            </Label>
             <Select>
                 <SelectTrigger>
                     <SelectValue placeholder="Theme" />

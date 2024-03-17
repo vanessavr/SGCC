@@ -13,7 +13,7 @@ export default function Ambiente() {
             </header>
 
             <div className="my-6">
-                <Link href="/" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                <Link href="/ambiente/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
                     <PlusIcon className="mr-2 inline-block" />
                     Registrar
                 </Link>
