@@ -22,7 +22,7 @@ export function DatePicker({ placeholder, name }: Props) {
             {date && <input type="hidden" name={name} value={date.toISOString()} />}
             <Popover>
                 <PopoverTrigger asChild>
-                    <Button variant={'outline'} className={cn('justify-start text-left font-normal rounded-full border-2', !date && 'text-muted-foreground')}>
+                    <Button variant={'outline'} className={cn('w-full justify-start text-left font-normal rounded-full border-2', !date && 'text-muted-foreground')}>
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {date ? format(date, 'PPP') : <span>{placeholder}</span>}
                     </Button>

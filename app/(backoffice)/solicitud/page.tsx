@@ -102,39 +102,41 @@ export default function Solicitud() {
                             </TableCell>
                             <TableCell>{solicitud.fechaSolicitud}</TableCell>
 
-                            <TableCell className="flex gap-2">
-                                <ViewIcon />
-                                <EditIcon />
+                            <TableCell>
+                                <div className="flex gap-2">
+                                    <ViewIcon />
+                                    <EditIcon />
 
-                                <Dialog>
-                                    <DialogTrigger>
-                                        <DeleteIcon />
-                                    </DialogTrigger>
-                                    <DialogContent>
-                                        <p className="flex text-center justify-center pt-10">¿Desea eliminar la solicitud?</p>
+                                    <Dialog>
+                                        <DialogTrigger>
+                                            <DeleteIcon />
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <p className="flex text-center justify-center pt-10">¿Desea eliminar la solicitud?</p>
 
-                                        <DialogFooter className="flex items-center justify-center gap-4 mb-10">
-                                            <DialogClose asChild>
-                                                <Button className="rounded-full text-center">Cancelar</Button>
-                                            </DialogClose>
+                                            <DialogFooter className="flex items-center justify-center gap-4 mb-10">
+                                                <DialogClose asChild>
+                                                    <Button className="rounded-full text-center">Cancelar</Button>
+                                                </DialogClose>
 
-                                            <Dialog>
-                                                <DialogTrigger>
-                                                    <Button className="rounded-full items-center text-center">Confirmar</Button>
-                                                </DialogTrigger>
-                                                <DialogContent className="flex items-center justify-center flex-col py-8">
-                                                    <CheckIcon className="text-sena-700" />
-                                                    <p className="flex items-center justify-around">¡Se ha eliminado correctamente el usuario!</p>
-                                                    <DialogFooter>
-                                                        <DialogClose asChild>
-                                                            <Button className="rounded-full text-center">Entendido</Button>
-                                                        </DialogClose>
-                                                    </DialogFooter>
-                                                </DialogContent>
-                                            </Dialog>
-                                        </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
+                                                <Dialog>
+                                                    <DialogTrigger>
+                                                        <Button className="rounded-full items-center text-center">Confirmar</Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent className="flex items-center justify-center flex-col py-8">
+                                                        <CheckIcon className="text-sena-700" />
+                                                        <p className="flex items-center justify-around">¡Se ha eliminado correctamente el usuario!</p>
+                                                        <DialogFooter>
+                                                            <DialogClose asChild>
+                                                                <Button className="rounded-full text-center">Entendido</Button>
+                                                            </DialogClose>
+                                                        </DialogFooter>
+                                                    </DialogContent>
+                                                </Dialog>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
                             </TableCell>
                         </TableRow>
                     ))}

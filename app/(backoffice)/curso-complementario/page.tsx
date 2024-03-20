@@ -55,10 +55,12 @@ export default function CursoComplementario() {
                             <TableCell>{cursoComplementario.fichaFormacion}</TableCell>
                             <TableCell>{cursoComplementario.instructorId}</TableCell>
                             <TableCell>{cursoComplementario.ambienteId}</TableCell>
-                            <TableCell className="flex gap-2">
-                                <ViewIcon />
-                                <EditIcon />
-                                <DeleteIcon />
+                            <TableCell>
+                                <div className="flex gap-2">
+                                    <ViewIcon />
+                                    <EditIcon />
+                                    <DeleteIcon />
+                                </div>
                             </TableCell>
                         </TableRow>
                     ))}

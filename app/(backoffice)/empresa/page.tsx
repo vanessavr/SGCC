@@ -50,10 +50,12 @@ export default function Empresa() {
                             <TableCell>{empresa.razonSocial}</TableCell>
                             <TableCell>{empresa.celular}</TableCell>
                             <TableCell>{empresa.correoElectronico}</TableCell>
-                            <TableCell className="flex gap-2">
-                                <ViewIcon />
-                                <EditIcon />
-                                <DeleteIcon />
+                            <TableCell>
+                                <div className="flex gap-2">
+                                    <ViewIcon />
+                                    <EditIcon />
+                                    <DeleteIcon />
+                                </div>
                             </TableCell>
                         </TableRow>
                     ))}

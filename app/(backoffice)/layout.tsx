@@ -27,7 +27,9 @@ export default function BackofficeLayout({
                 </div>
                 <div className="flex flex-col items-start justify-center">
                     <div>Bienvenido(a) JORGE ARIAS OSORIO</div>
-                    <Link href="/iniciar-sesion" className='mt-4'>Cerrar sesión</Link>
+                    <Link href="/iniciar-sesion" className="mt-4">
+                        Cerrar sesión
+                    </Link>
                     {/* <button className="mt-4 ">Cerrar sesión</button> */}
                 </div>
             </div>
@@ -93,7 +95,7 @@ export default function BackofficeLayout({
                     </ul>
                 </nav>
             </div>
-            <div className="body">{children}</div>
+            <div className="body mr-2">{children}</div>
             <div className="footer bg-sena-600 p-2 flex items-center justify-center">
                 <p className="text-white text-center w-8/12 mx-auto text-xs">
                     .:: Servicio Nacional de Aprendizaje SENA – Dirección General Calle 57 No. 8-69, Bogotá D.C - PBX (57 1) 5461500 <br />

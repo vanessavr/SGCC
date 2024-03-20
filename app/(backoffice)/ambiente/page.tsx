@@ -51,10 +51,12 @@ export default function Ambiente() {
                             <TableCell>{ambiente.nombre}</TableCell>
                             <TableCell>{ambiente.capacidad}</TableCell>
                             <TableCell>{ambiente.centroFormacion}</TableCell>
-                            <TableCell className="flex gap-2">
-                                <ViewIcon />
-                                <EditIcon />
-                                <DeleteIcon />
+                            <TableCell>
+                                <div className="flex gap-2">
+                                    <ViewIcon />
+                                    <EditIcon />
+                                    <DeleteIcon />
+                                </div>
                             </TableCell>
                         </TableRow>
                     ))}

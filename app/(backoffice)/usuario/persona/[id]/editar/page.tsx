@@ -20,7 +20,7 @@ export default function EditarPersona({ params }: { params: { id: string } }) {
                     <Button className="rounded-full">Cambiar contraseña</Button>
                 </div>
             </div>
-            <div className="mt-10  bg-gray-300 p-4 grid grid-cols-2 gap-6 items-center">
+            <div className="mt-10 bg-gray-300 rounded-md p-4 grid grid-cols-2 gap-6 items-center">
                 <div className="flex items-center justify-center">
                     <div className="flex flex-col items-center justify-center">
                         <Avatar className="size-60 mb-5">
@@ -51,7 +51,7 @@ export default function EditarPersona({ params }: { params: { id: string } }) {
                         <Label htmlFor="">Número de identificación</Label>
                         <Input type="number" placeholder="Número de identificación" className="rounded-full" />
                         <Label htmlFor="">Fecha de nacimiento</Label>
-                        <DatePicker />
+                        {/* <DatePicker /> */}
                         <Label htmlFor="">Género</Label>
                         <Input type="text" placeholder="Género" className="rounded-full" />
                         <Label htmlFor="">Correo electrónico</Label>

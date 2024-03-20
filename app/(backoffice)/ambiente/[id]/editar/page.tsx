@@ -10,7 +10,7 @@ export default function EditarAmbiente({ params }: { params: { id: string } }) {
             <div className="flex flex-col space-y-2 mt-6 ml-6">
                 <h1 className="text-3xl uppercase font-bold">MOTOS</h1>
             </div>
-            <div className="mt-10  bg-gray-300 p-4 grid grid-cols-2 gap-6 items-center">
+            <div className="mt-10 bg-gray-300 rounded-md p-4 grid grid-cols-2 gap-6 items-center">
                 <div className="ml-64 w-full">
                     <FormularioAmbiente />
                 </div>

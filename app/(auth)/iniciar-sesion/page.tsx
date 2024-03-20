@@ -5,7 +5,7 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import FormularioPersona from './_form-persona'
+import FormularioPersona from '@/app/(backoffice)/usuario/persona/_form'
 import FormularioEmpresa from '@/app/(backoffice)/empresa/_form'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -58,7 +58,11 @@ export default function InicioSesion() {
                                         <DialogHeader>
                                             <DialogTitle className="text-center text-sm text-white"> {selectedOption === 'persona' ? 'Registrar persona' : 'Registrar empresa'}</DialogTitle>
                                         </DialogHeader>
-                                        {selectedOption === 'persona' ? <FormularioPersona /> : <FormularioEmpresa className="p-8 grid grid-cols-2 space-y-4" />}
+                                        {selectedOption === 'persona' ? (
+                                            <FormularioPersona className="p-8 grid grid-cols-2 space-y-4" />
+                                        ) : (
+                                            <FormularioEmpresa className="p-8 grid grid-cols-2 space-y-4" />
+                                        )}
                                     </DialogContent>
                                 </Dialog>
                             </div>

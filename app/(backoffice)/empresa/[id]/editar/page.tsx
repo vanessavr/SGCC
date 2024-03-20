@@ -21,7 +21,7 @@ export default function EditarEmpresa({ params }: { params: { id: string } }) {
                     <Button className="rounded-full">Cambiar contraseña</Button>
                 </div>
             </div>
-            <div className="mt-10 bg-gray-300 py-16 grid grid-cols-2 gap-6 items-center">
+            <div className="mt-10 bg-gray-300 rounded-md py-16 grid grid-cols-2 gap-6 items-center">
                 <div className="ml-64 w-full">
                     <FormularioPerfilEmpresa />
                 </div>

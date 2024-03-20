@@ -41,7 +41,7 @@ export default function Perfil() {
                     </DialogContent>
                 </Dialog>
             </div>
-            <div className="mt-10  bg-gray-300 p-4 grid grid-cols-2 gap-6 items-center">
+            <div className="mt-10 bg-gray-300 rounded-md p-4 grid grid-cols-2 gap-6 items-center">
                 <div className="flex items-center justify-center">
                     <div className="flex flex-col items-center justify-center">
                         <Avatar className="size-60 mb-5">
@@ -72,7 +72,7 @@ export default function Perfil() {
                 <div>
                     <form action="" className="flex flex-col space-y-3">
                         <Label htmlFor="">Fecha de nacimiento</Label>
-                        <DatePicker />
+                        {/* <DatePicker /> */}
                         <Label htmlFor="">Correo electrónico</Label>
                         <Input type="email" placeholder="Correo electrónico" className="rounded-full" />
                         <Label htmlFor="">Celular</Label>

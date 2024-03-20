@@ -16,7 +16,7 @@ export default function EditarSolicitud({ params }: { params: { id: string } }) 
                 <h1 className="text-3xl uppercase font-bold">VITALPLATES</h1>
                 <h5 className="text-2xl">NIT - 100.3040</h5>
             </div>
-            <div className="mt-10  bg-gray-300 py-16 grid grid-cols-2 gap-6 items-center">
+            <div className="mt-10 bg-gray-300 rounded-md py-16 grid grid-cols-2 gap-6 items-center">
                 <div className="ml-64 w-full">
                     <FormularioSolicitud />
                 </div>

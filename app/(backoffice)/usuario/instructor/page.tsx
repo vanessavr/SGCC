@@ -44,10 +44,12 @@ export default function Instructor() {
                         </TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
+                        <TableCell>
+                            <div className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </div>
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -61,10 +63,12 @@ export default function Instructor() {
                         </TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
+                        <TableCell>
+                            <div className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </div>
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -78,10 +82,12 @@ export default function Instructor() {
                         </TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
+                        <TableCell>
+                            <div className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </div>
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -95,10 +101,12 @@ export default function Instructor() {
                         </TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
+                        <TableCell>
+                            <div className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </div>
                         </TableCell>
                     </TableRow>
                 </TableBody>
