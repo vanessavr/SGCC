@@ -1,11 +1,25 @@
+'use client'
+
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import DeleteIcon from '../components/svg/DeleteIcon'
 import ViewIcon from '../components/svg/ViewIcon'
 import EditIcon from '../components/svg/EditIcon'
 import PlusIcon from '../components/svg/PlusIcon'
 import Link from 'next/link'
+import useSWR from 'swr'
+
+interface Empresa {
+    id: string
+    razonSocial: string
+    celular: string
+    correoElectronico: string
+}
 
 export default function Empresa() {
+    const { data: empresas, error } = useSWR<Empresa[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`, fetcher)
+
+    if (error) return <div>Error al cargar los datos</div>
+    if (!empresas) return <div>Cargando...</div>
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -30,52 +44,29 @@ export default function Empresa() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
+                    {empresas.map((empresa, index) => (
+                        <TableRow key={empresa.id}>
+                            <TableCell className="font-medium">{index + 1}</TableCell>
+                            <TableCell>{empresa.razonSocial}</TableCell>
+                            <TableCell>{empresa.celular}</TableCell>
+                            <TableCell>{empresa.correoElectronico}</TableCell>
+                            <TableCell className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>
     )
+}
+
+const fetcher = async (url: string) => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error('Error al obtener los datos')
+    }
+    return response.json()
 }

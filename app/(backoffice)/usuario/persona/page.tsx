@@ -1,3 +1,5 @@
+'use client'
+
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 import ViewIcon from '../../components/svg/ViewIcon'
@@ -6,8 +8,21 @@ import DeleteIcon from '../../components/svg/DeleteIcon'
 import PlusIcon from '../../components/svg/PlusIcon'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
+import useSWR from 'swr'
+
+interface Persona {
+    id: string
+    nombres: string
+    apellidos: string
+    celular: string
+    correoElectronico: string
+}
 
 export default function Persona() {
+    const { data: personas, error } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
+
+    if (error) return <div>Error al cargar los datos</div>
+    if (!personas) return <div>Cargando...</div>
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -32,76 +47,37 @@ export default function Persona() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell className="flex items-center gap-3">
-                            <Avatar className="size-10 mb-5">
-                                <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                            Paid
-                        </TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell className="flex items-center gap-3">
-                            <Avatar className="size-10 mb-5">
-                                <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                            Paid
-                        </TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell className="flex items-center gap-3">
-                            <Avatar className="size-10 mb-5">
-                                <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                            Paid
-                        </TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell className="flex items-center gap-3">
-                            <Avatar className="size-10 mb-5">
-                                <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                            Paid
-                        </TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
+                    {personas.map((persona, index) => (
+                        <TableRow key={persona.id}>
+                            <TableCell className="font-medium">{index + 1}</TableCell>
+                            <TableCell>
+                                <div className="flex items-center">
+                                    <Avatar className="size-10 mr-2">
+                                        <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                    {persona.nombres + ' ' + persona.apellidos}
+                                </div>
+                            </TableCell>
+                            <TableCell>{persona.celular}</TableCell>
+                            <TableCell>{persona.correoElectronico}</TableCell>
+                            <TableCell className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>
     )
+}
+
+const fetcher = async (url: string) => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error('Error al obtener los datos')
+    }
+    return response.json()
 }

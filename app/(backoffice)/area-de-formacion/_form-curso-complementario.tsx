@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export default function FormularioCursoComplementario() {
     return (
@@ -26,18 +27,19 @@ export default function FormularioCursoComplementario() {
                 Duración:
             </Label>
             <span>[Duración del programa]</span>
-            <Label htmlFor="" className="font-bold">
-                Fecha inicio:
-            </Label>
-            <span>[Fecha de inicio]</span>
-            <Label htmlFor="" className="font-bold">
-                Fecha fin:
-            </Label>
-            <span>[Fecha de finalización]</span>
-            <Label htmlFor="" className="font-bold">
-                Fecha cierre:
-            </Label>
-            <span>[Fecha de cierre]</span>
+
+            <Label htmlFor="">Jornada</Label>
+            <Select name="jornada">
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccione una jornada" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="mañana">Mañana</SelectItem>
+                    <SelectItem value="tarde">Tarde</SelectItem>
+                    <SelectItem value="noche">Noche</SelectItem>
+                    <SelectItem value="mixta">Mixta</SelectItem>
+                </SelectContent>
+            </Select>
             <Label htmlFor="cuposSolicitados" className="font-bold self-center">
                 Cupos solicitados:
             </Label>

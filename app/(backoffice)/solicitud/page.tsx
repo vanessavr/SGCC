@@ -1,3 +1,5 @@
+'use client'
+
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import DeleteIcon from '../components/svg/DeleteIcon'
 import ViewIcon from '../components/svg/ViewIcon'
@@ -7,12 +9,23 @@ import PlusIcon from '../components/svg/PlusIcon'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import CheckIcon from '../components/svg/CheckIcon'
 import EditEstadoIcon from '../components/svg/EditEstadoIcon'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Link from 'next/link'
+import useSWR from 'swr'
+
+interface Solicitud {
+    id: string
+    usuarioId: string
+    estadoSolicitud: string
+    fechaSolicitud: string
+}
 
 export default function Solicitud() {
+    const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
+
+    if (error) return <div>Error al cargar los datos</div>
+    if (!solicitudes) return <div>Cargando...</div>
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -30,143 +43,111 @@ export default function Solicitud() {
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[100px]">#</TableHead>
-                        <TableHead>Nombre</TableHead>
-                        <TableHead>Empresa</TableHead>
-                        <TableHead>Correo electrónico</TableHead>
+                        <TableHead>Usuario / Empresa</TableHead>
                         <TableHead>Estado de solicitud</TableHead>
                         <TableHead>Fecha de la solicitud</TableHead>
                         <TableHead>Acción</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>
-                            <Dialog>
-                                <DialogTrigger className="flex mt-4 gap-4">
-                                    CERRADA
-                                    <EditEstadoIcon />
-                                </DialogTrigger>
+                    {solicitudes.map((solicitud, index) => (
+                        <TableRow key={solicitud.id}>
+                            <TableCell className="font-medium">{index + 1}</TableCell>
+                            <TableCell>{solicitud.usuarioId}</TableCell>
+                            <TableCell>
+                                <Dialog>
+                                    <DialogTrigger className="flex mt-4 gap-4">
+                                        {solicitud.estadoSolicitud}
+                                        <EditEstadoIcon />
+                                    </DialogTrigger>
 
-                                <DialogContent className="pb-4">
-                                    <DialogHeader>
-                                        <DialogTitle className="text-center text-md text-white">Estado de solicitud</DialogTitle>
-                                    </DialogHeader>
+                                    <DialogContent className="pb-4">
+                                        <DialogHeader>
+                                            <DialogTitle className="text-center text-md text-white">Estado de solicitud</DialogTitle>
+                                        </DialogHeader>
 
-                                    <form className="px-8 grid grid-cols-2 space-y-6 pb-8">
-                                        <Label htmlFor="" className="font-bold self-center">
-                                            Estado de solicitud:
-                                        </Label>
-                                        <Select>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Theme" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="light">Light</SelectItem>
-                                                <SelectItem value="dark">Dark</SelectItem>
-                                                <SelectItem value="system">System</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <Label htmlFor="" className="font-bold self-center">
-                                            Motivo de estado:
-                                        </Label>
-                                        <Select>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Theme" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="light">Light</SelectItem>
-                                                <SelectItem value="dark">Dark</SelectItem>
-                                                <SelectItem value="system">System</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <div className="col-span-2 ">
-                                            <Button className="rounded-full font-bold py-2 px-4 w-full mt-4">Guardar cambios</Button>
-                                        </div>
-                                    </form>
-                                </DialogContent>
-                            </Dialog>
-                        </TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
+                                        <form className="px-8 grid grid-cols-2 space-y-6 pb-8">
+                                            <Label htmlFor="" className="font-bold self-center">
+                                                Estado de solicitud:
+                                            </Label>
+                                            <Select>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Theme" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="light">Light</SelectItem>
+                                                    <SelectItem value="dark">Dark</SelectItem>
+                                                    <SelectItem value="system">System</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <Label htmlFor="" className="font-bold self-center">
+                                                Motivo de estado:
+                                            </Label>
+                                            <Select>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Theme" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="light">Light</SelectItem>
+                                                    <SelectItem value="dark">Dark</SelectItem>
+                                                    <SelectItem value="system">System</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <div className="col-span-2 ">
+                                                <Button className="rounded-full font-bold py-2 px-4 w-full mt-4">Guardar cambios</Button>
+                                            </div>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
+                            </TableCell>
+                            <TableCell>{solicitud.fechaSolicitud}</TableCell>
 
-                            <Dialog>
-                                <DialogTrigger>
-                                    <DeleteIcon />
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <p className="flex text-center justify-center pt-10">¿Desea eliminar la solicitud?</p>
+                            <TableCell className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
 
-                                    <DialogFooter className="flex items-center justify-center gap-4 mb-10">
-                                        <DialogClose asChild>
-                                            <Button className="rounded-full text-center">Cancelar</Button>
-                                        </DialogClose>
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <DeleteIcon />
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <p className="flex text-center justify-center pt-10">¿Desea eliminar la solicitud?</p>
 
-                                        <Dialog>
-                                            <DialogTrigger>
-                                                <Button className="rounded-full items-center text-center">Confirmar</Button>
-                                            </DialogTrigger>
-                                            <DialogContent className="flex items-center justify-center flex-col py-8">
-                                                <CheckIcon className="text-sena-700" />
-                                                <p className="flex items-center justify-around">¡Se ha eliminado correctamente el usuario!</p>
-                                                <DialogFooter>
-                                                    <DialogClose asChild>
-                                                        <Button className="rounded-full text-center">Entendido</Button>
-                                                    </DialogClose>
-                                                </DialogFooter>
-                                            </DialogContent>
-                                        </Dialog>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>CERRADA</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
+                                        <DialogFooter className="flex items-center justify-center gap-4 mb-10">
+                                            <DialogClose asChild>
+                                                <Button className="rounded-full text-center">Cancelar</Button>
+                                            </DialogClose>
+
+                                            <Dialog>
+                                                <DialogTrigger>
+                                                    <Button className="rounded-full items-center text-center">Confirmar</Button>
+                                                </DialogTrigger>
+                                                <DialogContent className="flex items-center justify-center flex-col py-8">
+                                                    <CheckIcon className="text-sena-700" />
+                                                    <p className="flex items-center justify-around">¡Se ha eliminado correctamente el usuario!</p>
+                                                    <DialogFooter>
+                                                        <DialogClose asChild>
+                                                            <Button className="rounded-full text-center">Entendido</Button>
+                                                        </DialogClose>
+                                                    </DialogFooter>
+                                                </DialogContent>
+                                            </Dialog>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>
     )
+}
+
+const fetcher = async (url: string) => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error('Error al obtener los datos')
+    }
+    return response.json()
 }

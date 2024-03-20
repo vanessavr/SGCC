@@ -1,70 +1,101 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+'use client'
 
-export default function FormularioPerfilEmpresa() {
-  return (
-      <form action="" className="flex flex-col space-y-3">
-          <Label htmlFor="">Nombre</Label>
-          <Input type="text" placeholder="Nombre" className="rounded-full" />
-          <Label htmlFor="">NIT</Label>
-          <Input type="text" placeholder="NIT" className="rounded-full" />
-          <Label htmlFor="">Representante legal</Label>
-          <Input type="text" placeholder="Representante legal" className="rounded-full" />
-          <Label htmlFor="">Razon Social</Label>
-          <Input type="text" placeholder="Razon social" className="rounded-full" />
-          <Label htmlFor="">Correo electrónico</Label>
-          <Input type="email" placeholder="Correo electrónico" className="rounded-full" />
-          <Label htmlFor="">Celular</Label>
-          <Input type="number" placeholder="Celular" className="rounded-full" />
-          <Label htmlFor="">Dirección</Label>
-          <Input type="text" placeholder="Dirección" className="rounded-full" />
-          <Label htmlFor="">Actividad económica</Label>
-          <Select>
-              <SelectTrigger>
-                  <SelectValue placeholder="Actividad econímica" />
-              </SelectTrigger>
-              <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-          </Select>
-          <Label htmlFor="">Departamento</Label>
-          <Select>
-              <SelectTrigger>
-                  <SelectValue placeholder="Departamento" />
-              </SelectTrigger>
-              <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-          </Select>
-          <Label htmlFor="">Ciudad</Label>
-          <Select>
-              <SelectTrigger>
-                  <SelectValue placeholder="Ciudad" />
-              </SelectTrigger>
-              <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-          </Select>
-          <Label htmlFor="">Rol</Label>
-          <Select>
-              <SelectTrigger>
-                  <SelectValue placeholder="Rol" />
-              </SelectTrigger>
-              <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-          </Select>
-          <Button className="rounded-full w-full">Guardar</Button>
-      </form>
-  )
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+
+interface Props {
+    className?: string
+}
+export default function FormularioEmpresa({ className }: Props) {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        const form = event.target as HTMLFormElement
+        const fields = Object.fromEntries(new FormData(form))
+        console.log(fields) // TODO Eliminar
+
+        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            body: JSON.stringify(fields),
+        })
+    }
+    return (
+        <form onSubmit={handleSubmit} action="" className={className}>
+            <Label htmlFor="" className="self-center">
+                Razón social
+            </Label>
+            <Input name="razonSocial" type="text" placeholder="Nombre de la empresa" className="!mt-0 rounded-full" />
+            <Label htmlFor="" className="self-center">
+                NIT
+            </Label>
+            <Input name="nit" type="number" placeholder="NIT (Sin dígito de verificación)" className="rounded-full" />
+            <Label htmlFor="" className="self-center">
+                Representante legal
+            </Label>
+            <Input name="representanteLegal" type="text" placeholder="Nombre del representante legal" className="rounded-full" />
+            <Label htmlFor="" className="self-center">
+                Correo electrónico
+            </Label>
+            <Input name="correoElectronico" type="email" placeholder="Correo electrónico" className="rounded-full" />
+            <Label htmlFor="" className="self-center">
+                Celular
+            </Label>
+            <Input name="celular" type="number" placeholder="Celular" className="rounded-full" />
+            <Label htmlFor="" className="self-center">
+                Dirección
+            </Label>
+            <Input name="direccion" type="text" placeholder="Dirección" className="rounded-full" />
+            <Label htmlFor="" className="self-center">
+                Actividad económica
+            </Label>
+            <Select name="actividadEconomica">
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccione una actividad" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="0">Light</SelectItem>
+                    <SelectItem value="1">Dark</SelectItem>
+                    <SelectItem value="2">System</SelectItem>
+                </SelectContent>
+            </Select>
+
+            <Label htmlFor="" className="self-center">
+                Departamento
+            </Label>
+            <Select name="departamento">
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccione un departamento" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="0">Light</SelectItem>
+                    <SelectItem value="1">Dark</SelectItem>
+                    <SelectItem value="2">System</SelectItem>
+                </SelectContent>
+            </Select>
+            <Label htmlFor="" className="self-center">
+                Ciudad
+            </Label>
+            <Select name="ciudad">
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccione una ciudad" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="0">Light</SelectItem>
+                    <SelectItem value="1">Dark</SelectItem>
+                    <SelectItem value="2">System</SelectItem>
+                </SelectContent>
+            </Select>
+            <Label htmlFor="" className="self-center">
+                Contraseña
+            </Label>
+            <Input type="password" name="password" placeholder="Contraseña" className="rounded-full" />
+
+            <Button className="rounded-full w-full col-span-2">Registrar</Button>
+        </form>
+    )
 }

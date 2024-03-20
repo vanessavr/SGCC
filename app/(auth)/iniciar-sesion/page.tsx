@@ -1,13 +1,17 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import FormularioPersona from './_form-persona'
-import FormularioEmpresa from './_form-empresa'
+import FormularioEmpresa from '@/app/(backoffice)/empresa/_form'
 import Link from 'next/link'
+import { useState } from 'react'
 
 export default function InicioSesion() {
+    const [selectedOption, setSelectedOption] = useState('empresa')
     return (
         <div className="bg-gray-300 p-8 w-[50vw] rounded-xl">
             <form action="" className="flex flex-col space-y-6">
@@ -33,16 +37,16 @@ export default function InicioSesion() {
                     <Dialog>
                         <DialogTrigger className="rounded-full px-6 py-2 text-white bg-sena-800">Crear cuenta</DialogTrigger>
 
-                        <DialogContent className="pb-10 pt-10  ">
+                        <DialogContent className="pb-10 pt-10">
                             <p className="flex text-center justify-center mb-6">Elige una de las siguientes opciones:</p>
-                            <RadioGroup defaultValue="option-one" className="flex items-center justify-center gap-10">
+                            <RadioGroup defaultValue="empresa" className="flex items-center justify-center gap-10" onValueChange={(value: string) => setSelectedOption(value)}>
                                 <div className="flex items-center space-x-2">
-                                    <Label htmlFor="option-one">Empresa</Label>
-                                    <RadioGroupItem value="option-one" id="option-one" />
+                                    <Label htmlFor="empresa">Empresa</Label>
+                                    <RadioGroupItem value="empresa" id="empresa" />
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <Label htmlFor="option-two">Persona</Label>
-                                    <RadioGroupItem value="option-two" id="option-two" />
+                                    <Label htmlFor="persona">Persona</Label>
+                                    <RadioGroupItem value="persona" id="persona" />
                                 </div>
                             </RadioGroup>
 
@@ -52,9 +56,9 @@ export default function InicioSesion() {
 
                                     <DialogContent>
                                         <DialogHeader>
-                                            <DialogTitle className="text-center text-sm text-white">Registrar persona</DialogTitle>
+                                            <DialogTitle className="text-center text-sm text-white"> {selectedOption === 'persona' ? 'Registrar persona' : 'Registrar empresa'}</DialogTitle>
                                         </DialogHeader>
-                                        <FormularioPersona />
+                                        {selectedOption === 'persona' ? <FormularioPersona /> : <FormularioEmpresa className="p-8 grid grid-cols-2 space-y-4" />}
                                     </DialogContent>
                                 </Dialog>
                             </div>

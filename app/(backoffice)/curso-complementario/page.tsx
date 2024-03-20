@@ -1,3 +1,5 @@
+'use client'
+
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import DeleteIcon from '../components/svg/DeleteIcon'
 import ViewIcon from '../components/svg/ViewIcon'
@@ -5,8 +7,22 @@ import EditIcon from '../components/svg/EditIcon'
 import PlusIcon from '../components/svg/PlusIcon'
 import CalendarIcon from '../components/svg/CalendarIcon'
 import Link from 'next/link'
+import useSWR from 'swr'
+
+interface CursoComplementario {
+    id: string
+    nombre: string
+    fichaFormacion: string
+    instructorId: string
+    ambienteId: string
+}
 
 export default function CursoComplementario() {
+    const { data: cursosComplementarios, error } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
+
+    if (error) return <div>Error al cargar los datos</div>
+    if (!cursosComplementarios) return <div>Cargando...</div>
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -32,60 +48,30 @@ export default function CursoComplementario() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <CalendarIcon className="size-4" />
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <CalendarIcon className="size-4" />
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <CalendarIcon className="size-4" />
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <CalendarIcon className="size-4" />
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
+                    {cursosComplementarios.map((cursoComplementario, index) => (
+                        <TableRow key={cursoComplementario.id}>
+                            <TableCell className="font-medium">{index + 1}</TableCell>
+                            <TableCell>{cursoComplementario.nombre}</TableCell>
+                            <TableCell>{cursoComplementario.fichaFormacion}</TableCell>
+                            <TableCell>{cursoComplementario.instructorId}</TableCell>
+                            <TableCell>{cursoComplementario.ambienteId}</TableCell>
+                            <TableCell className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>
     )
+}
+
+const fetcher = async (url: string) => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error('Error al obtener los datos')
+    }
+    return response.json()
 }

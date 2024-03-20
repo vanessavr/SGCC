@@ -1,3 +1,6 @@
+'use client'
+
+import useSWR from 'swr'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import DeleteIcon from '../components/svg/DeleteIcon'
 import ViewIcon from '../components/svg/ViewIcon'
@@ -5,7 +8,19 @@ import EditIcon from '../components/svg/EditIcon'
 import PlusIcon from '../components/svg/PlusIcon'
 import Link from 'next/link'
 
+interface Ambiente {
+    id: string
+    nombre: string
+    capacidad: number
+    centroFormacion: string
+}
+
 export default function Ambiente() {
+    const { data: ambientes, error } = useSWR<Ambiente[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente`, fetcher)
+
+    if (error) return <div>Error al cargar los datos</div>
+    if (!ambientes) return <div>Cargando...</div>
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -30,52 +45,29 @@ export default function Ambiente() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <ViewIcon />
-                            <EditIcon />
-                            <DeleteIcon />
-                        </TableCell>
-                    </TableRow>
+                    {ambientes.map((ambiente, index) => (
+                        <TableRow key={ambiente.id}>
+                            <TableCell className="font-medium">{index + 1}</TableCell>
+                            <TableCell>{ambiente.nombre}</TableCell>
+                            <TableCell>{ambiente.capacidad}</TableCell>
+                            <TableCell>{ambiente.centroFormacion}</TableCell>
+                            <TableCell className="flex gap-2">
+                                <ViewIcon />
+                                <EditIcon />
+                                <DeleteIcon />
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>
     )
+}
+
+const fetcher = async (url: string) => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error('Error al obtener los datos')
+    }
+    return response.json()
 }
