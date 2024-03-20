@@ -3,31 +3,77 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Ambiente } from '@/types/MyTypes'
+import { useEffect, useState } from 'react'
 
-export default function FormularioAmbiente() {
+interface Props {
+    className?: string
+    data?: Ambiente
+}
+export default function FormularioAmbiente({ className, data }: Props) {
+    const [formData, setFormData] = useState<Partial<Ambiente>>()
+
+    useEffect(() => {
+        if (data) {
+            // const { ambiente, ...formDataWithoutAmbiente } = data
+            setFormData(data)
+        }
+    }, [data])
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        const form = event.target as HTMLFormElement
-        const fields = Object.fromEntries(new FormData(form))
-        console.log(fields) // TODO Eliminar
 
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente`, {
-            method: 'POST',
+        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente/${data ? data?.id : ''}`, {
+            method: data ? 'PATCH' : 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             },
-            body: JSON.stringify(fields),
+            body: JSON.stringify(formData),
         })
     }
+
+    const handleChange = (name: string, value: string) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }))
+    }
     return (
-        <form onSubmit={handleSubmit} action="" className="flex flex-col space-y-3">
+        <form onSubmit={handleSubmit} className={`${className}`}>
             <Label htmlFor="">Nombre</Label>
-            <Input type="text" name="nombre" placeholder="Nombre del ambiente" className="rounded-full" required />
+            <Input
+                type="text"
+                name="nombre"
+                value={formData?.nombre || ''}
+                onChange={(event) => handleChange('nombre', event.target.value)}
+                placeholder="Nombre del ambiente"
+                className="rounded-full"
+                required
+            />
+
             <Label htmlFor="">Capacidad</Label>
-            <Input type="number" name="capacidad" placeholder="Capacidad" className="rounded-full" />
+            <Input
+                type="number"
+                name="capacidad"
+                value={formData?.capacidad || ''}
+                onChange={(event) => handleChange('capacidad', event.target.value)}
+                placeholder="Capacidad"
+                className="rounded-full"
+            />
+
             <Label htmlFor="">Centro de formación</Label>
-            <Input type="text" name="centroFormacion" placeholder="Centro de formación" className="rounded-full" />
+            <Select name="centroFormacion" value={formData?.centroFormacion || ''} onValueChange={(value) => handleChange('centroFormacion', value)}>
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccione un centro" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="0">Light</SelectItem>
+                    <SelectItem value="1">Dark</SelectItem>
+                    <SelectItem value="2">System</SelectItem>
+                </SelectContent>
+            </Select>
 
             <Button className="rounded-full w-full">Guardar</Button>
         </form>

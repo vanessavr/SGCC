@@ -7,13 +7,9 @@ import ViewIcon from '../components/svg/ViewIcon'
 import EditIcon from '../components/svg/EditIcon'
 import PlusIcon from '../components/svg/PlusIcon'
 import Link from 'next/link'
-
-interface Ambiente {
-    id: string
-    nombre: string
-    capacidad: number
-    centroFormacion: string
-}
+import { Ambiente } from '@/types/MyTypes'
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 export default function Ambiente() {
     const { data: ambientes, error } = useSWR<Ambiente[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente`, fetcher)
@@ -53,9 +49,11 @@ export default function Ambiente() {
                             <TableCell>{ambiente.centroFormacion}</TableCell>
                             <TableCell>
                                 <div className="flex gap-2">
-                                    <ViewIcon />
-                                    <EditIcon />
-                                    <DeleteIcon />
+                                    {/* <ViewIcon /> */}
+                                    <Link href={`/ambiente/${ambiente.id}/editar`}>
+                                        <EditIcon />
+                                    </Link>
+                                    <DeleteButton ambiente={ambiente} />
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -63,6 +61,39 @@ export default function Ambiente() {
                 </TableBody>
             </Table>
         </div>
+    )
+}
+
+function DeleteButton({ ambiente }: { ambiente: Ambiente }) {
+    const handleClick = () => {
+        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente/${ambiente.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        })
+    }
+
+    return (
+        <Dialog>
+            <DialogTrigger>
+                <DeleteIcon />
+            </DialogTrigger>
+            <DialogContent>
+                <p className="flex text-center justify-center pt-10">
+                    ¿Desea eliminar el ambiente <span className="uppercase font-bold">&nbsp;{ambiente.nombre}</span>?
+                </p>
+                <DialogFooter className="flex items-center justify-center gap-4 mb-10">
+                    <DialogClose asChild>
+                        <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
+                    </DialogClose>
+                    <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
+                        Confirmar
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
 

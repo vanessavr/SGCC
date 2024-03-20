@@ -1,20 +1,22 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { DatePicker } from '@/components/ui/datepicker'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import FormularioPersona from '../../_form'
+import { Persona } from '@/types/MyTypes'
+import useSWR from 'swr'
 
 export default function EditarPersona({ params }: { params: { id: string } }) {
-    // You can use the id variable in your component logic
+    const { data: persona, error } = useSWR<Persona>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${params.id}`, fetcher)
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
-                <h1 className="text-center text-4xl text-white">Perfil</h1>
+                <h1 className="text-center text-4xl text-white">Editar usuario</h1>
             </header>
             <div className="flex flex-col space-y-2 mt-6 ml-6">
-                <h1 className="text-3xl uppercase font-bold">José Aguirre</h1>
-                <h5 className="text-2xl">CC - 1.000.323</h5>
+                <h1 className="text-3xl uppercase font-bold">{persona?.nombres}</h1>
+                <h5 className="text-2xl">CC - {persona?.numeroIdentificacion}</h5>
 
                 <div>
                     <Button className="rounded-full">Cambiar contraseña</Button>
@@ -32,80 +34,17 @@ export default function EditarPersona({ params }: { params: { id: string } }) {
                 </div>
 
                 <div>
-                    <form action="" className="flex flex-col space-y-3">
-                        <Label htmlFor="">Nombres</Label>
-                        <Input type="text" placeholder="Nombres" className="rounded-full" />
-                        <Label htmlFor="">Apellidos</Label>
-                        <Input type="text" placeholder="Apellidos" className="rounded-full" />
-                        <Label htmlFor="">Tipo de documento</Label>
-                        <Select>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Tipo de documento" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Label htmlFor="">Número de identificación</Label>
-                        <Input type="number" placeholder="Número de identificación" className="rounded-full" />
-                        <Label htmlFor="">Fecha de nacimiento</Label>
-                        {/* <DatePicker /> */}
-                        <Label htmlFor="">Género</Label>
-                        <Input type="text" placeholder="Género" className="rounded-full" />
-                        <Label htmlFor="">Correo electrónico</Label>
-                        <Input type="email" placeholder="Correo electrónico" className="rounded-full" />
-                        <Label htmlFor="">Celular</Label>
-                        <Input type="number" placeholder="Celular" className="rounded-full" />
-                        <Label htmlFor="">Departamento</Label>
-                        <Select>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Departamento" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Label htmlFor="">Ciudad</Label>
-                        <Select>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Ciudad" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Label htmlFor="">Población especial</Label>
-                        <Select>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Población especial" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Label htmlFor="">Rol</Label>
-                        <Select>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Rol" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Button className="rounded-full w-full">Guardar cambios</Button>
-                    </form>
+                    <FormularioPersona data={persona} className="space-y-4" />
                 </div>
             </div>
         </div>
     )
+}
+
+const fetcher = async (url: string) => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error('Error al obtener los datos')
+    }
+    return response.json()
 }

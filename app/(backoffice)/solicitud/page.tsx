@@ -13,19 +13,14 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Link from 'next/link'
 import useSWR from 'swr'
-
-interface Solicitud {
-    id: string
-    usuarioId: string
-    estadoSolicitud: string
-    fechaSolicitud: string
-}
+import { Solicitud } from '@/types/MyTypes'
 
 export default function Solicitud() {
     const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
 
     if (error) return <div>Error al cargar los datos</div>
     if (!solicitudes) return <div>Cargando...</div>
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -43,6 +38,7 @@ export default function Solicitud() {
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[100px]">#</TableHead>
+                        <TableHead>Radicado</TableHead>
                         <TableHead>Usuario / Empresa</TableHead>
                         <TableHead>Estado de solicitud</TableHead>
                         <TableHead>Fecha de la solicitud</TableHead>
@@ -53,7 +49,8 @@ export default function Solicitud() {
                     {solicitudes.map((solicitud, index) => (
                         <TableRow key={solicitud.id}>
                             <TableCell className="font-medium">{index + 1}</TableCell>
-                            <TableCell>{solicitud.usuarioId}</TableCell>
+                            <TableCell>{solicitud.radicadoSolicitud}</TableCell>
+                            <TableCell>{solicitud.usuario.nombres}</TableCell>
                             <TableCell>
                                 <Dialog>
                                     <DialogTrigger className="flex mt-4 gap-4">
@@ -104,38 +101,11 @@ export default function Solicitud() {
 
                             <TableCell>
                                 <div className="flex gap-2">
-                                    <ViewIcon />
-                                    <EditIcon />
-
-                                    <Dialog>
-                                        <DialogTrigger>
-                                            <DeleteIcon />
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <p className="flex text-center justify-center pt-10">¿Desea eliminar la solicitud?</p>
-
-                                            <DialogFooter className="flex items-center justify-center gap-4 mb-10">
-                                                <DialogClose asChild>
-                                                    <Button className="rounded-full text-center">Cancelar</Button>
-                                                </DialogClose>
-
-                                                <Dialog>
-                                                    <DialogTrigger>
-                                                        <Button className="rounded-full items-center text-center">Confirmar</Button>
-                                                    </DialogTrigger>
-                                                    <DialogContent className="flex items-center justify-center flex-col py-8">
-                                                        <CheckIcon className="text-sena-700" />
-                                                        <p className="flex items-center justify-around">¡Se ha eliminado correctamente el usuario!</p>
-                                                        <DialogFooter>
-                                                            <DialogClose asChild>
-                                                                <Button className="rounded-full text-center">Entendido</Button>
-                                                            </DialogClose>
-                                                        </DialogFooter>
-                                                    </DialogContent>
-                                                </Dialog>
-                                            </DialogFooter>
-                                        </DialogContent>
-                                    </Dialog>
+                                    {/* <ViewIcon /> */}
+                                    <Link href={`/solicitud/${solicitud.id}/editar`}>
+                                        <EditIcon />
+                                    </Link>
+                                    <DeleteButton solicitud={solicitud} />
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -143,6 +113,39 @@ export default function Solicitud() {
                 </TableBody>
             </Table>
         </div>
+    )
+}
+
+function DeleteButton({ solicitud }: { solicitud: Solicitud }) {
+    const handleClick = () => {
+        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${solicitud.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        })
+    }
+
+    return (
+        <Dialog>
+            <DialogTrigger>
+                <DeleteIcon />
+            </DialogTrigger>
+            <DialogContent>
+                <p className="flex text-center justify-center pt-10">
+                    ¿Desea eliminar la solicitud con radicado <span className="uppercase font-bold">&nbsp;{solicitud.radicadoSolicitud}</span>?
+                </p>
+                <DialogFooter className="flex items-center justify-center gap-4 mb-10">
+                    <DialogClose asChild>
+                        <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
+                    </DialogClose>
+                    <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
+                        Confirmar
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
 

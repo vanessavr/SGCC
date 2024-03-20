@@ -1,5 +1,6 @@
-import SenaLogo from '@/app/(backoffice)/components/svg/SenaLogo'
 import './backoffice.css'
+
+import SenaLogo from '@/app/(backoffice)/components/svg/SenaLogo'
 import HomeIcon from './components/svg/HomeIcon'
 import UserIcon from './components/svg/UserIcon'
 import CalendarIcon from './components/svg/CalendarIcon'

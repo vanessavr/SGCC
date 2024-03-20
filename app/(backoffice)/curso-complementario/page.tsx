@@ -8,14 +8,9 @@ import PlusIcon from '../components/svg/PlusIcon'
 import CalendarIcon from '../components/svg/CalendarIcon'
 import Link from 'next/link'
 import useSWR from 'swr'
-
-interface CursoComplementario {
-    id: string
-    nombre: string
-    fichaFormacion: string
-    instructorId: string
-    ambienteId: string
-}
+import { CursoComplementario } from '@/types/MyTypes'
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 export default function CursoComplementario() {
     const { data: cursosComplementarios, error } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
@@ -53,13 +48,15 @@ export default function CursoComplementario() {
                             <TableCell className="font-medium">{index + 1}</TableCell>
                             <TableCell>{cursoComplementario.nombre}</TableCell>
                             <TableCell>{cursoComplementario.fichaFormacion}</TableCell>
-                            <TableCell>{cursoComplementario.instructorId}</TableCell>
-                            <TableCell>{cursoComplementario.ambienteId}</TableCell>
+                            <TableCell>{cursoComplementario.instructor.nombres}</TableCell>
+                            <TableCell>{cursoComplementario.ambiente.nombre}</TableCell>
                             <TableCell>
                                 <div className="flex gap-2">
-                                    <ViewIcon />
-                                    <EditIcon />
-                                    <DeleteIcon />
+                                    {/* <ViewIcon /> */}
+                                    <Link href={`/curso-complementario/${cursoComplementario.id}/editar`}>
+                                        <EditIcon />
+                                    </Link>
+                                    <DeleteButton cursoComplementario={cursoComplementario} />
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -67,6 +64,39 @@ export default function CursoComplementario() {
                 </TableBody>
             </Table>
         </div>
+    )
+}
+
+function DeleteButton({ cursoComplementario }: { cursoComplementario: CursoComplementario }) {
+    const handleClick = () => {
+        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${cursoComplementario.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        })
+    }
+
+    return (
+        <Dialog>
+            <DialogTrigger>
+                <DeleteIcon />
+            </DialogTrigger>
+            <DialogContent>
+                <p className="flex text-center justify-center pt-10">
+                    ¿Desea eliminar el curso complementario <span className="uppercase font-bold">&nbsp;{cursoComplementario.nombre}</span>?
+                </p>
+                <DialogFooter className="flex items-center justify-center gap-4 mb-10">
+                    <DialogClose asChild>
+                        <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
+                    </DialogClose>
+                    <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
+                        Confirmar
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
 

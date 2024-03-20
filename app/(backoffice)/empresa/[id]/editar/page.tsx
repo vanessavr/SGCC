@@ -1,21 +1,21 @@
-import Formulario from '../../_form'
+'use client'
+
 import { Button } from '@/components/ui/button'
-import { DatePicker } from '@/components/ui/datepicker'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import FormularioPerfilEmpresa from '../../_form'
+import { Empresa } from '@/types/MyTypes'
+import useSWR from 'swr'
 
 export default function EditarEmpresa({ params }: { params: { id: string } }) {
-    // You can use the id variable in your component logic
+    const { data: empresa, error } = useSWR<Empresa>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/${params.id}`, fetcher)
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
                 <h1 className="text-center text-4xl text-white">Registrar empresa</h1>
             </header>
             <div className="flex flex-col space-y-2 mt-6 ml-6">
-                <h1 className="text-3xl uppercase font-bold">VITALPLATES</h1>
-                <h5 className="text-2xl">NIT 1.000.323</h5>
+                <h1 className="text-3xl uppercase font-bold">{empresa?.razonSocial}</h1>
+                <h5 className="text-2xl">NIT {empresa?.nit}</h5>
 
                 <div>
                     <Button className="rounded-full">Cambiar contraseña</Button>
@@ -23,9 +23,17 @@ export default function EditarEmpresa({ params }: { params: { id: string } }) {
             </div>
             <div className="mt-10 bg-gray-300 rounded-md py-16 grid grid-cols-2 gap-6 items-center">
                 <div className="ml-64 w-full">
-                    <FormularioPerfilEmpresa />
+                    <FormularioPerfilEmpresa className="flex flex-col space-y-3" data={empresa} />
                 </div>
             </div>
         </div>
     )
+}
+
+const fetcher = async (url: string) => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error('Error al obtener los datos')
+    }
+    return response.json()
 }
