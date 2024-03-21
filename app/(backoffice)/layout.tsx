@@ -10,8 +10,6 @@ import EmpresaIcon from './components/svg/EmpresaIcon'
 import AmbienteIcon from './components/svg/AmbienteIcon'
 import LoadIcon from './components/svg/LoadIcon'
 import Link from 'next/link'
-import { Suspense } from 'react'
-import Loading from './loading'
 
 export default function BackofficeLayout({
     children, // will be a page or nested layout
@@ -100,9 +98,7 @@ export default function BackofficeLayout({
                     </ul>
                 </nav>
             </div>
-            <div className="body mr-2 relative">
-                <Suspense fallback={<Loading />}>{children}</Suspense>
-            </div>
+            <div className="body mr-2 relative">{children}</div>
             <div className="footer bg-sena-600 p-2 flex items-center justify-center">
                 <p className="text-white text-center w-8/12 mx-auto text-xs">
                     .:: Servicio Nacional de Aprendizaje SENA – Dirección General Calle 57 No. 8-69, Bogotá D.C - PBX (57 1) 5461500 <br />

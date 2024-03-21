@@ -13,6 +13,8 @@ export default function AuthLayout({
                     <h1 className="text-sena-600 text-1xl ml-6 title-header">
                         <strong className="text-4xl">SGCC</strong> <br /> Sistema de Gestión <br />
                         Cursos Complementarios
+                        <br />
+                        CPIC
                     </h1>
                 </div>
             </div>
