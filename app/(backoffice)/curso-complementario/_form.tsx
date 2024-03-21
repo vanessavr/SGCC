@@ -17,8 +17,7 @@ interface Props {
 
 const FormularioCurso = ({ className, data }: Props) => {
     const [formData, setFormData] = useState<Partial<CursoComplementario>>(data || {})
-    const [departamentoId, setDepartamentoId] = useState<string>()
-    const [ciudades, setCiudades] = useState<[]>()
+    const [ciudades, setCiudades] = useState<[]>([])
 
     const { data: instructores } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
     const { data: ambientes } = useSWR<Ambiente[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente`, fetcher)
@@ -26,24 +25,26 @@ const FormularioCurso = ({ className, data }: Props) => {
 
     useEffect(() => {
         // Si no hay instructor seleccionado, no es necesario hacer la solicitud
-        if (!departamentoId) return
+        const departamentoId = formData?.departamento
 
-        // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
-        const fetchCiudades = async () => {
-            const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${departamentoId}`
-            const response = await fetch(url)
-            if (!response.ok) {
-                throw new Error('Error al obtener los cursos complementarios')
+        if (departamentoId) {
+            // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
+            const fetchCiudades = async () => {
+                const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${departamentoId}`
+                const response = await fetch(url)
+                if (!response.ok) {
+                    throw new Error('Error al obtener los cursos complementarios')
+                }
+                const data = await response.json()
+
+                setCiudades(data.ciudades)
+                // Actualizamos los datos de los cursos complementarios
+                mutate(url, data, false)
             }
-            const data = await response.json()
 
-            setCiudades(data.ciudades)
-            // Actualizamos los datos de los cursos complementarios
-            mutate(url, data, false)
+            fetchCiudades()
         }
-
-        fetchCiudades()
-    }, [departamentoId])
+    }, [formData?.departamento])
 
     useEffect(() => {
         if (data) {
@@ -112,11 +113,11 @@ const FormularioCurso = ({ className, data }: Props) => {
                     <SelectValue placeholder="Centro de formación" />
                 </SelectTrigger>
                 <SelectContent>
-                    {ambientes?.map((ambiente, index) => (
-                        <SelectItem key={ambiente.id} value={ambiente.id}>
-                            {ambiente.nombre}
-                        </SelectItem>
-                    ))}
+                    <SelectItem value="1">Centro de Procesos Industriales y Construcción</SelectItem>
+                    <SelectItem value="2">Centro de Automatización Industrial</SelectItem>
+                    <SelectItem value="3">Centro de Comercio y Servicios</SelectItem>
+                    <SelectItem value="4">Centro Agropecuario</SelectItem>
+                    <SelectItem value="5">Centro para la Formación Cafetera</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -140,7 +141,11 @@ const FormularioCurso = ({ className, data }: Props) => {
                     <SelectValue placeholder="Ambiente" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="a39e42d1-e425-4dc3-a952-3a456c745c73">Sistemas 1</SelectItem>
+                    {ambientes?.map((ambiente, index) => (
+                        <SelectItem key={ambiente.id} value={ambiente.id}>
+                            {ambiente.nombre}
+                        </SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
 
@@ -150,12 +155,15 @@ const FormularioCurso = ({ className, data }: Props) => {
                     <SelectValue placeholder="Jornada" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Mañana</SelectItem>
+                    <SelectItem value="1">Mañana</SelectItem>
+                    <SelectItem value="2">Tarde</SelectItem>
+                    <SelectItem value="3">Noche</SelectItem>
+                    <SelectItem value="4">Mixta</SelectItem>
                 </SelectContent>
             </Select>
 
             <Label htmlFor="">Departamento</Label>
-            <Select name="departamento" value={departamentoId || ''} onValueChange={(value) => setDepartamentoId(value)}>
+            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -168,19 +176,23 @@ const FormularioCurso = ({ className, data }: Props) => {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Ciudad</Label>
-            <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Ciudad" />
-                </SelectTrigger>
-                <SelectContent>
-                    {ciudades?.map((ciudad, index) => (
-                        <SelectItem key={index} value={index.toString()}>
-                            {ciudad}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
+            {ciudades?.length > 0 && (
+                <>
+                    <Label htmlFor="">Ciudad</Label>
+                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Ciudad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {ciudades?.map((ciudad, index) => (
+                                <SelectItem key={index} value={index.toString()}>
+                                    {ciudad}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </>
+            )}
 
             <Label htmlFor="">Duración</Label>
             <Input type="text" placeholder="Duración" name="duracion" value={formData?.duracion || ''} onChange={(event) => handleChange('duracion', event.target.value)} className="rounded-full" />

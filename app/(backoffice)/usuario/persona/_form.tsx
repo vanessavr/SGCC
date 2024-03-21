@@ -17,30 +17,32 @@ interface Props {
 }
 export default function FormularioPersona({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Persona>>()
-    const [departamentoId, setDepartamentoId] = useState<string>()
-    const [ciudades, setCiudades] = useState<[]>()
+
+    const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
 
     useEffect(() => {
         // Si no hay instructor seleccionado, no es necesario hacer la solicitud
-        if (!departamentoId) return
+        const departamentoId = formData?.departamento
 
-        // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
-        const fetchCiudades = async () => {
-            const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${departamentoId}`
-            const response = await fetch(url)
-            if (!response.ok) {
-                throw new Error('Error al obtener los cursos complementarios')
+        if (departamentoId) {
+            // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
+            const fetchCiudades = async () => {
+                const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${departamentoId}`
+                const response = await fetch(url)
+                if (!response.ok) {
+                    throw new Error('Error al obtener los cursos complementarios')
+                }
+                const data = await response.json()
+
+                setCiudades(data.ciudades)
+                // Actualizamos los datos de los cursos complementarios
+                mutate(url, data, false)
             }
-            const data = await response.json()
 
-            setCiudades(data.ciudades)
-            // Actualizamos los datos de los cursos complementarios
-            mutate(url, data, false)
+            fetchCiudades()
         }
-
-        fetchCiudades()
-    }, [departamentoId])
+    }, [formData?.departamento])
 
     useEffect(() => {
         if (data) {
@@ -103,9 +105,9 @@ export default function FormularioPersona({ className, data }: Props) {
                     <SelectValue placeholder="Tipo de documento" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Cédula de Ciudadanía</SelectItem>
-                    <SelectItem value="1">Cédula de Extranjería</SelectItem>
-                    <SelectItem value="2">Tarjeta de Identidad</SelectItem>
+                    <SelectItem value="1">Cédula de Ciudadanía</SelectItem>
+                    <SelectItem value="2">Cédula de Extranjería</SelectItem>
+                    <SelectItem value="3">Tarjeta de Identidad</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -162,7 +164,7 @@ export default function FormularioPersona({ className, data }: Props) {
             <Input type="number" name="celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} placeholder="Celular" className="rounded-full" />
 
             <Label htmlFor="">Departamento</Label>
-            <Select name="departamento" value={departamentoId || ''} onValueChange={(value) => setDepartamentoId(value)}>
+            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -175,19 +177,23 @@ export default function FormularioPersona({ className, data }: Props) {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Ciudad</Label>
-            <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Ciudad" />
-                </SelectTrigger>
-                <SelectContent>
-                    {ciudades?.map((ciudad, index) => (
-                        <SelectItem key={index} value={index.toString()}>
-                            {ciudad}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
+            {ciudades?.length > 0 && (
+                <>
+                    <Label htmlFor="">Ciudad</Label>
+                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Ciudad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {ciudades?.map((ciudad, index) => (
+                                <SelectItem key={index} value={index.toString()}>
+                                    {ciudad}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </>
+            )}
 
             <Label htmlFor="" className="self-center">
                 Población especial

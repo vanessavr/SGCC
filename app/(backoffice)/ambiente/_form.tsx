@@ -69,9 +69,11 @@ export default function FormularioAmbiente({ className, data }: Props) {
                     <SelectValue placeholder="Seleccione un centro" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Light</SelectItem>
-                    <SelectItem value="1">Dark</SelectItem>
-                    <SelectItem value="2">System</SelectItem>
+                    <SelectItem value="1">Centro de Procesos Industriales y Construcción</SelectItem>
+                    <SelectItem value="2">Centro de Automatización Industrial</SelectItem>
+                    <SelectItem value="3">Centro de Comercio y Servicios</SelectItem>
+                    <SelectItem value="4">Centro Agropecuario</SelectItem>
+                    <SelectItem value="5">Centro para la Formación Cafetera</SelectItem>
                 </SelectContent>
             </Select>
 

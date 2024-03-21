@@ -34,10 +34,10 @@ export default function FormularioCursoComplementario() {
                     <SelectValue placeholder="Seleccione una jornada" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="mañana">Mañana</SelectItem>
-                    <SelectItem value="tarde">Tarde</SelectItem>
-                    <SelectItem value="noche">Noche</SelectItem>
-                    <SelectItem value="mixta">Mixta</SelectItem>
+                    <SelectItem value="1">Mañana</SelectItem>
+                    <SelectItem value="2">Tarde</SelectItem>
+                    <SelectItem value="3">Noche</SelectItem>
+                    <SelectItem value="4">Mixta</SelectItem>
                 </SelectContent>
             </Select>
             <Label htmlFor="cuposSolicitados" className="font-bold self-center">

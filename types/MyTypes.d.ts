@@ -33,6 +33,7 @@ interface CursoComplementario {
     jornada: string
     instructorId: string
     ambienteId: string
+    departamento: string
     ciudad: string
     duracion: number
     fechaInicio: string

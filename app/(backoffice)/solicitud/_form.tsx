@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Solicitud } from '@/types/MyTypes'
+import { CursoComplementario, Persona, Solicitud } from '@/types/MyTypes'
+import { fetcher } from '@/utils/fetcher'
 import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 interface Props {
     className?: string
@@ -13,6 +15,8 @@ interface Props {
 }
 export default function FormularioSolicitud({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Solicitud>>()
+    const { data: cursosComplementarios, error: erroCursosComplementarios } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
+    const { data: usuarios, error: erroUsuarios } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
 
     useEffect(() => {
         if (data) {
@@ -48,7 +52,10 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     <SelectValue placeholder="Seleccione una opción" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Pepito</SelectItem>
+                    <SelectItem value="1">Ticket</SelectItem>
+                    <SelectItem value="2">Correo electrónico</SelectItem>
+                    <SelectItem value="3">Conferencia</SelectItem>
+                    <SelectItem value="4">Aplicativo Web</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -68,9 +75,13 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     <SelectValue placeholder="Segmento" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Light</SelectItem>
-                    <SelectItem value="1">Dark</SelectItem>
-                    <SelectItem value="2">System</SelectItem>
+                    <SelectItem value="1">Individual</SelectItem>
+                    <SelectItem value="2">Aprendices</SelectItem>
+                    <SelectItem value="3">Empresa</SelectItem>
+                    <SelectItem value="4">Institución</SelectItem>
+                    <SelectItem value="5">Entidad Territorial</SelectItem>
+                    <SelectItem value="6">Funcionarios y Contratistas</SelectItem>
+                    <SelectItem value="7">CPIC</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -80,9 +91,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     <SelectValue placeholder="Tipo de solicitud " />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Light</SelectItem>
-                    <SelectItem value="1">Dark</SelectItem>
-                    <SelectItem value="2">System</SelectItem>
+                    <SelectItem value="1">Formación</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -102,9 +111,8 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     <SelectValue placeholder="Estado" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Light</SelectItem>
-                    <SelectItem value="1">Dark</SelectItem>
-                    <SelectItem value="2">System</SelectItem>
+                    <SelectItem value="1">Abierta</SelectItem>
+                    <SelectItem value="0">Cerrada</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -114,9 +122,25 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     <SelectValue placeholder="Motivo de solicitud" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Light</SelectItem>
-                    <SelectItem value="1">Dark</SelectItem>
-                    <SelectItem value="2">System</SelectItem>
+                    <SelectItem value="1">En cola</SelectItem>
+                    <SelectItem value="2">En cola - Faltan datos</SelectItem>
+                    <SelectItem value="3">Sin respuesta</SelectItem>
+                    <SelectItem value="4">No interesado</SelectItem>
+                    <SelectItem value="5">Cancelada</SelectItem>
+                    <SelectItem value="6">Por convocar</SelectItem>
+                    <SelectItem value="7">Programada</SelectItem>
+                    <SelectItem value="8">Sin oferta disponible</SelectItem>
+                    <SelectItem value="9">Sin instructor disponible</SelectItem>
+                    <SelectItem value="10">Instructor asignado</SelectItem>
+                    <SelectItem value="11">Satisfecha</SelectItem>
+                    <SelectItem value="12">Trasladada</SelectItem>
+                    <SelectItem value="13">Pendiente</SelectItem>
+                    <SelectItem value="14">Duplicada</SelectItem>
+                    <SelectItem value="15">En cola - Aplazada</SelectItem>
+                    <SelectItem value="16">Por completar cupo mínimo</SelectItem>
+                    <SelectItem value="17">Propuesta de oferta enviada</SelectItem>
+                    <SelectItem value="18">Cerrada</SelectItem>
+                    <SelectItem value="19">Por enviar listad de interesados</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -126,7 +150,9 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     <SelectValue placeholder="Seleccione una persona" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="3049ae25-01a7-43eb-a9a8-5b6e1e4b8e82">Pepito</SelectItem>
+                    {usuarios?.map((usuario, index) => (
+                        <SelectItem value={usuario.id}>{usuario.nombres + ' ' + usuario.apellidos}</SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
 
@@ -136,7 +162,9 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     <SelectValue placeholder="Seleccione un curso" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="666ce19b-bf36-4239-8149-f005a2347181">Cableado estructurado</SelectItem>
+                    {cursosComplementarios?.map((cursoComplementario, index) => (
+                        <SelectItem value={cursoComplementario.id}>{cursoComplementario.nombre}</SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
 
