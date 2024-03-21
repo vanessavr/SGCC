@@ -4,8 +4,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Empresa } from '@/types/MyTypes'
+import { Departamento, Empresa } from '@/types/MyTypes'
 import { useEffect, useState } from 'react'
+import useSWR, { mutate } from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 interface Props {
     className?: string
@@ -13,6 +15,30 @@ interface Props {
 }
 export default function FormularioEmpresa({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Empresa>>()
+    const [departamentoId, setDepartamentoId] = useState<string>()
+    const [ciudades, setCiudades] = useState<[]>()
+    const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
+
+    useEffect(() => {
+        // Si no hay instructor seleccionado, no es necesario hacer la solicitud
+        if (!departamentoId) return
+
+        // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
+        const fetchCiudades = async () => {
+            const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${departamentoId}`
+            const response = await fetch(url)
+            if (!response.ok) {
+                throw new Error('Error al obtener los cursos complementarios')
+            }
+            const data = await response.json()
+
+            setCiudades(data.ciudades)
+            // Actualizamos los datos de los cursos complementarios
+            mutate(url, data, false)
+        }
+
+        fetchCiudades()
+    }, [departamentoId])
 
     useEffect(() => {
         if (data) {
@@ -121,31 +147,31 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="" className="self-center">
-                Departamento
-            </Label>
-            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
+            <Label htmlFor="">Departamento</Label>
+            <Select name="departamento" value={departamentoId || ''} onValueChange={(value) => setDepartamentoId(value)}>
                 <SelectTrigger>
-                    <SelectValue placeholder="Seleccione un departamento" />
+                    <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Light</SelectItem>
-                    <SelectItem value="1">Dark</SelectItem>
-                    <SelectItem value="2">System</SelectItem>
+                    {departamentos?.map((departamento, index) => (
+                        <SelectItem key={departamento.id} value={departamento.id.toString()}>
+                            {departamento.departamento}
+                        </SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="" className="self-center">
-                Ciudad
-            </Label>
+            <Label htmlFor="">Ciudad</Label>
             <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
                 <SelectTrigger>
-                    <SelectValue placeholder="Seleccione una ciudad" />
+                    <SelectValue placeholder="Ciudad" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Light</SelectItem>
-                    <SelectItem value="1">Dark</SelectItem>
-                    <SelectItem value="2">System</SelectItem>
+                    {ciudades?.map((ciudad, index) => (
+                        <SelectItem key={index} value={index.toString()}>
+                            {ciudad}
+                        </SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
 

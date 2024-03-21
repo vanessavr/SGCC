@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import FormularioPersona from '../../_form'
 import { Persona } from '@/types/MyTypes'
 import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 export default function EditarPersona({ params }: { params: { id: string } }) {
     const { data: persona, error } = useSWR<Persona>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${params.id}`, fetcher)
@@ -39,12 +40,4 @@ export default function EditarPersona({ params }: { params: { id: string } }) {
             </div>
         </div>
     )
-}
-
-const fetcher = async (url: string) => {
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error('Error al obtener los datos')
-    }
-    return response.json()
 }

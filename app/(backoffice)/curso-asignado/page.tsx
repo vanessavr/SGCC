@@ -1,82 +1,91 @@
+'use client'
+
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import PlusIcon from '../components/svg/PlusIcon'
 import CalendarIcon from '../components/svg/CalendarIcon'
-import FaceIcon from '../components/svg/FaceIcon'
+import Link from 'next/link'
+import useSWR, { mutate } from 'swr'
+import { CursoComplementario, Persona } from '@/types/MyTypes'
+import { useEffect, useState } from 'react'
+import { fetcher } from '@/utils/fetcher'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export default function CursoAsignado() {
+    const [instructorId, setInstructorId] = useState<string>()
+    const { data: cursosComplementarios, error: errorCursos } = useSWR<CursoComplementario[]>(
+        instructorId ? `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${instructorId}/curso-complementario` : null,
+        fetcher,
+    )
+    const { data: instructores, error: errorInstructores } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
+
+    // Efecto para actualizar los cursos complementarios cuando cambia el instructor seleccionado
+    useEffect(() => {
+        // Si no hay instructor seleccionado, no es necesario hacer la solicitud
+        if (!instructorId) return
+
+        // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
+        const fetchCursos = async () => {
+            const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${instructorId}/curso-complementario`
+            const response = await fetch(url)
+            if (!response.ok) {
+                throw new Error('Error al obtener los cursos complementarios')
+            }
+            const data = await response.json()
+            // Actualizamos los datos de los cursos complementarios
+            mutate(url, data, false)
+        }
+
+        fetchCursos()
+    }, [instructorId])
+
+    if (errorCursos || errorInstructores) return <div>Error al cargar los datos</div>
+    // if (!cursosComplementarios || !instructores) return <div>Cargando...</div>
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
                 <h1 className="text-center text-4xl text-white">Cursos asignados</h1>
             </header>
 
+            <div className="flex items-center gap-2 my-10">
+                <Label htmlFor="" className="block">
+                    Seleccione un instructor:
+                </Label>
+                <Select name="instructorId" onValueChange={(value) => setInstructorId(value)}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Instructor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {instructores?.map((instructor, index) => (
+                            <SelectItem key={instructor.id} value={instructor.id}>
+                                {instructor.nombres}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Ficha de la formación</TableHead>
-                        <TableHead>Curso complementario</TableHead>
-                        <TableHead>Correo electrónico</TableHead>
+                        <TableHead className="w-[100px]">#</TableHead>
+                        <TableHead>Nombre del curso</TableHead>
+                        <TableHead>Ficha de formación</TableHead>
+                        <TableHead>Instructor</TableHead>
                         <TableHead>Ambiente</TableHead>
-                        <TableHead>Horario</TableHead>
-                        <TableHead>Estado</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <Dialog>
-                                <DialogTrigger>
-                                    <CalendarIcon className="w-10 items-center" />
-                                </DialogTrigger>
-                                <DialogContent className="pb-20 pt-20 flex items-center justify-center flex-col py-8 ">
-                                    <FaceIcon className="w-20 items-center" />
-                                    <p className="flex text-center justify-center">Lo sentimos, no tiene un horario disponible en este momento</p>
-                                    <DialogFooter>
-                                        <DialogClose asChild>
-                                            <Button className="rounded-full text-center w-40">Cerrar</Button>
-                                        </DialogClose>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
-                        </TableCell>
-
-                        <TableCell>Credit Card</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <CalendarIcon className="w-10 items-center" />
-                        </TableCell>
-                        <TableCell>Credit Card</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <CalendarIcon className="w-10 items-center" />
-                        </TableCell>
-                        <TableCell>Credit Card</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="flex gap-2">
-                            <CalendarIcon className="w-10 items-center" />
-                        </TableCell>
-                        <TableCell>Credit Card</TableCell>
-                    </TableRow>
+                    {cursosComplementarios?.map((cursoComplementario, index) => (
+                        <TableRow key={cursoComplementario.id}>
+                            <TableCell className="font-medium">{index + 1}</TableCell>
+                            <TableCell>{cursoComplementario.nombre}</TableCell>
+                            <TableCell>{cursoComplementario.fichaFormacion}</TableCell>
+                            <TableCell>{cursoComplementario.instructor.nombres + ' ' + cursoComplementario.instructor.apellidos}</TableCell>
+                            <TableCell>{cursoComplementario.ambiente.nombre}</TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>

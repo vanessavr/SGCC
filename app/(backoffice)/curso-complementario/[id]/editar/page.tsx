@@ -3,6 +3,7 @@
 import useSWR from 'swr'
 import FormularioCurso from '../../_form'
 import { CursoComplementario } from '@/types/MyTypes'
+import { fetcher } from '@/utils/fetcher'
 
 export default function EditarCursoComplementario({ params }: { params: { id: string } }) {
     const { data: cursoComplementario, error } = useSWR<CursoComplementario>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${params.id}`, fetcher)
@@ -24,12 +25,4 @@ export default function EditarCursoComplementario({ params }: { params: { id: st
             </div>
         </div>
     )
-}
-
-const fetcher = async (url: string) => {
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error('Error al obtener los datos')
-    }
-    return response.json()
 }

@@ -11,6 +11,7 @@ import EditIcon from '../../components/svg/EditIcon'
 import DeleteIcon from '../../components/svg/DeleteIcon'
 import PlusIcon from '../../components/svg/PlusIcon'
 import { Persona } from '@/types/MyTypes'
+import { fetcher } from '@/utils/fetcher'
 
 export default function Persona() {
     const { data: personas, error } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
@@ -104,12 +105,4 @@ function DeleteButton({ persona }: { persona: Persona }) {
             </DialogContent>
         </Dialog>
     )
-}
-
-const fetcher = async (url: string) => {
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error('Error al obtener los datos')
-    }
-    return response.json()
 }

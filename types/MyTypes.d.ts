@@ -17,6 +17,7 @@ export interface Persona {
 
 interface Instructor {
     nombres: string
+    apellidos: string
 }
 
 interface Ambiente {
@@ -83,4 +84,10 @@ interface Ambiente {
     centroFormacion: string
     createdAt: Date
     updatedAt: Date
+}
+
+interface Departamento {
+    id: string
+    departamento: string
+    ciudades: array
 }

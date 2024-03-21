@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Link from 'next/link'
 import useSWR from 'swr'
 import { Solicitud } from '@/types/MyTypes'
+import { fetcher } from '@/utils/fetcher'
 
 export default function Solicitud() {
     const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
@@ -147,12 +148,4 @@ function DeleteButton({ solicitud }: { solicitud: Solicitud }) {
             </DialogContent>
         </Dialog>
     )
-}
-
-const fetcher = async (url: string) => {
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error('Error al obtener los datos')
-    }
-    return response.json()
 }

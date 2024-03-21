@@ -3,6 +3,7 @@
 import useSWR from 'swr'
 import FormularioSolicitud from '../../_form'
 import { Solicitud } from '@/types/MyTypes'
+import { fetcher } from '@/utils/fetcher'
 
 export default function EditarSolicitud({ params }: { params: { id: string } }) {
     const { data: solicitud, error } = useSWR<Solicitud>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${params.id}`, fetcher)
@@ -25,12 +26,4 @@ export default function EditarSolicitud({ params }: { params: { id: string } }) 
             </div>
         </div>
     )
-}
-
-const fetcher = async (url: string) => {
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error('Error al obtener los datos')
-    }
-    return response.json()
 }

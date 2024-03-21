@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { Ambiente } from '@/types/MyTypes'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { fetcher } from '@/utils/fetcher'
 
 export default function Ambiente() {
     const { data: ambientes, error } = useSWR<Ambiente[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente`, fetcher)
@@ -95,12 +96,4 @@ function DeleteButton({ ambiente }: { ambiente: Ambiente }) {
             </DialogContent>
         </Dialog>
     )
-}
-
-const fetcher = async (url: string) => {
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error('Error al obtener los datos')
-    }
-    return response.json()
 }

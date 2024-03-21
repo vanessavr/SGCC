@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import FormularioPerfilEmpresa from '../../_form'
 import { Empresa } from '@/types/MyTypes'
 import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 export default function EditarEmpresa({ params }: { params: { id: string } }) {
     const { data: empresa, error } = useSWR<Empresa>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/${params.id}`, fetcher)
@@ -28,12 +29,4 @@ export default function EditarEmpresa({ params }: { params: { id: string } }) {
             </div>
         </div>
     )
-}
-
-const fetcher = async (url: string) => {
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error('Error al obtener los datos')
-    }
-    return response.json()
 }

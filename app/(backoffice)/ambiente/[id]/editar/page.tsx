@@ -3,6 +3,7 @@
 import useSWR from 'swr'
 import FormularioAmbiente from '../../_form'
 import { Ambiente } from '@/types/MyTypes'
+import { fetcher } from '@/utils/fetcher'
 
 export default function EditarAmbiente({ params }: { params: { id: string } }) {
     const { data: ambiente, error } = useSWR<Ambiente>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente/${params.id}`, fetcher)
@@ -22,12 +23,4 @@ export default function EditarAmbiente({ params }: { params: { id: string } }) {
             </div>
         </div>
     )
-}
-
-const fetcher = async (url: string) => {
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error('Error al obtener los datos')
-    }
-    return response.json()
 }
