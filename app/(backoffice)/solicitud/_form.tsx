@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useToast } from '@/components/ui/use-toast'
 import { CursoComplementario, Persona, Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { useEffect, useState } from 'react'
@@ -15,6 +16,7 @@ interface Props {
 }
 export default function FormularioSolicitud({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Solicitud>>()
+    const { toast } = useToast()
     const { data: cursosComplementarios, error: erroCursosComplementarios } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
     const { data: usuarios, error: erroUsuarios } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
 
@@ -36,6 +38,18 @@ export default function FormularioSolicitud({ className, data }: Props) {
             },
             body: JSON.stringify(formData),
         })
+            .then((response) => {
+                if (response.ok) {
+                    // Mostrar el toast cuando la solicitud sea exitosa
+                    toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
+                } else {
+                    toast({ title: '✖️', description: 'Error al guardar la solicitud' })
+                }
+            })
+            .catch((error) => {
+                console.error('Error al guardar la solicitud:', error)
+                toast({ title: '✖️', description: 'Error al guardar la solicitud' })
+            })
     }
 
     const handleChange = (name: string, value: string) => {

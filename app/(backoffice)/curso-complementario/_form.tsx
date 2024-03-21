@@ -9,6 +9,7 @@ import { Ambiente, CursoComplementario, Departamento, Persona } from '@/types/My
 import { fetcher } from '@/utils/fetcher'
 import { useEffect, useState } from 'react'
 import useSWR, { mutate } from 'swr'
+import { useToast } from '@/components/ui/use-toast'
 
 interface Props {
     className?: string
@@ -17,6 +18,7 @@ interface Props {
 
 const FormularioCurso = ({ className, data }: Props) => {
     const [formData, setFormData] = useState<Partial<CursoComplementario>>(data || {})
+    const { toast } = useToast()
     const [ciudades, setCiudades] = useState<[]>([])
 
     const { data: instructores } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
@@ -56,22 +58,26 @@ const FormularioCurso = ({ className, data }: Props) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${data ? data.id : ''}`
-        const method = data ? 'PATCH' : 'POST'
-
-        const response = await fetch(url, {
-            method,
+        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${data ? data.id : ''}`, {
+            method: data ? 'PATCH' : 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             },
             body: JSON.stringify(formData),
         })
-
-        if (response.ok) {
-            // Actualizar la caché y los datos locales después de la modificación o creación exitosa
-            mutate(url)
-        }
+            .then((response) => {
+                if (response.ok) {
+                    // Mostrar el toast cuando el curso sea exitoso
+                    toast({ title: '✔️', description: 'Curso complementario guardado satisfactoriamente' })
+                } else {
+                    toast({ title: '✖️', description: 'Error al guardar el curso complementario' })
+                }
+            })
+            .catch((error) => {
+                console.error('Error al guardar el curso complementario:', error)
+                toast({ title: '✖️', description: 'Error al guardar el curso complementario' })
+            })
     }
 
     const handleChange = (name: string, value: string) => {

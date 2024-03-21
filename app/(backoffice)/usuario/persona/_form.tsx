@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import { Departamento, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { useToast } from '@/components/ui/use-toast'
 
 interface Props {
     className?: string
@@ -17,7 +18,7 @@ interface Props {
 }
 export default function FormularioPersona({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Persona>>()
-
+    const { toast } = useToast()
     const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
 
@@ -61,6 +62,18 @@ export default function FormularioPersona({ className, data }: Props) {
             },
             body: JSON.stringify(formData),
         })
+            .then((response) => {
+                if (response.ok) {
+                    // Mostrar el toast cuando el usuario sea exitoso
+                    toast({ title: '✔️', description: 'Usuario guardado satisfactoriamente' })
+                } else {
+                    toast({ title: '✖️', description: 'Error al guardar el usuario' })
+                }
+            })
+            .catch((error) => {
+                console.error('Error al guardar el usuario:', error)
+                toast({ title: '✖️', description: 'Error al guardar el usuario' })
+            })
     }
 
     const handleChange = (name: string, value: string) => {

@@ -8,6 +8,7 @@ import { Departamento, Empresa } from '@/types/MyTypes'
 import { useEffect, useState } from 'react'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { useToast } from '@/components/ui/use-toast'
 
 interface Props {
     className?: string
@@ -15,6 +16,7 @@ interface Props {
 }
 export default function FormularioEmpresa({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Empresa>>()
+    const { toast } = useToast()
     const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
     const { data: actividadesEconomicas } = useSWR(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/actividades-economicas`, fetcher)
@@ -60,6 +62,18 @@ export default function FormularioEmpresa({ className, data }: Props) {
             },
             body: JSON.stringify(formData),
         })
+            .then((response) => {
+                if (response.ok) {
+                    // Mostrar el toast cuando la empresa sea exitosa
+                    toast({ title: '✔️', description: 'Empresa guardada satisfactoriamente' })
+                } else {
+                    toast({ title: '✖️', description: 'Error al guardar la empresa' })
+                }
+            })
+            .catch((error) => {
+                console.error('Error al guardar la empresa:', error)
+                toast({ title: '✖️', description: 'Error al guardar la empresa' })
+            })
     }
 
     const handleChange = (name: string, value: string) => {

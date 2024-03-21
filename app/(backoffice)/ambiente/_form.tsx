@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Ambiente } from '@/types/MyTypes'
 import { useEffect, useState } from 'react'
+import { useToast } from '@/components/ui/use-toast'
 
 interface Props {
     className?: string
@@ -13,6 +14,7 @@ interface Props {
 }
 export default function FormularioAmbiente({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Ambiente>>()
+    const { toast } = useToast()
 
     useEffect(() => {
         if (data) {
@@ -32,6 +34,18 @@ export default function FormularioAmbiente({ className, data }: Props) {
             },
             body: JSON.stringify(formData),
         })
+            .then((response) => {
+                if (response.ok) {
+                    // Mostrar el toast cuando el sea exitoso
+                    toast({ title: '✔️', description: 'Ambiente guardado satisfactoriamente' })
+                } else {
+                    toast({ title: '✖️', description: 'Error al guardar el ambiente' })
+                }
+            })
+            .catch((error) => {
+                console.error('Error al guardar el ambiente:', error)
+                toast({ title: '✖️', description: 'Error al guardar el ambiente' })
+            })
     }
 
     const handleChange = (name: string, value: string) => {
