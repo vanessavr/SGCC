@@ -71,12 +71,11 @@ export default function Solicitud() {
                                             </Label>
                                             <Select>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Theme" />
+                                                    <SelectValue placeholder="Seleccione el estado" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="light">Light</SelectItem>
-                                                    <SelectItem value="dark">Dark</SelectItem>
-                                                    <SelectItem value="system">System</SelectItem>
+                                                    <SelectItem value="abierto">Abierto</SelectItem>
+                                                    <SelectItem value="cerrado">Cerrado</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <Label htmlFor="" className="font-bold self-center">
