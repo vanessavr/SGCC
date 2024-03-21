@@ -15,30 +15,32 @@ interface Props {
 }
 export default function FormularioEmpresa({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Empresa>>()
-    const [departamentoId, setDepartamentoId] = useState<string>()
-    const [ciudades, setCiudades] = useState<[]>()
+    const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
+    const { data: actividadesEconomicas } = useSWR(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/actividades-economicas`, fetcher)
 
     useEffect(() => {
         // Si no hay instructor seleccionado, no es necesario hacer la solicitud
-        if (!departamentoId) return
+        const departamentoId = formData?.departamento
 
-        // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
-        const fetchCiudades = async () => {
-            const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${departamentoId}`
-            const response = await fetch(url)
-            if (!response.ok) {
-                throw new Error('Error al obtener los cursos complementarios')
+        if (departamentoId) {
+            // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
+            const fetchCiudades = async () => {
+                const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${departamentoId}`
+                const response = await fetch(url)
+                if (!response.ok) {
+                    throw new Error('Error al obtener los cursos complementarios')
+                }
+                const data = await response.json()
+
+                setCiudades(data.ciudades)
+                // Actualizamos los datos de los cursos complementarios
+                mutate(url, data, false)
             }
-            const data = await response.json()
 
-            setCiudades(data.ciudades)
-            // Actualizamos los datos de los cursos complementarios
-            mutate(url, data, false)
+            fetchCiudades()
         }
-
-        fetchCiudades()
-    }, [departamentoId])
+    }, [formData?.departamento])
 
     useEffect(() => {
         if (data) {
@@ -68,9 +70,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
     }
     return (
         <form onSubmit={handleSubmit} className={`${className}`}>
-            <Label htmlFor="" className="self-center">
-                Razón social
-            </Label>
+            <Label htmlFor="">Razón social</Label>
             <Input
                 type="text"
                 name="razonSocial"
@@ -80,9 +80,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 className="!mt-0 rounded-full"
             />
 
-            <Label htmlFor="" className="self-center">
-                NIT
-            </Label>
+            <Label htmlFor="">NIT</Label>
             <Input
                 type="number"
                 name="nit"
@@ -92,9 +90,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 className="rounded-full"
             />
 
-            <Label htmlFor="" className="self-center">
-                Representante legal
-            </Label>
+            <Label htmlFor="">Representante legal</Label>
             <Input
                 type="text"
                 name="representanteLegal"
@@ -104,9 +100,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 className="rounded-full"
             />
 
-            <Label htmlFor="" className="self-center">
-                Correo electrónico
-            </Label>
+            <Label htmlFor="">Correo electrónico</Label>
             <Input
                 type="email"
                 name="correoElectronico"
@@ -116,14 +110,10 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 className="rounded-full"
             />
 
-            <Label htmlFor="" className="self-center">
-                Celular
-            </Label>
+            <Label htmlFor="">Celular</Label>
             <Input type="number" name="celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} placeholder="Celular" className="rounded-full" />
 
-            <Label htmlFor="" className="self-center">
-                Dirección
-            </Label>
+            <Label htmlFor="">Dirección</Label>
             <Input
                 type="text"
                 name="direccion"
@@ -133,22 +123,22 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 className="rounded-full"
             />
 
-            <Label htmlFor="" className="self-center">
-                Actividad económica
-            </Label>
+            <Label htmlFor="">Actividad económica</Label>
             <Select name="actividadEconomica" value={formData?.actividadEconomica || ''} onValueChange={(value) => handleChange('actividadEconomica', value)}>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una actividad" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">Light</SelectItem>
-                    <SelectItem value="1">Dark</SelectItem>
-                    <SelectItem value="2">System</SelectItem>
+                    {actividadesEconomicas?.map((actividadEconomica: string, index: number) => (
+                        <SelectItem key={index} value={index.toString()}>
+                            {actividadEconomica}
+                        </SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
 
             <Label htmlFor="">Departamento</Label>
-            <Select name="departamento" value={departamentoId || ''} onValueChange={(value) => setDepartamentoId(value)}>
+            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -161,25 +151,27 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Ciudad</Label>
-            <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Ciudad" />
-                </SelectTrigger>
-                <SelectContent>
-                    {ciudades?.map((ciudad, index) => (
-                        <SelectItem key={index} value={index.toString()}>
-                            {ciudad}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
+            {ciudades?.length > 0 && (
+                <>
+                    <Label htmlFor="">Ciudad</Label>
+                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Ciudad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {ciudades?.map((ciudad, index) => (
+                                <SelectItem key={index} value={index.toString()}>
+                                    {ciudad}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </>
+            )}
 
             {!data && (
                 <>
-                    <Label htmlFor="" className="self-center">
-                        Contraseña
-                    </Label>
+                    <Label htmlFor="">Contraseña</Label>
                     <Input
                         type="password"
                         name="password"
