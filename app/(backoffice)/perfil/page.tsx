@@ -1,3 +1,5 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/datepicker'
@@ -7,15 +9,54 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import ClickIcon from '../components/svg/ClipIcon'
 import ClipIcon from '../components/svg/ClipIcon'
+import { useEffect, useState } from 'react'
+import { Departamento, Persona } from '@/types/MyTypes'
+import useSWR, { mutate } from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 export default function Perfil() {
+    const [formData, setFormData] = useState<Partial<Persona>>()
+
+    const [ciudades, setCiudades] = useState<[]>([])
+    const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
+
+    useEffect(() => {
+        // Si no hay instructor seleccionado, no es necesario hacer la solicitud
+        const departamentoId = formData?.departamento
+
+        if (departamentoId) {
+            // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
+            const fetchCiudades = async () => {
+                const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${departamentoId}`
+                const response = await fetch(url)
+                if (!response.ok) {
+                    throw new Error('Error al obtener los cursos complementarios')
+                }
+                const data = await response.json()
+
+                setCiudades(data.ciudades)
+                // Actualizamos los datos de los cursos complementarios
+                mutate(url, data, false)
+            }
+
+            fetchCiudades()
+        }
+    }, [formData?.departamento])
+
+    const handleChange = (name: string, value: string) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }))
+    }
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
                 <h1 className="text-center text-4xl text-white">Perfil</h1>
             </header>
             <div className="space-y-2 mt-6 ml-6">
-                <h1 className="text-3xl uppercase font-bold">José Aguirre</h1>
+                <h1 className="text-3xl uppercase font-bold">Jorge Arias Osorio</h1>
                 <h5 className="text-2xl">CC - 1.000.323</h5>
 
                 <Dialog>
@@ -72,33 +113,46 @@ export default function Perfil() {
                 <div>
                     <form action="" className="flex flex-col space-y-3">
                         <Label htmlFor="">Fecha de nacimiento</Label>
-                        {/* <DatePicker /> */}
+                        <DatePicker name="fechaNacimiento" value="1989-04-04" placeholder="Seleccione una fecha" />
+
                         <Label htmlFor="">Correo electrónico</Label>
-                        <Input type="email" placeholder="Correo electrónico" className="rounded-full" />
+                        <Input type="email" value="jorgearias@gmail.com" placeholder="Correo electrónico" className="rounded-full" />
+
                         <Label htmlFor="">Celular</Label>
-                        <Input type="number" placeholder="Celular" className="rounded-full" />
+                        <Input type="number" value="3206985743" placeholder="Celular" className="rounded-full" />
+
                         <Label htmlFor="">Departamento</Label>
-                        <Select>
+                        <Select name="departamento" value={formData?.departamento || '6'} onValueChange={(value) => handleChange('departamento', value)}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Theme" />
+                                <SelectValue placeholder="Departamento" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
+                                {departamentos?.map((departamento, index) => (
+                                    <SelectItem key={departamento.id} value={departamento.id.toString()}>
+                                        {departamento.departamento}
+                                    </SelectItem>
+                                ))}
                             </SelectContent>
                         </Select>
-                        <Label htmlFor="">Ciudad</Label>
-                        <Select>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Theme" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                        </Select>
+
+                        {ciudades?.length > 0 && (
+                            <>
+                                <Label htmlFor="">Ciudad</Label>
+                                <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Ciudad" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {ciudades?.map((ciudad, index) => (
+                                            <SelectItem key={index} value={index.toString()}>
+                                                {ciudad}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </>
+                        )}
+
                         <Button className="rounded-full w-full">Guardar cambios</Button>
                     </form>
                 </div>

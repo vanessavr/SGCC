@@ -110,7 +110,7 @@ function DeleteButton({ persona }: { persona: Persona }) {
                 <p className="flex flex-col text-center justify-center pt-10">
                     {confirmarEliminacion ? (
                         <div>
-                            ¿Desea eliminar el usuario <span className="uppercase font-bold">&nbsp;{persona.nombres + ' ' + persona.apellidos}</span>? ¿Desea eliminar la empresa{' '}
+                            ¿Desea eliminar el usuario <span className="uppercase font-bold">&nbsp;{persona.nombres + ' ' + persona.apellidos}</span>?
                         </div>
                     ) : (
                         <>

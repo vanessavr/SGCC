@@ -147,15 +147,15 @@ export default function FormularioPersona({ className, data }: Props) {
             <RadioGroup name="genero" value={formData?.genero} onValueChange={(value) => handleChange('genero', value)} className="flex items-center gap-10">
                 <div className="space-x-2">
                     <Label htmlFor="option-m">M:</Label>
-                    <RadioGroupItem value="0" id="option-m" />
+                    <RadioGroupItem value="1" id="option-m" />
                 </div>
                 <div className="space-x-2">
                     <Label htmlFor="option-f">F:</Label>
-                    <RadioGroupItem value="1" id="option-f" />
+                    <RadioGroupItem value="2" id="option-f" />
                 </div>
                 <div className="space-x-2">
                     <Label htmlFor="option-o">O:</Label>
-                    <RadioGroupItem value="2" id="option-o" />
+                    <RadioGroupItem value="3" id="option-o" />
                 </div>
             </RadioGroup>
 
@@ -216,21 +216,21 @@ export default function FormularioPersona({ className, data }: Props) {
                     <SelectValue placeholder="Seleccione una población..." />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">No aplica</SelectItem>
-                    <SelectItem value="1">Con discapacidad</SelectItem>
-                    <SelectItem value="2">Víctimas</SelectItem>
-                    <SelectItem value="3">Indígena</SelectItem>
-                    <SelectItem value="4">Afrocolombiana</SelectItem>
-                    <SelectItem value="5">Comunidades negras</SelectItem>
-                    <SelectItem value="6">Palenquera</SelectItem>
-                    <SelectItem value="7">Raizal</SelectItem>
-                    <SelectItem value="8">Privada de la libertad</SelectItem>
-                    <SelectItem value="9">Jóvenes vulnerables</SelectItem>
-                    <SelectItem value="10">Tercera edad</SelectItem>
-                    <SelectItem value="11">En reincorporación</SelectItem>
-                    <SelectItem value="12">En reintegración</SelectItem>
-                    <SelectItem value="13">RROM</SelectItem>
-                    <SelectItem value="14">Adolescente en conflicto con ley penal</SelectItem>
+                    <SelectItem value="1">No aplica</SelectItem>
+                    <SelectItem value="2">Con discapacidad</SelectItem>
+                    <SelectItem value="3">Víctimas</SelectItem>
+                    <SelectItem value="4">Indígena</SelectItem>
+                    <SelectItem value="5">Afrocolombiana</SelectItem>
+                    <SelectItem value="6">Comunidades negras</SelectItem>
+                    <SelectItem value="7">Palenquera</SelectItem>
+                    <SelectItem value="8">Raizal</SelectItem>
+                    <SelectItem value="9">Privada de la libertad</SelectItem>
+                    <SelectItem value="10">Jóvenes vulnerables</SelectItem>
+                    <SelectItem value="11">Tercera edad</SelectItem>
+                    <SelectItem value="12">En reincorporación</SelectItem>
+                    <SelectItem value="13">En reintegración</SelectItem>
+                    <SelectItem value="14">RROM</SelectItem>
+                    <SelectItem value="15">Adolescente en conflicto con ley penal</SelectItem>
                 </SelectContent>
             </Select>
 
