@@ -3,7 +3,7 @@
 import { Table, TableBody, TableHeader, TableHead, TableCell, TableRow } from '@/components/ui/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import ViewIcon from '../../components/svg/ViewIcon'
@@ -12,6 +12,8 @@ import DeleteIcon from '../../components/svg/DeleteIcon'
 import PlusIcon from '../../components/svg/PlusIcon'
 import { Persona } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
+import { useState } from 'react'
+import CheckIcon from '../../components/svg/CheckIcon'
 
 export default function Persona() {
     const { data: personas, error } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
@@ -75,6 +77,8 @@ export default function Persona() {
 }
 
 function DeleteButton({ persona }: { persona: Persona }) {
+    const [confirmarEliminacion, setConfirmarEliminacion] = useState(true)
+
     const handleClick = () => {
         fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${persona.id}`, {
             method: 'DELETE',
@@ -83,6 +87,17 @@ function DeleteButton({ persona }: { persona: Persona }) {
                 Accept: 'application/json',
             },
         })
+            .then((response) => {
+                if (response.ok) {
+                    setConfirmarEliminacion(false)
+                    setTimeout(() => {
+                        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`)
+                    }, 2000)
+                }
+            })
+            .catch((error) => {
+                console.error('Error al eliminar la solicitud:', error)
+            })
     }
 
     return (
@@ -90,17 +105,31 @@ function DeleteButton({ persona }: { persona: Persona }) {
             <DialogTrigger>
                 <DeleteIcon />
             </DialogTrigger>
+
             <DialogContent>
-                <p className="flex text-center justify-center pt-10">
-                    ¿Desea eliminar el usuario <span className="uppercase font-bold">&nbsp;{persona.nombres + ' ' + persona.apellidos}</span>?
+                <p className="flex flex-col text-center justify-center pt-10">
+                    {confirmarEliminacion ? (
+                        <div>
+                            ¿Desea eliminar el usuario <span className="uppercase font-bold">&nbsp;{persona.nombres + ' ' + persona.apellidos}</span>? ¿Desea eliminar la empresa{' '}
+                        </div>
+                    ) : (
+                        <>
+                            <CheckIcon className="w-20 mx-auto text-sena-500" />
+                            <span className="text-2xl px-6">¡Se ha eliminado correctamente el usuario!</span>
+                        </>
+                    )}
                 </p>
                 <DialogFooter className="flex items-center justify-center gap-4 mb-10">
-                    <DialogClose asChild>
-                        <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
-                    </DialogClose>
-                    <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
-                        Confirmar
-                    </Button>
+                    {confirmarEliminacion && (
+                        <>
+                            <DialogClose asChild>
+                                <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
+                            </DialogClose>
+                            <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
+                                Confirmar
+                            </Button>
+                        </>
+                    )}
                 </DialogFooter>
             </DialogContent>
         </Dialog>

@@ -151,7 +151,9 @@ export default function FormularioSolicitud({ className, data }: Props) {
                 </SelectTrigger>
                 <SelectContent>
                     {usuarios?.map((usuario, index) => (
-                        <SelectItem value={usuario.id}>{usuario.nombres + ' ' + usuario.apellidos}</SelectItem>
+                        <SelectItem key={usuario.id} value={usuario.id}>
+                            {usuario.nombres + ' ' + usuario.apellidos}
+                        </SelectItem>
                     ))}
                 </SelectContent>
             </Select>
@@ -163,7 +165,9 @@ export default function FormularioSolicitud({ className, data }: Props) {
                 </SelectTrigger>
                 <SelectContent>
                     {cursosComplementarios?.map((cursoComplementario, index) => (
-                        <SelectItem value={cursoComplementario.id}>{cursoComplementario.nombre}</SelectItem>
+                        <SelectItem key={cursoComplementario.id} value={cursoComplementario.id}>
+                            {cursoComplementario.nombre}
+                        </SelectItem>
                     ))}
                 </SelectContent>
             </Select>
