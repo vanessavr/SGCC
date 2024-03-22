@@ -10,6 +10,7 @@ import { fetcher } from '@/utils/fetcher'
 import { useEffect, useState } from 'react'
 import useSWR, { mutate } from 'swr'
 import { useToast } from '@/components/ui/use-toast'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Props {
     className?: string
@@ -217,6 +218,15 @@ const FormularioCurso = ({ className, data }: Props) => {
                 value={formData?.cuposDisponibles || ''}
                 onChange={(event) => handleChange('cuposDisponibles', event.target.value)}
                 className="rounded-full"
+            />
+
+            <Label htmlFor="">Descripción</Label>
+            <Textarea
+            
+                name="descripcion"
+                value={formData?.descripcion || ''}
+                onChange={(event) => handleChange('descripcion', event.target.value)}
+                placeholder="Escriba aquí una descripción del curso"
             />
 
             <Button className="rounded-full w-full !mt-8">Guardar</Button>

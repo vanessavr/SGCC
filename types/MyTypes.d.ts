@@ -39,6 +39,8 @@ interface CursoComplementario {
     fechaInicio: string
     fechaFin: string
     cuposDisponibles: number
+    imagen: string
+    descripcion: string
     createdAt: string
     updatedAt: string
     instructor: Instructor
