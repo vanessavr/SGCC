@@ -2,7 +2,6 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { DatePicker } from '@/components/ui/datepicker'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -113,7 +112,7 @@ export default function Perfil() {
                 <div>
                     <form action="" className="flex flex-col space-y-3">
                         <Label htmlFor="">Fecha de nacimiento</Label>
-                        <DatePicker name="fechaNacimiento" value="1989-04-04" placeholder="Seleccione una fecha" />
+                        <input type="date" name="fechaNacimiento" value="1989-04-04" placeholder="Seleccione una fecha" />
 
                         <Label htmlFor="">Correo electrónico</Label>
                         <Input type="email" value="jorgearias@gmail.com" placeholder="Correo electrónico" className="rounded-full" />

@@ -41,9 +41,9 @@ export default function FormularioCursoComplementario() {
                 </SelectContent>
             </Select>
             <Label htmlFor="cuposSolicitados" className="font-bold self-center">
-                Cupos solicitados:
+                Cupos solicitados: *
             </Label>
-            <Input id="cuposSolicitados" name="cuposSolicitados" type="number" />
+            <Input id="cuposSolicitados" name="cuposSolicitados" type="number" required />
             <Dialog>
                 <DialogTrigger className="rounded-full font-bold py-2 px-8 !w-full col-span-2 mt-6 text-white bg-sena-800 ">Aplicar</DialogTrigger>
                 <DialogContent className="pb-20 pt-20 flex items-center justify-center flex-col py-8 ">

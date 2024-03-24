@@ -56,7 +56,7 @@ export default function FormularioAmbiente({ className, data }: Props) {
     }
     return (
         <form onSubmit={handleSubmit} className={`${className}`}>
-            <Label htmlFor="">Nombre</Label>
+            <Label htmlFor="">Nombre *</Label>
             <Input
                 type="text"
                 name="nombre"
@@ -67,7 +67,7 @@ export default function FormularioAmbiente({ className, data }: Props) {
                 required
             />
 
-            <Label htmlFor="">Capacidad</Label>
+            <Label htmlFor="">Capacidad *</Label>
             <Input
                 type="number"
                 name="capacidad"
@@ -75,10 +75,11 @@ export default function FormularioAmbiente({ className, data }: Props) {
                 onChange={(event) => handleChange('capacidad', event.target.value)}
                 placeholder="Capacidad"
                 className="rounded-full"
+                required
             />
 
-            <Label htmlFor="">Centro de formación</Label>
-            <Select name="centroFormacion" value={formData?.centroFormacion || ''} onValueChange={(value) => handleChange('centroFormacion', value)}>
+            <Label htmlFor="">Centro de formación *</Label>
+            <Select name="centroFormacion" value={formData?.centroFormacion || ''} onValueChange={(value) => handleChange('centroFormacion', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione un centro" />
                 </SelectTrigger>

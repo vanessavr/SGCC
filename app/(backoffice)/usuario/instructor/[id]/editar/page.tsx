@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -51,7 +50,7 @@ export default function EditarInstructor({ params }: { params: { id: string } })
                         <Label htmlFor="">Número de identificación</Label>
                         <Input type="number" placeholder="Número de identificación" className="rounded-full" />
                         <Label htmlFor="">Fecha de nacimiento</Label>
-                        <DatePicker />
+                        <input type="date" />
                         <Label htmlFor="">Género</Label>
                         <Input type="text" placeholder="Género" className="rounded-full" />
                         <Label htmlFor="">Correo electrónico</Label>

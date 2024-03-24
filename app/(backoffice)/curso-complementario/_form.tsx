@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -90,7 +89,7 @@ const FormularioCurso = ({ className, data }: Props) => {
 
     return (
         <form onSubmit={handleSubmit} className={`${className}`}>
-            <Label htmlFor="">Área de formación</Label>
+            <Label htmlFor="">Área de formación *</Label>
             <Input
                 type="text"
                 placeholder="Área de formación"
@@ -101,10 +100,10 @@ const FormularioCurso = ({ className, data }: Props) => {
                 required
             />
 
-            <Label htmlFor="">Nombre</Label>
+            <Label htmlFor="">Nombre *</Label>
             <Input type="text" placeholder="Nombre" name="nombre" value={formData?.nombre || ''} onChange={(event) => handleChange('nombre', event.target.value)} className="rounded-full" required />
 
-            <Label htmlFor="">Ficha de formación</Label>
+            <Label htmlFor="">Ficha de formación *</Label>
             <Input
                 type="text"
                 placeholder="Ficha de formación"
@@ -114,8 +113,8 @@ const FormularioCurso = ({ className, data }: Props) => {
                 className="rounded-full"
             />
 
-            <Label htmlFor="">Centro de formación</Label>
-            <Select name="centroFormacion" value={formData?.centroFormacion || ''} onValueChange={(value) => handleChange('centroFormacion', value)}>
+            <Label htmlFor="">Centro de formación *</Label>
+            <Select name="centroFormacion" value={formData?.centroFormacion || ''} onValueChange={(value) => handleChange('centroFormacion', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Centro de formación" />
                 </SelectTrigger>
@@ -128,8 +127,8 @@ const FormularioCurso = ({ className, data }: Props) => {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Instructor</Label>
-            <Select name="instructorId" value={formData?.instructorId || ''} onValueChange={(value) => handleChange('instructorId', value)}>
+            <Label htmlFor="">Instructor *</Label>
+            <Select name="instructorId" value={formData?.instructorId || ''} onValueChange={(value) => handleChange('instructorId', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Instructor" />
                 </SelectTrigger>
@@ -142,8 +141,8 @@ const FormularioCurso = ({ className, data }: Props) => {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Ambiente</Label>
-            <Select name="ambienteId" value={formData?.ambienteId || ''} onValueChange={(value) => handleChange('ambienteId', value)}>
+            <Label htmlFor="">Ambiente *</Label>
+            <Select name="ambienteId" value={formData?.ambienteId || ''} onValueChange={(value) => handleChange('ambienteId', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Ambiente" />
                 </SelectTrigger>
@@ -156,8 +155,8 @@ const FormularioCurso = ({ className, data }: Props) => {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Jornada</Label>
-            <Select name="jornada" value={formData?.jornada || ''} onValueChange={(value) => handleChange('jornada', value)}>
+            <Label htmlFor="">Jornada *</Label>
+            <Select name="jornada" value={formData?.jornada || ''} onValueChange={(value) => handleChange('jornada', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Jornada" />
                 </SelectTrigger>
@@ -169,8 +168,8 @@ const FormularioCurso = ({ className, data }: Props) => {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Departamento</Label>
-            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
+            <Label htmlFor="">Departamento *</Label>
+            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -185,8 +184,8 @@ const FormularioCurso = ({ className, data }: Props) => {
 
             {ciudades?.length > 0 && (
                 <>
-                    <Label htmlFor="">Ciudad</Label>
-                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
+                    <Label htmlFor="">Ciudad *</Label>
+                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)} required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
@@ -201,14 +200,36 @@ const FormularioCurso = ({ className, data }: Props) => {
                 </>
             )}
 
-            <Label htmlFor="">Duración</Label>
-            <Input type="text" placeholder="Duración" name="duracion" value={formData?.duracion || ''} onChange={(event) => handleChange('duracion', event.target.value)} className="rounded-full" />
+            <Label htmlFor="">Duración *</Label>
+            <Input
+                type="text"
+                placeholder="Duración"
+                name="duracion"
+                value={formData?.duracion || ''}
+                onChange={(event) => handleChange('duracion', event.target.value)}
+                className="rounded-full"
+                required
+            />
 
             <Label htmlFor="">Fecha inicio</Label>
-            <DatePicker placeholder="Seleccionar fecha.." name="fechaInicio" value={formData?.fechaInicio || ''} onChange={(value) => handleChange('fechaInicio', value)} />
+            <input
+                type="date"
+                placeholder="Seleccionar fecha.."
+                name="fechaInicio"
+                value={formData?.fechaInicio || ''}
+                onChange={(event) => handleChange('fechaInicio', event.target.value)}
+                className="p-2 rounded-full block w-full"
+            />
 
             <Label htmlFor="">Fecha fin</Label>
-            <DatePicker placeholder="Seleccionar fecha.." name="fechaFin" value={formData?.fechaFin || ''} onChange={(value) => handleChange('fechaFin', value)} />
+            <input
+                type="date"
+                placeholder="Seleccionar fecha.."
+                name="fechaFin"
+                value={formData?.fechaFin || ''}
+                onChange={(event) => handleChange('fechaFin', event.target.value)}
+                className="p-2 rounded-full block w-full"
+            />
 
             <Label htmlFor="">Cupos disponibles</Label>
             <Input
@@ -222,7 +243,6 @@ const FormularioCurso = ({ className, data }: Props) => {
 
             <Label htmlFor="">Descripción</Label>
             <Textarea
-            
                 name="descripcion"
                 value={formData?.descripcion || ''}
                 onChange={(event) => handleChange('descripcion', event.target.value)}

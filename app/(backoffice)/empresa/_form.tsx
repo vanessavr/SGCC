@@ -84,7 +84,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
     }
     return (
         <form onSubmit={handleSubmit} className={`${className}`}>
-            <Label htmlFor="">Razón social</Label>
+            <Label htmlFor="">Razón social *</Label>
             <Input
                 type="text"
                 name="razonSocial"
@@ -92,9 +92,10 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 onChange={(event) => handleChange('razonSocial', event.target.value)}
                 placeholder="Nombre de la empresa"
                 className="!mt-0 rounded-full"
+                required
             />
 
-            <Label htmlFor="">NIT</Label>
+            <Label htmlFor="">NIT *</Label>
             <Input
                 type="number"
                 name="nit"
@@ -102,9 +103,10 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 onChange={(event) => handleChange('nit', event.target.value)}
                 placeholder="NIT (Sin dígito de verificación)"
                 className="rounded-full"
+                required
             />
 
-            <Label htmlFor="">Representante legal</Label>
+            <Label htmlFor="">Persona a cargo *</Label>
             <Input
                 type="text"
                 name="representanteLegal"
@@ -112,9 +114,10 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 onChange={(event) => handleChange('representanteLegal', event.target.value)}
                 placeholder="Nombre del representante legal"
                 className="rounded-full"
+                required
             />
 
-            <Label htmlFor="">Correo electrónico</Label>
+            <Label htmlFor="">Correo electrónico *</Label>
             <Input
                 type="email"
                 name="correoElectronico"
@@ -122,12 +125,13 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 onChange={(event) => handleChange('correoElectronico', event.target.value)}
                 placeholder="Correo electrónico"
                 className="rounded-full"
+                required
             />
 
-            <Label htmlFor="">Celular</Label>
-            <Input type="number" name="celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} placeholder="Celular" className="rounded-full" />
+            <Label htmlFor="">Celular *</Label>
+            <Input type="number" name="celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} placeholder="Celular" className="rounded-full"  required/>
 
-            <Label htmlFor="">Dirección</Label>
+            <Label htmlFor="">Dirección *</Label>
             <Input
                 type="text"
                 name="direccion"
@@ -135,10 +139,11 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 onChange={(event) => handleChange('direccion', event.target.value)}
                 placeholder="Dirección"
                 className="rounded-full"
+                required
             />
 
-            <Label htmlFor="">Actividad económica</Label>
-            <Select name="actividadEconomica" value={formData?.actividadEconomica || ''} onValueChange={(value) => handleChange('actividadEconomica', value)}>
+            <Label htmlFor="">Actividad económica *</Label>
+            <Select name="actividadEconomica" value={formData?.actividadEconomica || ''} onValueChange={(value) => handleChange('actividadEconomica', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una actividad" />
                 </SelectTrigger>
@@ -151,8 +156,8 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Departamento</Label>
-            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
+            <Label htmlFor="">Departamento *</Label>
+            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -167,8 +172,8 @@ export default function FormularioEmpresa({ className, data }: Props) {
 
             {ciudades?.length > 0 && (
                 <>
-                    <Label htmlFor="">Ciudad</Label>
-                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
+                    <Label htmlFor="">Ciudad *</Label>
+                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)} required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
@@ -185,7 +190,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
 
             {!data && (
                 <>
-                    <Label htmlFor="">Contraseña</Label>
+                    <Label htmlFor="">Contraseña *</Label>
                     <Input
                         type="password"
                         name="password"
@@ -193,6 +198,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
                         onChange={(event) => handleChange('password', event.target.value)}
                         placeholder="Contraseña"
                         className="rounded-full"
+                        required
                     />
                 </>
             )}

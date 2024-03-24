@@ -1,7 +1,6 @@
 'use client'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -99,7 +98,7 @@ export default function FormularioPersona({ className, data }: Props) {
             />
 
             <Label htmlFor="" className="self-center">
-                Apellidos
+                Apellidos *
             </Label>
             <Input
                 type="text"
@@ -108,12 +107,13 @@ export default function FormularioPersona({ className, data }: Props) {
                 value={formData?.apellidos || ''}
                 onChange={(event) => handleChange('apellidos', event.target.value)}
                 className="rounded-full"
+                required
             />
 
             <Label htmlFor="" className="self-center">
-                Tipo de documento
+                Tipo de documento *
             </Label>
-            <Select name="tipoDocumento" value={formData?.tipoDocumento || ''} onValueChange={(value) => handleChange('tipoDocumento', value)}>
+            <Select name="tipoDocumento" value={formData?.tipoDocumento || ''} onValueChange={(value) => handleChange('tipoDocumento', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Tipo de documento" />
                 </SelectTrigger>
@@ -125,7 +125,7 @@ export default function FormularioPersona({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="" className="self-center">
-                Número de identificación
+                Número de identificación *
             </Label>
             <Input
                 type="number"
@@ -134,17 +134,25 @@ export default function FormularioPersona({ className, data }: Props) {
                 onChange={(event) => handleChange('numeroIdentificacion', event.target.value)}
                 placeholder="Número de identificación"
                 className="rounded-full"
+                required
             />
 
             <Label htmlFor="" className="self-center">
-                Fecha de nacimiento
+                Fecha de nacimiento *
             </Label>
-            <DatePicker placeholder="Seleccione una fecha" name="fechaNacimiento" value={formData?.fechaNacimiento || ''} onChange={(value) => handleChange('fechaNacimiento', value)} />
+            <input
+                type="date"
+                placeholder="Seleccione una fecha"
+                name="fechaNacimiento"
+                value={formData?.fechaNacimiento || ''}
+                onChange={(event) => handleChange('fechaNacimiento', event.target.value)}
+                className='p-2 rounded-full block w-full'
+            />
 
             <Label htmlFor="" className="self-center">
-                Género
+                Género *
             </Label>
-            <RadioGroup name="genero" value={formData?.genero} onValueChange={(value) => handleChange('genero', value)} className="flex items-center gap-10">
+            <RadioGroup name="genero" value={formData?.genero} onValueChange={(value) => handleChange('genero', value)} className="flex items-center gap-10" required>
                 <div className="space-x-2">
                     <Label htmlFor="option-m">M:</Label>
                     <RadioGroupItem value="1" id="option-m" />
@@ -160,7 +168,7 @@ export default function FormularioPersona({ className, data }: Props) {
             </RadioGroup>
 
             <Label htmlFor="" className="self-center">
-                Correo electrónico
+                Correo electrónico *
             </Label>
             <Input
                 type="email"
@@ -169,15 +177,24 @@ export default function FormularioPersona({ className, data }: Props) {
                 onChange={(event) => handleChange('correoElectronico', event.target.value)}
                 placeholder="Correo electrónico"
                 className="rounded-full"
+                required
             />
 
             <Label htmlFor="" className="self-center">
-                Celular
+                Celular *
             </Label>
-            <Input type="number" name="celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} placeholder="Celular" className="rounded-full" />
+            <Input
+                type="number"
+                name="celular"
+                value={formData?.celular || ''}
+                onChange={(event) => handleChange('celular', event.target.value)}
+                placeholder="Celular"
+                className="rounded-full"
+                required
+            />
 
-            <Label htmlFor="">Departamento</Label>
-            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
+            <Label htmlFor="">Departamento *</Label>
+            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -192,8 +209,8 @@ export default function FormularioPersona({ className, data }: Props) {
 
             {ciudades?.length > 0 && (
                 <>
-                    <Label htmlFor="">Ciudad</Label>
-                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
+                    <Label htmlFor="">Ciudad *</Label>
+                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)} required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
@@ -209,9 +226,9 @@ export default function FormularioPersona({ className, data }: Props) {
             )}
 
             <Label htmlFor="" className="self-center">
-                Población especial
+                Población especial *
             </Label>
-            <Select name="poblacionEspecial" value={formData?.poblacionEspecial || ''} onValueChange={(value) => handleChange('poblacionEspecial', value)}>
+            <Select name="poblacionEspecial" value={formData?.poblacionEspecial || ''} onValueChange={(value) => handleChange('poblacionEspecial', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una población..." />
                 </SelectTrigger>
@@ -237,9 +254,9 @@ export default function FormularioPersona({ className, data }: Props) {
             {!data && (
                 <>
                     <Label htmlFor="" className="self-center">
-                        Contraseña
+                        Contraseña *
                     </Label>
-                    <Input type="password" name="password" placeholder="Contraseña" onChange={(event) => handleChange('password', event.target.value)} className="rounded-full" />
+                    <Input type="password" name="password" placeholder="Contraseña" onChange={(event) => handleChange('password', event.target.value)} className="rounded-full" required />
                 </>
             )}
             <Button className="rounded-full w-full col-span-2">{data ? 'Guardar' : 'Registrar'}</Button>
