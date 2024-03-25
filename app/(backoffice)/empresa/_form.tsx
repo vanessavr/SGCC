@@ -16,7 +16,7 @@ interface Props {
     data?: Empresa
 }
 export default function FormularioEmpresa({ className, data }: Props) {
-    const [formData, setFormData] = useState<Partial<Empresa>>()
+    const [formData, setFormData] = useState<Partial<Empresa>>(data || {})
     const { toast } = useToast()
     const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)

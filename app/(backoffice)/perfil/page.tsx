@@ -80,6 +80,8 @@ export default function Perfil() {
         }))
     }
 
+    const tipoDocumento = formData?.tipoDocumento == '1' ? 'CC' : formData?.tipoDocumento == '2' ? 'CE' : 'TI'
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -87,7 +89,9 @@ export default function Perfil() {
             </header>
             <div className="space-y-2 mt-6 ml-6">
                 <h1 className="text-3xl uppercase font-bold">{formData?.nombres + ' ' + formData?.apellidos}</h1>
-                <h5 className="text-2xl">CC - {formData?.numeroIdentificacion}</h5>
+                <h5 className="text-2xl">
+                    {tipoDocumento} - {formData?.numeroIdentificacion}
+                </h5>
 
                 <Dialog>
                     <DialogTrigger className="rounded-full py-2 px-4 mt-6 text-white bg-sena-800">Cambiar contraseña</DialogTrigger>

@@ -10,8 +10,11 @@ import { fetcher } from '@/utils/fetcher'
 export default function EditarPersona({ params }: { params: { id: string } }) {
     const { data: persona, error } = useSWR<Persona>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${params.id}`, fetcher)
 
-    const tipoDocumentoNumber = parseInt(persona?.tipoDocumento, 10)
-    const tipoDocumentoString = tipoDocumentoNumber === 1 ? 'C.C' : tipoDocumentoNumber === 2 ? 'C.E' : 'T.I'
+    const tipoDocumento = persona?.tipoDocumento == '1' ? 'CC' : persona?.tipoDocumento == '2' ? 'CE' : 'TI'
+    const fechaNacimiento = persona?.fechaNacimiento.toString().split('T')[0]
+
+    const personaTransformed = { ...persona, fechaNacimiento: fechaNacimiento } as Persona
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -20,7 +23,7 @@ export default function EditarPersona({ params }: { params: { id: string } }) {
             <div className="flex flex-col space-y-2 mt-6 ml-6">
                 <h1 className="text-3xl uppercase font-bold">{persona?.nombres}</h1>
                 <h5 className="text-2xl">
-                    {tipoDocumentoString} - {persona?.numeroIdentificacion}
+                    {tipoDocumento} - {persona?.numeroIdentificacion}
                 </h5>
 
                 <div>
@@ -39,7 +42,7 @@ export default function EditarPersona({ params }: { params: { id: string } }) {
                 </div>
 
                 <div>
-                    <FormularioPersona data={persona} className="space-y-4" />
+                    <FormularioPersona data={personaTransformed} className="space-y-4" />
                 </div>
             </div>
         </div>

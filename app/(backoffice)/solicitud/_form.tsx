@@ -16,7 +16,7 @@ interface Props {
     data?: Solicitud
 }
 export default function FormularioSolicitud({ className, data }: Props) {
-    const [formData, setFormData] = useState<Partial<Solicitud>>()
+    const [formData, setFormData] = useState<Partial<Solicitud>>(data || {})
     const { toast } = useToast()
     const { data: cursosComplementarios, error: erroCursosComplementarios } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
     const { data: usuarios, error: erroUsuarios } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
@@ -24,6 +24,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
     useEffect(() => {
         if (data) {
             const { usuario, ...formDataWithoutUsuario } = data
+
             setFormData(formDataWithoutUsuario)
         }
     }, [data])

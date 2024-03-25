@@ -8,6 +8,11 @@ import { fetcher } from '@/utils/fetcher'
 export default function EditarCursoComplementario({ params }: { params: { id: string } }) {
     const { data: cursoComplementario, error } = useSWR<CursoComplementario>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${params.id}`, fetcher)
 
+    const fechaInicio = cursoComplementario?.fechaInicio.toString().split('T')[0]
+    const fechaFin = cursoComplementario?.fechaFin.toString().split('T')[0]
+
+    const cursoComplementarioTransformed = { ...cursoComplementario, fechaInicio: fechaInicio, fechaFin: fechaFin } as CursoComplementario
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -20,7 +25,7 @@ export default function EditarCursoComplementario({ params }: { params: { id: st
             </div>
             <div className="mt-10 bg-gray-300 rounded-md py-16 grid grid-cols-2 gap-6 items-center">
                 <div className="ml-64 w-full">
-                    <FormularioCurso className="flex flex-col space-y-3" data={cursoComplementario} />
+                    <FormularioCurso className="flex flex-col space-y-3" data={cursoComplementarioTransformed} />
                 </div>
             </div>
         </div>

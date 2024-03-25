@@ -206,7 +206,7 @@ const FormularioCurso = ({ className, data }: Props) => {
                 name="fechaInicio"
                 value={formData?.fechaInicio || ''}
                 onChange={(event) => handleChange('fechaInicio', event.target.value)}
-                className="p-2 rounded-full block w-full"
+                className="p-2 rounded-full block w-full text-sm"
             />
 
             <Label htmlFor="">Fecha fin</Label>
@@ -216,7 +216,7 @@ const FormularioCurso = ({ className, data }: Props) => {
                 name="fechaFin"
                 value={formData?.fechaFin || ''}
                 onChange={(event) => handleChange('fechaFin', event.target.value)}
-                className="p-2 rounded-full block w-full"
+                className="p-2 rounded-full block w-full text-sm"
             />
 
             <Label htmlFor="">Cupos disponibles</Label>

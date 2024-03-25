@@ -14,7 +14,7 @@ interface Props {
     data?: Ambiente
 }
 export default function FormularioAmbiente({ className, data }: Props) {
-    const [formData, setFormData] = useState<Partial<Ambiente>>()
+    const [formData, setFormData] = useState<Partial<Ambiente>>(data || {})
     const { toast } = useToast()
 
     useEffect(() => {

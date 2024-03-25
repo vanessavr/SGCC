@@ -17,7 +17,7 @@ interface Props {
     data?: Persona
 }
 export default function FormularioPersona({ className, data }: Props) {
-    const [formData, setFormData] = useState<Partial<Persona>>()
+    const [formData, setFormData] = useState<Partial<Persona>>(data || {})
     const { toast } = useToast()
     const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
@@ -134,7 +134,8 @@ export default function FormularioPersona({ className, data }: Props) {
                 name="fechaNacimiento"
                 value={formData?.fechaNacimiento || ''}
                 onChange={(event) => handleChange('fechaNacimiento', event.target.value)}
-                className="p-2 rounded-full block w-full"
+                className="p-2 rounded-full block w-full text-sm pl-3"
+                required
             />
 
             <Label htmlFor="" className="self-center">
