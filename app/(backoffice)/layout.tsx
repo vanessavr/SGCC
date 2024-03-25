@@ -14,8 +14,8 @@ import LoadIcon from './components/svg/LoadIcon'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
-import { Persona } from '@/types/MyTypes'
 import { getProfile } from '@/lib/actions'
+import { useRouter } from 'next/navigation'
 
 export default function BackofficeLayout({
     children, // will be a page or nested layout
@@ -23,16 +23,25 @@ export default function BackofficeLayout({
     children: React.ReactNode
 }) {
     const [authUser, setAuthUser] = useState<any>()
+    const router = useRouter()
 
-    const handleSubmit = () => {
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/logout`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        })
+    const handleSubmit = async () => {
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            })
+
+            // Redireccionar a la página de inicio de sesión
+            router.push('/iniciar-sesion')
+        } catch (error: any) {
+            console.error('Error al cerrar sesión:', error.message)
+            // Manejar errores si es necesario
+        }
     }
 
     useEffect(() => {

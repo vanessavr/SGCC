@@ -10,24 +10,47 @@ import FormularioEmpresa from '@/app/(backoffice)/empresa/_form'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Login } from '@/types/MyTypes'
+import { useRouter } from 'next/navigation'
 
 export default function InicioSesion() {
     const [formData, setFormData] = useState<Partial<Login>>()
     const [selectedOption, setSelectedOption] = useState('empresa')
+    const router = useRouter()
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault() // Evita que el formulario se envíe automáticamente
 
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/login`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/login`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+
+            if (!response.ok) {
+                throw new Error('Error al iniciar sesión: ' + response.statusText)
+            }
+
+            const data = await response.json()
+            const token = data.token // Suponiendo que el token está en la propiedad 'token'
+
+            if (token) {
+                // Redireccionar al panel principal
+                router.push('/panel-principal')
+            } else {
+                // Si no se recibió un token en la respuesta, manejar el error
+                throw new Error('No se recibió un token en la respuesta')
+            }
+        } catch (error: any) {
+            console.error('Error al iniciar sesión:', error.message)
+            // Manejar errores si es necesario
+        }
     }
+
 
     const handleChange = (name: string, value: string) => {
         setFormData((prevData) => ({
