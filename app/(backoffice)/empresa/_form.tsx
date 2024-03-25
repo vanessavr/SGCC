@@ -71,7 +71,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
         }))
     }
     return (
-        <form onSubmit={handleSubmit} className={`${className}`}>
+        <form onSubmit={handleSubmit} className={`${className}`} id="form-empresa">
             <Label htmlFor="">Razón social *</Label>
             <Input
                 type="text"
@@ -198,7 +198,9 @@ export default function FormularioEmpresa({ className, data }: Props) {
                     />
                 </>
             )}
-            <Button className="rounded-full w-full col-span-2">Registrar</Button>
+            <Button className="rounded-full w-full col-span-2" form="form-empresa">
+                Registrar
+            </Button>
         </form>
     )
 }

@@ -8,8 +8,8 @@ import { fetcher } from '@/utils/fetcher'
 export default function EditarCursoComplementario({ params }: { params: { id: string } }) {
     const { data: cursoComplementario, error } = useSWR<CursoComplementario>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${params.id}`, fetcher)
 
-    const fechaInicio = cursoComplementario?.fechaInicio.toString().split('T')[0]
-    const fechaFin = cursoComplementario?.fechaFin.toString().split('T')[0]
+    const fechaInicio = cursoComplementario?.fechaInicio?.toString().split('T')[0]
+    const fechaFin = cursoComplementario?.fechaFin?.toString().split('T')[0]
 
     const cursoComplementarioTransformed = { ...cursoComplementario, fechaInicio: fechaInicio, fechaFin: fechaFin } as CursoComplementario
 
