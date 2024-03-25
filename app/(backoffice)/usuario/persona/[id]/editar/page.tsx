@@ -10,11 +10,10 @@ import { fetcher } from '@/utils/fetcher'
 export default function EditarPersona({ params }: { params: { id: string } }) {
     const { data: persona, error } = useSWR<Persona>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${params.id}`, fetcher)
 
-    const tipoDocumento = persona?.tipoDocumento == '1' ? 'CC' : persona?.tipoDocumento == '2' ? 'CE' : 'TI'
     const fechaNacimiento = persona?.fechaNacimiento.toString().split('T')[0]
-
     const personaTransformed = { ...persona, fechaNacimiento: fechaNacimiento } as Persona
 
+    const tipoDocumento = persona?.tipoDocumento == '1' ? 'CC' : persona?.tipoDocumento == '2' ? 'CE' : 'TI'
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">

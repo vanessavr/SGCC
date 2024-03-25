@@ -9,14 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import ClickIcon from '../components/svg/ClipIcon'
 import ClipIcon from '../components/svg/ClipIcon'
 import { useEffect, useState } from 'react'
-import { Departamento, Persona } from '@/types/MyTypes'
+import { Departamento, Empresa, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
-import { getProfile, updateProfile } from '@/lib/actions'
+import { getProfile, updateProfilePersona, updateProfileEmpresa } from '@/lib/actions'
 
 export default function Perfil() {
-    const [formData, setFormData] = useState<Partial<Persona>>()
+    const [formData, setFormData] = useState<any>()
     const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
 
@@ -52,7 +52,14 @@ export default function Perfil() {
                     throw new Error('Error al obtener el perfil del usuario')
                 }
 
-                setFormData(data)
+                let dataTransformed = null
+
+                if (data?.fechaNacimiento) {
+                    const fechaNacimiento = data?.fechaNacimiento.toString().split('T')[0]
+                    dataTransformed = { ...data, fechaNacimiento: fechaNacimiento } as Persona
+                }
+
+                setFormData(dataTransformed || data)
             } catch (error: any) {
                 console.error('Error al obtener el perfil del usuario:', error.message)
             }
@@ -65,7 +72,13 @@ export default function Perfil() {
         event.preventDefault()
 
         try {
-            await updateProfile(formData as Persona)
+            if (formData?.fechaNacimiento) {
+                await updateProfilePersona(formData as Persona)
+            }
+
+            if (formData?.razonSocial) {
+                await updateProfileEmpresa(formData as Empresa)
+            }
             toast({ title: '✔️', description: 'Perfil actualizado satisfactoriamente' })
         } catch (error) {
             console.error('Error al actualizar el perfil:', error)
@@ -74,7 +87,7 @@ export default function Perfil() {
     }
 
     const handleChange = (name: string, value: string) => {
-        setFormData((prevData) => ({
+        setFormData((prevData: any) => ({
             ...prevData,
             [name]: value,
         }))
@@ -88,9 +101,9 @@ export default function Perfil() {
                 <h1 className="text-center text-4xl text-white">Perfil</h1>
             </header>
             <div className="space-y-2 mt-6 ml-6">
-                <h1 className="text-3xl uppercase font-bold">{formData?.nombres + ' ' + formData?.apellidos}</h1>
+                <h1 className="text-3xl uppercase font-bold">{formData?.razonSocial || formData?.nombres + ' ' + formData?.apellidos}</h1>
                 <h5 className="text-2xl">
-                    {tipoDocumento} - {formData?.numeroIdentificacion}
+                    {formData?.fechaNacimiento ? tipoDocumento + ' - ' : 'NIT - '} {formData?.numeroIdentificacion || formData?.nit}
                 </h5>
 
                 <Dialog>
@@ -148,15 +161,19 @@ export default function Perfil() {
 
                 <div>
                     <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
-                        <Label htmlFor="">Fecha de nacimiento</Label>
-                        <input
-                            type="date"
-                            name="fechaNacimiento"
-                            placeholder="Seleccione una fecha"
-                            value={formData?.fechaNacimiento || ''}
-                            onChange={(event) => handleChange('fechaNacimiento', event.target.value)}
-                            className="py-1 px-3 rounded-full block w-full text-sm"
-                        />
+                        {formData?.fechaNacimiento && (
+                            <>
+                                <Label htmlFor="">Fecha de nacimiento</Label>
+                                <input
+                                    type="date"
+                                    name="fechaNacimiento"
+                                    placeholder="Seleccione una fecha"
+                                    value={formData?.fechaNacimiento || ''}
+                                    onChange={(event) => handleChange('fechaNacimiento', event.target.value)}
+                                    className="py-1 px-3 rounded-full block w-full text-sm"
+                                />
+                            </>
+                        )}
 
                         <Label htmlFor="">Correo electrónico</Label>
                         <Input

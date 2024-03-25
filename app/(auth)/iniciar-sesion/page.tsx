@@ -42,7 +42,7 @@ export default function InicioSesion() {
                 <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
                     <div>
                         <Label htmlFor="" className="mb-2 ml-2">
-                            Usuario / N° de Documento / NIT
+                            N° de Documento / NIT
                         </Label>
                         <Input
                             type="number"

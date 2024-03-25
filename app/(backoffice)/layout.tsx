@@ -22,7 +22,7 @@ export default function BackofficeLayout({
 }: {
     children: React.ReactNode
 }) {
-    const [authUser, setAuthUser] = useState<Partial<Persona>>()
+    const [authUser, setAuthUser] = useState<any>()
 
     const handleSubmit = () => {
         fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/logout`, {
@@ -67,7 +67,7 @@ export default function BackofficeLayout({
                 </div>
                 <div className="flex flex-col items-start justify-center">
                     <div>
-                        Bienvenido(a) <span className="uppercase">{authUser?.nombres}</span>
+                        Bienvenido(a) <span className="uppercase">{authUser?.nombres || authUser?.razonSocial}</span>
                     </div>
                     <Button className="mt-4" onClick={handleSubmit}>
                         Cerrar sesión
