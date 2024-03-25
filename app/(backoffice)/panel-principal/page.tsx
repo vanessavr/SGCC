@@ -1,7 +1,3 @@
 export default function PanelPrincipal() {
-  return (
-  <div>
-    Panel principal
-  </div>
-  );
+    return <div>Panel principal</div>
 }

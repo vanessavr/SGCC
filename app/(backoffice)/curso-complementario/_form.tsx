@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import useSWR, { mutate } from 'swr'
 import { useToast } from '@/components/ui/use-toast'
 import { Textarea } from '@/components/ui/textarea'
+import { saveCursoComplementario } from '@/lib/actions'
 
 interface Props {
     className?: string
@@ -58,26 +59,13 @@ const FormularioCurso = ({ className, data }: Props) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${data ? data.id : ''}`, {
-            method: data ? 'PATCH' : 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    // Mostrar el toast cuando el curso sea exitoso
-                    toast({ title: '✔️', description: 'Curso complementario guardado satisfactoriamente' })
-                } else {
-                    toast({ title: '✖️', description: 'Error al guardar el curso complementario' })
-                }
-            })
-            .catch((error) => {
-                console.error('Error al guardar el curso complementario:', error)
-                toast({ title: '✖️', description: 'Error al guardar el curso complementario' })
-            })
+        try {
+            await saveCursoComplementario(formData as CursoComplementario)
+            toast({ title: '✔️', description: 'Curso complementario guardado satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al guardar el curso complementario:', error)
+            toast({ title: '✖️', description: 'Error al guardar el curso complementario' })
+        }
     }
 
     const handleChange = (name: string, value: string) => {

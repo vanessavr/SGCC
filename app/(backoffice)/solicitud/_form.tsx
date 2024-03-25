@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
+import { saveSolicitud } from '@/lib/actions'
 import { CursoComplementario, Persona, Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { useEffect, useState } from 'react'
@@ -27,29 +28,16 @@ export default function FormularioSolicitud({ className, data }: Props) {
         }
     }, [data])
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${data ? data?.id : ''}`, {
-            method: data ? 'PATCH' : 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    // Mostrar el toast cuando la solicitud sea exitosa
-                    toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
-                } else {
-                    toast({ title: '✖️', description: 'Error al guardar la solicitud' })
-                }
-            })
-            .catch((error) => {
-                console.error('Error al guardar la solicitud:', error)
-                toast({ title: '✖️', description: 'Error al guardar la solicitud' })
-            })
+        try {
+            await saveSolicitud(formData as Solicitud)
+            toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al guardar la solicitud:', error)
+            toast({ title: '✖️', description: 'Error al guardar la solicitud' })
+        }
     }
 
     const handleChange = (name: string, value: string) => {

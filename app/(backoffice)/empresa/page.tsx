@@ -11,8 +11,9 @@ import { Empresa } from '@/types/MyTypes'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { fetcher } from '@/utils/fetcher'
-import { useState } from 'react'
 import CheckIcon from '../components/svg/CheckIcon'
+import { toast } from '@/components/ui/use-toast'
+import { deleteEmpresa } from '@/lib/actions'
 
 export default function Empresa() {
     const { data: empresas, error } = useSWR<Empresa[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`, fetcher)
@@ -68,27 +69,14 @@ export default function Empresa() {
 }
 
 function DeleteButton({ empresa }: { empresa: Empresa }) {
-    const [confirmarEliminacion, setConfirmarEliminacion] = useState(true)
+    const handleClick = async () => {
+        const res = await deleteEmpresa(empresa.id)
 
-    const handleClick = () => {
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/${empresa.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    setConfirmarEliminacion(false)
-                    setTimeout(() => {
-                        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`)
-                    }, 2000)
-                }
-            })
-            .catch((error) => {
-                console.error('Error al eliminar la solicitud:', error)
-            })
+        if (res) {
+            toast({ title: '✔️', description: 'Empresa eliminada satisfactoriamente' })
+        }
+
+        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`)
     }
 
     return (
@@ -97,29 +85,18 @@ function DeleteButton({ empresa }: { empresa: Empresa }) {
                 <DeleteIcon />
             </DialogTrigger>
             <DialogContent>
-                <p className="flex flex-col text-center justify-center pt-10">
-                    {confirmarEliminacion ? (
-                        <div>
-                            ¿Desea eliminar la empresa <span className="uppercase font-bold">&nbsp;{empresa.razonSocial}</span>?
-                        </div>
-                    ) : (
-                        <>
-                            <CheckIcon className="w-20 mx-auto text-sena-500" />
-                            <span className="text-2xl px-6">¡Se ha eliminado correctamente la empresa!</span>
-                        </>
-                    )}
-                </p>
+                <div className="flex flex-col text-center justify-center pt-10">
+                    <div>
+                        ¿Desea eliminar la empresa <span className="uppercase font-bold">&nbsp;{empresa.razonSocial}</span>?
+                    </div>
+                </div>
                 <DialogFooter className="flex items-center justify-center gap-4 mb-10">
-                    {confirmarEliminacion && (
-                        <>
-                            <DialogClose asChild>
-                                <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
-                            </DialogClose>
-                            <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
-                                Confirmar
-                            </Button>
-                        </>
-                    )}
+                    <DialogClose asChild>
+                        <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
+                    </DialogClose>
+                    <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
+                        Confirmar
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

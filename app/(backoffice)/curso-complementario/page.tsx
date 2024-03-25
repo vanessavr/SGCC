@@ -13,7 +13,8 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from 
 import { Button } from '@/components/ui/button'
 import { fetcher } from '@/utils/fetcher'
 import CheckIcon from '../components/svg/CheckIcon'
-import { useState } from 'react'
+import { toast } from '@/components/ui/use-toast'
+import { deleteCursoComplementario } from '@/lib/actions'
 
 export default function CursoComplementario() {
     const { data: cursosComplementarios, error } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
@@ -71,27 +72,14 @@ export default function CursoComplementario() {
 }
 
 function DeleteButton({ cursoComplementario }: { cursoComplementario: CursoComplementario }) {
-    const [confirmarEliminacion, setConfirmarEliminacion] = useState(true)
+    const handleClick = async () => {
+        const res = await deleteCursoComplementario(cursoComplementario.id)
 
-    const handleClick = () => {
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${cursoComplementario.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    setConfirmarEliminacion(false)
-                    setTimeout(() => {
-                        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`)
-                    }, 2000)
-                }
-            })
-            .catch((error) => {
-                console.error('Error al eliminar la solicitud:', error)
-            })
+        if (res) {
+            toast({ title: '✔️', description: 'Curso complementario eliminado satisfactoriamente' })
+        }
+
+        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`)
     }
 
     return (
@@ -101,29 +89,18 @@ function DeleteButton({ cursoComplementario }: { cursoComplementario: CursoCompl
             </DialogTrigger>
 
             <DialogContent>
-                <p className="flex flex-col text-center justify-center pt-10">
-                    {confirmarEliminacion ? (
-                        <div>
-                            ¿Desea eliminar el curso complementario <span className="uppercase font-bold">&nbsp;{cursoComplementario.nombre}</span>?
-                        </div>
-                    ) : (
-                        <>
-                            <CheckIcon className="w-20 mx-auto text-sena-500" />
-                            <span className="text-2xl px-6">¡Se ha eliminado correctamente el curso complementario!</span>
-                        </>
-                    )}
-                </p>
+                <div className="flex flex-col text-center justify-center pt-10">
+                    <div>
+                        ¿Desea eliminar el curso complementario <span className="uppercase font-bold">&nbsp;{cursoComplementario.nombre}</span>?
+                    </div>
+                </div>
                 <DialogFooter className="flex items-center justify-center gap-4 mb-10">
-                    {confirmarEliminacion && (
-                        <>
-                            <DialogClose asChild>
-                                <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
-                            </DialogClose>
-                            <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
-                                Confirmar
-                            </Button>
-                        </>
-                    )}
+                    <DialogClose asChild>
+                        <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
+                    </DialogClose>
+                    <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
+                        Confirmar
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { useToast } from '@/components/ui/use-toast'
+import { saveEmpresa } from '@/lib/actions'
 
 interface Props {
     className?: string
@@ -51,29 +52,16 @@ export default function FormularioEmpresa({ className, data }: Props) {
         }
     }, [data])
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/${data ? data?.id : ''}`, {
-            method: data ? 'PATCH' : 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    // Mostrar el toast cuando la empresa sea exitosa
-                    toast({ title: '✔️', description: 'Empresa guardada satisfactoriamente' })
-                } else {
-                    toast({ title: '✖️', description: 'Error al guardar la empresa' })
-                }
-            })
-            .catch((error) => {
-                console.error('Error al guardar la empresa:', error)
-                toast({ title: '✖️', description: 'Error al guardar la empresa' })
-            })
+        try {
+            await saveEmpresa(formData as Empresa)
+            toast({ title: '✔️', description: 'Empresa guardada satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al guardar la empresa:', error)
+            toast({ title: '✖️', description: 'Error al guardar la empresa' })
+        }
     }
 
     const handleChange = (name: string, value: string) => {
@@ -129,7 +117,15 @@ export default function FormularioEmpresa({ className, data }: Props) {
             />
 
             <Label htmlFor="">Celular *</Label>
-            <Input type="number" name="celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} placeholder="Celular" className="rounded-full"  required/>
+            <Input
+                type="number"
+                name="celular"
+                value={formData?.celular || ''}
+                onChange={(event) => handleChange('celular', event.target.value)}
+                placeholder="Celular"
+                className="rounded-full"
+                required
+            />
 
             <Label htmlFor="">Dirección *</Label>
             <Input

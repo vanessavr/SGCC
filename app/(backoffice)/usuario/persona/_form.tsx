@@ -10,6 +10,7 @@ import { Departamento, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { useToast } from '@/components/ui/use-toast'
+import { savePersona } from '@/lib/actions'
 
 interface Props {
     className?: string
@@ -50,29 +51,16 @@ export default function FormularioPersona({ className, data }: Props) {
         }
     }, [data])
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${data ? data?.id : ''}`, {
-            method: data ? 'PATCH' : 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    // Mostrar el toast cuando el usuario sea exitoso
-                    toast({ title: '✔️', description: 'Usuario guardado satisfactoriamente' })
-                } else {
-                    toast({ title: '✖️', description: 'Error al guardar el usuario' })
-                }
-            })
-            .catch((error) => {
-                console.error('Error al guardar el usuario:', error)
-                toast({ title: '✖️', description: 'Error al guardar el usuario' })
-            })
+        try {
+            await savePersona(formData as Persona)
+            toast({ title: '✔️', description: 'Usuario guardado satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al guardar el usuario:', error)
+            toast({ title: '✖️', description: 'Error al guardar el usuario' })
+        }
     }
 
     const handleChange = (name: string, value: string) => {
@@ -85,7 +73,7 @@ export default function FormularioPersona({ className, data }: Props) {
     return (
         <form onSubmit={handleSubmit} className={`${className}`}>
             <Label htmlFor="" className="self-center">
-                Nombres
+                Nombres *
             </Label>
             <Input
                 type="text"
@@ -146,7 +134,7 @@ export default function FormularioPersona({ className, data }: Props) {
                 name="fechaNacimiento"
                 value={formData?.fechaNacimiento || ''}
                 onChange={(event) => handleChange('fechaNacimiento', event.target.value)}
-                className='p-2 rounded-full block w-full'
+                className="p-2 rounded-full block w-full"
             />
 
             <Label htmlFor="" className="self-center">

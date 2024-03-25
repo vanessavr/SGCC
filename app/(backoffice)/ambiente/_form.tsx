@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Ambiente } from '@/types/MyTypes'
 import { useEffect, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
+import { saveAmbiente } from '@/lib/actions'
 
 interface Props {
     className?: string
@@ -23,29 +24,16 @@ export default function FormularioAmbiente({ className, data }: Props) {
         }
     }, [data])
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente/${data ? data?.id : ''}`, {
-            method: data ? 'PATCH' : 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    // Mostrar el toast cuando el sea exitoso
-                    toast({ title: '✔️', description: 'Ambiente guardado satisfactoriamente' })
-                } else {
-                    toast({ title: '✖️', description: 'Error al guardar el ambiente' })
-                }
-            })
-            .catch((error) => {
-                console.error('Error al guardar el ambiente:', error)
-                toast({ title: '✖️', description: 'Error al guardar el ambiente' })
-            })
+        try {
+            await saveAmbiente(formData as Ambiente)
+            toast({ title: '✔️', description: 'Ambiente guardado satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al guardar el ambiente:', error)
+            toast({ title: '✖️', description: 'Error al guardar el ambiente' })
+        }
     }
 
     const handleChange = (name: string, value: string) => {

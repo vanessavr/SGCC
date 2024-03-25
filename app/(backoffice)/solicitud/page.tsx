@@ -15,7 +15,8 @@ import Link from 'next/link'
 import useSWR, { mutate } from 'swr'
 import { Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
-import { useState } from 'react'
+import { toast } from '@/components/ui/use-toast'
+import { deleteSolicitud } from '@/lib/actions'
 
 export default function Solicitud() {
     const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
@@ -118,27 +119,14 @@ export default function Solicitud() {
 }
 
 function DeleteButton({ solicitud }: { solicitud: Solicitud }) {
-    const [confirmarEliminacion, setConfirmarEliminacion] = useState(true)
+    const handleClick = async () => {
+        const res = await deleteSolicitud(solicitud.id)
 
-    const handleClick = () => {
-        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${solicitud.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    setConfirmarEliminacion(false)
-                    setTimeout(() => {
-                        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`)
-                    }, 2000)
-                }
-            })
-            .catch((error) => {
-                console.error('Error al eliminar la solicitud:', error)
-            })
+        if (res) {
+            toast({ title: '✔️', description: 'Solicitud eliminada satisfactoriamente' })
+        }
+
+        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`)
     }
 
     return (
@@ -147,29 +135,18 @@ function DeleteButton({ solicitud }: { solicitud: Solicitud }) {
                 <DeleteIcon />
             </DialogTrigger>
             <DialogContent>
-                <p className="flex flex-col text-center justify-center pt-10">
-                    {confirmarEliminacion ? (
-                        <div>
-                            ¿Desea eliminar la solicitud con radicado <span className="uppercase font-bold">&nbsp;{solicitud.radicadoSolicitud}</span>?
-                        </div>
-                    ) : (
-                        <>
-                            <CheckIcon className="w-20 mx-auto text-sena-500" />
-                            <span className="text-2xl px-6">¡Se ha eliminado correctamente la solicitud!</span>
-                        </>
-                    )}
-                </p>
+                <div className="flex flex-col text-center justify-center pt-10">
+                    <div>
+                        ¿Desea eliminar la solicitud con radicado <span className="uppercase font-bold">&nbsp;{solicitud.radicadoSolicitud}</span>?
+                    </div>
+                </div>
                 <DialogFooter className="flex items-center justify-center gap-4 mb-10">
-                    {confirmarEliminacion && (
-                        <>
-                            <DialogClose asChild>
-                                <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
-                            </DialogClose>
-                            <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
-                                Confirmar
-                            </Button>
-                        </>
-                    )}
+                    <DialogClose asChild>
+                        <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
+                    </DialogClose>
+                    <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
+                        Confirmar
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

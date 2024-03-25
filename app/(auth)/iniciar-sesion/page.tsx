@@ -9,32 +9,66 @@ import FormularioPersona from '@/app/(backoffice)/usuario/persona/_form'
 import FormularioEmpresa from '@/app/(backoffice)/empresa/_form'
 import Link from 'next/link'
 import { useState } from 'react'
+import { Login } from '@/types/MyTypes'
+import { login } from '@/lib/actions'
+import { toast } from '@/components/ui/use-toast'
 
 export default function InicioSesion() {
+    const [formData, setFormData] = useState<Partial<Login>>()
     const [selectedOption, setSelectedOption] = useState('empresa')
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        try {
+            await login(formData as Login)
+        } catch (error) {
+            console.error('Error al guardar el ambiente:', error)
+        }
+    }
+
+    const handleChange = (name: string, value: string) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }))
+    }
+
     return (
         <div className="h-[69.9vh] flex items-center justify-center">
             <div className="bg-gray-300 p-8 w-[50vw] rounded-xl">
-                <form action="" className="flex flex-col space-y-6">
+                <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
                     <div>
                         <Label htmlFor="" className="mb-2 ml-2">
                             Usuario / N° de Documento / NIT
                         </Label>
-                        <Input type="text" placeholder="" value="jorge@gmail.com" className="rounded-full" />
+                        <Input
+                            type="number"
+                            placeholder="Ingrese el número de documento / NIT"
+                            value={formData?.numeroIdentificacion || ''}
+                            onChange={(event) => handleChange('numeroIdentificacion', event.target.value)}
+                            className="rounded-full"
+                            required
+                        />
                     </div>
 
                     <div>
                         <Label htmlFor="" className="mb-2 ml-2">
                             Contraseña
                         </Label>
-                        <Input type="password" value="admin123" placeholder="Ingrese la contraseña" className="rounded-full" />
+                        <Input
+                            type="password"
+                            placeholder="Ingrese la contraseña"
+                            value={formData?.password || ''}
+                            onChange={(event) => handleChange('password', event.target.value)}
+                            className="rounded-full"
+                            required
+                        />
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {/* <Button className="rounded-full px-6">Iniciar sesión</Button> */}
-                        <Link href="/panel-principal" className="rounded-full px-6 py-2 text-white bg-sena-800">
-                            Iniciar sesión
-                        </Link>
+                        <Button className="rounded-full px-6">Iniciar sesión</Button>
+
                         <Dialog>
                             <DialogTrigger className="rounded-full px-6 py-2 text-white bg-sena-800">Crear cuenta</DialogTrigger>
 

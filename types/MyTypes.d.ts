@@ -94,3 +94,8 @@ interface Departamento {
     departamento: string
     ciudades: array
 }
+
+interface Login {
+    numeroIdentificacion: string
+    password: string
+}
