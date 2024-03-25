@@ -5,7 +5,7 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import FormularioPersona from '@/app/(backoffice)/usuario/persona/_form'
+import FormularioPersona from '@/app/(backoffice)/usuario/_form'
 import FormularioEmpresa from '@/app/(backoffice)/empresa/_form'
 import Link from 'next/link'
 import { useState } from 'react'
