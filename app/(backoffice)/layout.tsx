@@ -1,3 +1,5 @@
+'use client'
+
 import './backoffice.css'
 
 import SenaLogo from '@/app/(backoffice)/components/svg/SenaLogo'
@@ -10,12 +12,24 @@ import EmpresaIcon from './components/svg/EmpresaIcon'
 import AmbienteIcon from './components/svg/AmbienteIcon'
 import LoadIcon from './components/svg/LoadIcon'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default function BackofficeLayout({
     children, // will be a page or nested layout
 }: {
     children: React.ReactNode
 }) {
+    const handleSubmit = () => {
+        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/logout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        })
+    }
+
     return (
         <section className="layout">
             <div className="header mx-2 p-4 border-b-8 border-b-sena-600 grid grid-cols-3">
@@ -30,10 +44,9 @@ export default function BackofficeLayout({
                 </div>
                 <div className="flex flex-col items-start justify-center">
                     <div>Bienvenido(a) JORGE ARIAS OSORIO</div>
-                    <Link href="/iniciar-sesion" className="mt-4">
+                    <Button className="mt-4" onClick={handleSubmit}>
                         Cerrar sesión
-                    </Link>
-                    {/* <button className="mt-4 ">Cerrar sesión</button> */}
+                    </Button>
                 </div>
             </div>
             <div className="sidebar bg-sena-600 rounded-md ml-2">

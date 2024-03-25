@@ -1,14 +1,6 @@
 import { Login, Persona, Ambiente, Empresa, Solicitud, CursoComplementario } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 
-export async function login(data: Login): Promise<void> {
-    try {
-        await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/login`, 'POST', data)
-    } catch (error: any) {
-        throw new Error('Error al inicar sesión: ' + error.message)
-    }
-}
-
 export async function savePersona(data: Persona): Promise<void> {
     try {
         await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${data.id || ''}`, data.id ? 'PATCH' : 'POST', data)

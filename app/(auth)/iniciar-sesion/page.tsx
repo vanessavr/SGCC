@@ -10,21 +10,23 @@ import FormularioEmpresa from '@/app/(backoffice)/empresa/_form'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Login } from '@/types/MyTypes'
-import { login } from '@/lib/actions'
-import { toast } from '@/components/ui/use-toast'
 
 export default function InicioSesion() {
     const [formData, setFormData] = useState<Partial<Login>>()
     const [selectedOption, setSelectedOption] = useState('empresa')
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        try {
-            await login(formData as Login)
-        } catch (error) {
-            console.error('Error al guardar el ambiente:', error)
-        }
+        fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/login`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
     }
 
     const handleChange = (name: string, value: string) => {
