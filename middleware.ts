@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
         return
     }
 
-    if (!accessToken && !request.nextUrl.pathname.startsWith('/iniciar-sesion')) {
+    if (!accessToken && !request.nextUrl.pathname.startsWith('/iniciar-sesion') && !request.nextUrl.pathname.startsWith('/usuario-invitado')) {
         return NextResponse.redirect(new URL('/iniciar-sesion', request.url))
     }
 }

@@ -30,7 +30,8 @@ const getAccessTokenFromCookie = () => {
     const token = cookieStore.get('accessToken')
 
     if (!token) {
-        throw new Error('No se encontró el token de acceso en la cookie')
+        return null
+        // throw new Error('No se encontró el token de acceso en la cookie')
     }
 
     return token.value
