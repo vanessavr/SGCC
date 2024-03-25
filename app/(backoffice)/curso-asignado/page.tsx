@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react'
 import { fetcher } from '@/utils/fetcher'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { toast } from '@/components/ui/use-toast'
+import { getCursosAsignados } from '@/lib/actions'
 
 export default function CursoAsignado() {
     const [instructorId, setInstructorId] = useState<string>()
@@ -26,14 +28,18 @@ export default function CursoAsignado() {
 
         // Hacemos la solicitud de los cursos complementarios del instructor seleccionado
         const fetchCursos = async () => {
-            const url = `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${instructorId}/curso-complementario`
-            const response = await fetch(url)
-            if (!response.ok) {
-                throw new Error('Error al obtener los cursos complementarios')
+            try {
+                const response = await getCursosAsignados(instructorId)
+
+                if (!response.ok) {
+                    throw new Error('Error al obtener los cursos complementarios')
+                }
+                const data = await response.json()
+                // Actualizamos los datos de los cursos complementarios
+                mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${instructorId}/curso-complementario`, data, false)
+            } catch (error) {
+                console.error('Error al obtener los cursos complementarios:', error)
             }
-            const data = await response.json()
-            // Actualizamos los datos de los cursos complementarios
-            mutate(url, data, false)
         }
 
         fetchCursos()

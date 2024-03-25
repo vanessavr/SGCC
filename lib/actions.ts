@@ -9,6 +9,14 @@ export async function getProfile(): Promise<any> {
     }
 }
 
+export async function getCursosAsignados(instructorId: string): Promise<any> {
+    try {
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${instructorId}/curso-complementario`, 'GET')
+    } catch (error: any) {
+        throw new Error('Error al obtener el perfil: ' + error.message)
+    }
+}
+
 export async function updateProfilePersona(data: Persona): Promise<void> {
     try {
         await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/profile/update-persona`, 'PATCH', data)

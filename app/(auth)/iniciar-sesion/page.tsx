@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Login } from '@/types/MyTypes'
 import { useRouter } from 'next/navigation'
+import { toast } from '@/components/ui/use-toast'
 
 export default function InicioSesion() {
     const [formData, setFormData] = useState<Partial<Login>>()
@@ -48,9 +49,9 @@ export default function InicioSesion() {
         } catch (error: any) {
             console.error('Error al iniciar sesión:', error.message)
             // Manejar errores si es necesario
+            toast({ title: '✖️', description: 'Es posible que el usuario no exista. Por favor verifique los datos de acceso.' })
         }
     }
-
 
     const handleChange = (name: string, value: string) => {
         setFormData((prevData) => ({
