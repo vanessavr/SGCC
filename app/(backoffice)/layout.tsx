@@ -13,12 +13,17 @@ import AmbienteIcon from './components/svg/AmbienteIcon'
 import LoadIcon from './components/svg/LoadIcon'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react'
+import { Persona } from '@/types/MyTypes'
+import { getProfile } from '@/lib/actions'
 
 export default function BackofficeLayout({
     children, // will be a page or nested layout
 }: {
     children: React.ReactNode
 }) {
+    const [authUser, setAuthUser] = useState<Partial<Persona>>()
+
     const handleSubmit = () => {
         fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/logout`, {
             method: 'POST',
@@ -29,6 +34,24 @@ export default function BackofficeLayout({
             },
         })
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getProfile()
+
+                if (!data) {
+                    throw new Error('Error al obtener el perfil del usuario')
+                }
+
+                setAuthUser(data)
+            } catch (error: any) {
+                console.error('Error al obtener el perfil del usuario:', error.message)
+            }
+        }
+
+        fetchData()
+    }, [])
 
     return (
         <section className="layout">
@@ -43,7 +66,9 @@ export default function BackofficeLayout({
                     </h1>
                 </div>
                 <div className="flex flex-col items-start justify-center">
-                    <div>Bienvenido(a) JORGE ARIAS OSORIO</div>
+                    <div>
+                        Bienvenido(a) <span className="uppercase">{authUser?.nombres}</span>
+                    </div>
                     <Button className="mt-4" onClick={handleSubmit}>
                         Cerrar sesión
                     </Button>

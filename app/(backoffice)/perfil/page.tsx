@@ -12,10 +12,11 @@ import { useEffect, useState } from 'react'
 import { Departamento, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { toast } from '@/components/ui/use-toast'
+import { getProfile, updateProfile } from '@/lib/actions'
 
 export default function Perfil() {
     const [formData, setFormData] = useState<Partial<Persona>>()
-
     const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
 
@@ -42,6 +43,36 @@ export default function Perfil() {
         }
     }, [formData?.departamento])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getProfile()
+
+                if (!data) {
+                    throw new Error('Error al obtener el perfil del usuario')
+                }
+
+                setFormData(data)
+            } catch (error: any) {
+                console.error('Error al obtener el perfil del usuario:', error.message)
+            }
+        }
+
+        fetchData()
+    }, [])
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        try {
+            await updateProfile(formData as Persona)
+            toast({ title: '✔️', description: 'Perfil actualizado satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al actualizar el perfil:', error)
+            toast({ title: '✖️', description: 'Error al actualizar el perfil' })
+        }
+    }
+
     const handleChange = (name: string, value: string) => {
         setFormData((prevData) => ({
             ...prevData,
@@ -55,8 +86,8 @@ export default function Perfil() {
                 <h1 className="text-center text-4xl text-white">Perfil</h1>
             </header>
             <div className="space-y-2 mt-6 ml-6">
-                <h1 className="text-3xl uppercase font-bold">Jorge Arias Osorio</h1>
-                <h5 className="text-2xl">CC - 1.000.323</h5>
+                <h1 className="text-3xl uppercase font-bold">{formData?.nombres + ' ' + formData?.apellidos}</h1>
+                <h5 className="text-2xl">CC - {formData?.numeroIdentificacion}</h5>
 
                 <Dialog>
                     <DialogTrigger className="rounded-full py-2 px-4 mt-6 text-white bg-sena-800">Cambiar contraseña</DialogTrigger>
@@ -70,11 +101,13 @@ export default function Perfil() {
                                 Contraseña anterior:
                             </Label>
                             <Input id="contrasenaAnterior" name="contrasenaAnterior" type="password" />
+
                             <Label htmlFor="contraseñaNueva" className="font-bold self-center">
                                 Contraseña nueva:
                             </Label>
                             <Input id="contraseñaNueva" name="contraseñaNueva" type="password" />
-                            <div className="col-span-2 ">
+
+                            <div className="col-span-2">
                                 <Button className="rounded-full font-bold py-2 px-4 w-full">Guardar</Button>
                             </div>
                         </form>
@@ -110,18 +143,31 @@ export default function Perfil() {
                 </div>
 
                 <div>
-                    <form action="" className="flex flex-col space-y-3">
+                    <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
                         <Label htmlFor="">Fecha de nacimiento</Label>
-                        <input type="date" name="fechaNacimiento" value="1989-04-04" placeholder="Seleccione una fecha" />
+                        <input
+                            type="date"
+                            name="fechaNacimiento"
+                            placeholder="Seleccione una fecha"
+                            value={formData?.fechaNacimiento || ''}
+                            onChange={(event) => handleChange('fechaNacimiento', event.target.value)}
+                            className="py-1 px-3 rounded-full block w-full text-sm"
+                        />
 
                         <Label htmlFor="">Correo electrónico</Label>
-                        <Input type="email" value="jorgearias@gmail.com" placeholder="Correo electrónico" className="rounded-full" />
+                        <Input
+                            type="email"
+                            placeholder="Correo electrónico"
+                            value={formData?.correoElectronico || ''}
+                            onChange={(event) => handleChange('correoElectronico', event.target.value)}
+                            className="rounded-full"
+                        />
 
                         <Label htmlFor="">Celular</Label>
-                        <Input type="number" value="3206985743" placeholder="Celular" className="rounded-full" />
+                        <Input type="number" placeholder="Celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} className="rounded-full" />
 
                         <Label htmlFor="">Departamento</Label>
-                        <Select name="departamento" value={formData?.departamento || '6'} onValueChange={(value) => handleChange('departamento', value)}>
+                        <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Departamento" />
                             </SelectTrigger>

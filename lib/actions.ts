@@ -1,5 +1,21 @@
-import { Login, Persona, Ambiente, Empresa, Solicitud, CursoComplementario } from '@/types/MyTypes'
+import { Persona, Ambiente, Empresa, Solicitud, CursoComplementario } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
+
+export async function getProfile(): Promise<Persona> {
+    try {
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/profile`, 'POST')
+    } catch (error: any) {
+        throw new Error('Error al obtener el perfil: ' + error.message)
+    }
+}
+
+export async function updateProfile(data: Persona): Promise<void> {
+    try {
+        await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/profile/update`, 'PATCH', data)
+    } catch (error: any) {
+        throw new Error('Error al actualizar el perfil: ' + error.message)
+    }
+}
 
 export async function savePersona(data: Persona): Promise<void> {
     try {
