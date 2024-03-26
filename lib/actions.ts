@@ -41,7 +41,7 @@ export async function savePersona(data: Persona): Promise<void> {
     }
 }
 
-export async function deletePersona(personaId: string): Promise<Response> {
+export async function deletePersona(personaId: string): Promise<Persona> {
     try {
         return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${personaId || ''}`, 'DELETE')
     } catch (error: any) {
@@ -65,7 +65,7 @@ export async function saveAmbiente(data: Ambiente): Promise<void> {
     }
 }
 
-export async function deleteAmbiente(ambienteId: string): Promise<Response> {
+export async function deleteAmbiente(ambienteId: string): Promise<Ambiente> {
     try {
         return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente/${ambienteId || ''}`, 'DELETE')
     } catch (error: any) {
@@ -81,7 +81,7 @@ export async function saveCursoComplementario(data: CursoComplementario): Promis
     }
 }
 
-export async function deleteCursoComplementario(cursoComplementarioId: string): Promise<Response> {
+export async function deleteCursoComplementario(cursoComplementarioId: string): Promise<CursoComplementario> {
     try {
         return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${cursoComplementarioId || ''}`, 'DELETE')
     } catch (error: any) {
@@ -97,7 +97,7 @@ export async function saveEmpresa(data: Empresa): Promise<void> {
     }
 }
 
-export async function deleteEmpresa(empresaId: string): Promise<Response> {
+export async function deleteEmpresa(empresaId: string): Promise<Empresa> {
     try {
         return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/${empresaId || ''}`, 'DELETE')
     } catch (error: any) {
@@ -113,7 +113,7 @@ export async function saveSolicitud(data: Solicitud): Promise<void> {
     }
 }
 
-export async function deleteSolicitud(solicitud: string): Promise<Response> {
+export async function deleteSolicitud(solicitud: string): Promise<Solicitud> {
     try {
         return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${solicitud || ''}`, 'DELETE')
     } catch (error: any) {

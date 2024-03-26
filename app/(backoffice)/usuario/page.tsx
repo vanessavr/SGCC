@@ -106,7 +106,7 @@ function DeleteButton({ usuario }: { usuario: Persona }) {
     const handleClick = async () => {
         const res = await deletePersona(usuario.id)
 
-        if (res.ok) {
+        if (res.id) {
             toast({ title: '✔️', description: 'Usuario eliminado satisfactoriamente' })
         }
 
