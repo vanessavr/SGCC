@@ -19,7 +19,7 @@ export const AppProvider = ({ children }: Readonly<{ children: React.ReactNode }
     const adminId = process.env.NEXT_PUBLIC_NESTJS_ROL_ADMIN_ID
     const personaId = process.env.NEXT_PUBLIC_NESTJS_ROL_PERSONA_ID
     const instructorId = process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID
-    const empresaId = process.env.NEXT_PUBLIC_NESTJS_API_URL
+    const empresaId = process.env.NEXT_PUBLIC_NESTJS_ROL_EMPRESA_ID
 
     let rolNombre = ''
 

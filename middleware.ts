@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getRoleIdFromToken } from './utils/getRoleIdFromToken'
+import { getTokenData } from './utils/getTokenData'
 
 export function middleware(request: NextRequest) {
     const accessToken = request.cookies.get('accessToken')?.value
@@ -13,9 +13,9 @@ export function middleware(request: NextRequest) {
         return
     }
 
-    const rolId = getRoleIdFromToken(accessToken)
+    const tokenData = getTokenData(accessToken)
 
-    if (!rolId) {
+    if (!tokenData?.rolId) {
         // Manejar caso donde no se puede obtener el rolId del token
         console.error('No se pudo obtener el rolId del token')
         return NextResponse.redirect(new URL('/iniciar-sesion', request.url))
@@ -38,14 +38,14 @@ export function middleware(request: NextRequest) {
         ],
         'b202d04e-eb12-4cf5-9c2d-d382536e7ff4': ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
         'd7f72697-7937-490a-953d-26bd122d6c3e': ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
-        '4a29d9e1-76aa-49ff-9ccc-e0a3d2ec90c9': ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/curso-asignado', '/solicitud'],
+        '4a29d9e1-76aa-49ff-9ccc-e0a3d2ec90c9': ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil',  '/curso-asignado', '/solicitud'],
     }
 
-    const allowedURLsForRole = allowedURLs[rolId]
+    const allowedURLsForRole = allowedURLs[tokenData?.rolId]
 
     if (!allowedURLsForRole) {
-        // Manejar caso donde el rolId no está mapeado a ninguna URL permitida
-        console.error('RolId no permitido:', rolId)
+        // Manejar caso donde el tokenData?.rolId no está mapeado a ninguna URL permitida
+        console.error('RolId no permitido:', tokenData?.rolId)
         // return NextResponse.forbidden()
     }
 

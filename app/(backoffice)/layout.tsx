@@ -106,12 +106,14 @@ export default function BackofficeLayout({
                             </Link>
                         </li>
 
-                        <li>
-                            <Link href="/area-de-formacion" className="flex items-center text-white">
-                                <AmbienteIcon className="mr-2 size-6" />
-                                Áreas de formación
-                            </Link>
-                        </li>
+                        {rolId == adminId || rolId == empresaId || rolId == personaId ? (
+                            <li>
+                                <Link href="/area-de-formacion" className="flex items-center text-white">
+                                    <AmbienteIcon className="mr-2 size-6" />
+                                    Áreas de formación
+                                </Link>
+                            </li>
+                        ) : null}
 
                         {rolId == adminId && (
                             <li>
