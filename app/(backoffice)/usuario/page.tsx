@@ -14,18 +14,21 @@ import { toast } from '@/components/ui/use-toast'
 import EditIcon from '../components/svg/EditIcon'
 import DeleteIcon from '../components/svg/DeleteIcon'
 import PlusIcon from '../components/svg/PlusIcon'
+import { useRol } from '@/app/context/AppContext'
 
 export default function Persona() {
+    const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
+
     // Estado para almacenar el parámetro de URL actual
-    const [rolId, setRolId] = useState(process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID)
+    const [rolUsuarioId, setRolUsuarioId] = useState(process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID)
 
     // Función para cambiar entre los valores de los parámetros de URL
     const toggleRolId = () => {
-        setRolId(rolId === process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID ? process.env.NEXT_PUBLIC_NESTJS_ROL_PERSONA_ID : process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID)
+        setRolUsuarioId(rolUsuarioId === process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID ? process.env.NEXT_PUBLIC_NESTJS_ROL_PERSONA_ID : process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID)
     }
 
     // SWR hook para hacer la solicitud con el parámetro de URL actual
-    const { data: usuarios, error } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/rol/${rolId}`, fetcher)
+    const { data: usuarios, error } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/rol/${rolUsuarioId}`, fetcher)
 
     // Manejar errores si es necesario
     if (error) {
@@ -38,16 +41,18 @@ export default function Persona() {
                 <h1 className="text-center text-4xl text-white">Usuarios</h1>
             </header>
 
-            <div className="my-6">
-                <Link href="/usuario/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
-                    <PlusIcon className="mr-2 inline-block" />
-                    Registrar
-                </Link>
+            {rolId == adminId && (
+                <div className="my-6">
+                    <Link href="/usuario/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                        <PlusIcon className="mr-2 inline-block" />
+                        Registrar
+                    </Link>
 
-                <Button onClick={toggleRolId} className="rounded-full ml-4 bg-gray-900">
-                    {rolId === process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID ? 'Visualizar Personas' : 'Visualizar instructores'}
-                </Button>
-            </div>
+                    <Button onClick={toggleRolId} className="rounded-full ml-4 bg-gray-900">
+                        {rolId === process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID ? 'Visualizar Personas' : 'Visualizar instructores'}
+                    </Button>
+                </div>
+            )}
 
             <Table>
                 <TableHeader>
@@ -76,15 +81,17 @@ export default function Persona() {
                                     </TableCell>
                                     <TableCell>{usuario.celular}</TableCell>
                                     <TableCell>{usuario.correoElectronico}</TableCell>
-                                    <TableCell>
-                                        <div className="flex gap-2">
-                                            {/* <ViewIcon /> */}
-                                            <Link href={`/usuario/${usuario.id}/editar`}>
-                                                <EditIcon />
-                                            </Link>
-                                            <DeleteButton usuario={usuario} />
-                                        </div>
-                                    </TableCell>
+                                    {rolId == adminId && (
+                                        <TableCell>
+                                            <div className="flex gap-2">
+                                                {/* <ViewIcon /> */}
+                                                <Link href={`/usuario/${usuario.id}/editar`}>
+                                                    <EditIcon />
+                                                </Link>
+                                                <DeleteButton usuario={usuario} />
+                                            </div>
+                                        </TableCell>
+                                    )}
                                 </TableRow>
                             ))}
                         </>

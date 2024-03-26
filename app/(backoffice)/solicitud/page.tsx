@@ -17,9 +17,11 @@ import { Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
 import { deleteSolicitud } from '@/lib/actions'
+import { useRol } from '@/app/context/AppContext'
 
 export default function Solicitud() {
     const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
+    const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
 
     if (error) return <div>Error al cargar los datos</div>
     if (!solicitudes) return <div>Cargando...</div>
@@ -30,21 +32,23 @@ export default function Solicitud() {
                 <h1 className="text-center text-4xl text-white">Solicitudes</h1>
             </header>
 
-            <div className="my-6">
-                <Link href="/solicitud/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
-                    <PlusIcon className="mr-2 inline-block" />
-                    Registrar
-                </Link>
-            </div>
+            {rolId == adminId && (
+                <div className="my-6">
+                    <Link href="/solicitud/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                        <PlusIcon className="mr-2 inline-block" />
+                        Registrar
+                    </Link>
+                </div>
+            )}
 
             <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[100px]">#</TableHead>
                         <TableHead>Radicado</TableHead>
-                        <TableHead>Usuario / Empresa</TableHead>
-                        <TableHead>Estado de solicitud</TableHead>
                         <TableHead>Fecha de la solicitud</TableHead>
+                        <TableHead>Estado de solicitud</TableHead>
+                        <TableHead>Cargar archivo</TableHead>
                         <TableHead>Acción</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -53,61 +57,70 @@ export default function Solicitud() {
                         <TableRow key={solicitud.id}>
                             <TableCell className="font-medium">{index + 1}</TableCell>
                             <TableCell>{solicitud.radicadoSolicitud}</TableCell>
-                            <TableCell>{solicitud.usuario.nombres}</TableCell>
-                            <TableCell>
-                                <Dialog>
-                                    <DialogTrigger className="flex mt-4 gap-4">
-                                        {solicitud.estadoSolicitud}
-                                        <EditEstadoIcon />
-                                    </DialogTrigger>
-
-                                    <DialogContent className="pb-4">
-                                        <DialogHeader>
-                                            <DialogTitle className="text-center text-md text-white">Estado de solicitud</DialogTitle>
-                                        </DialogHeader>
-
-                                        <form className="px-8 grid grid-cols-2 space-y-6 pb-8">
-                                            <Label htmlFor="" className="font-bold self-center">
-                                                Estado de solicitud:
-                                            </Label>
-                                            <Select>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Seleccione el estado" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="abierto">Abierto</SelectItem>
-                                                    <SelectItem value="cerrado">Cerrado</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            <Label htmlFor="" className="font-bold self-center">
-                                                Motivo de estado:
-                                            </Label>
-                                            <Select>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Theme" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="light">Light</SelectItem>
-                                                    <SelectItem value="dark">Dark</SelectItem>
-                                                    <SelectItem value="system">System</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            <div className="col-span-2 ">
-                                                <Button className="rounded-full font-bold py-2 px-4 w-full mt-4">Guardar cambios</Button>
-                                            </div>
-                                        </form>
-                                    </DialogContent>
-                                </Dialog>
-                            </TableCell>
                             <TableCell>{solicitud.fechaSolicitud}</TableCell>
 
                             <TableCell>
+                                <div className="flex items-center gap-2">
+                                    {solicitud.estadoSolicitud == '0' ? 'CERRADA' : 'ABIERTA'}
+                                    {rolId == adminId || rolId == instructorId ? (
+                                        <Dialog>
+                                            <DialogTrigger>
+                                                <EditEstadoIcon />
+                                            </DialogTrigger>
+
+                                            <DialogContent className="pb-4">
+                                                <DialogHeader>
+                                                    <DialogTitle className="text-center text-md text-white">Estado de solicitud</DialogTitle>
+                                                </DialogHeader>
+
+                                                <form className="px-8 grid grid-cols-2 space-y-6 pb-8">
+                                                    <Label htmlFor="" className="font-bold self-center">
+                                                        Estado de solicitud:
+                                                    </Label>
+                                                    <Select>
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Seleccione el estado" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="abierto">Abierto</SelectItem>
+                                                            <SelectItem value="cerrado">Cerrado</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    <Label htmlFor="" className="font-bold self-center">
+                                                        Motivo de estado:
+                                                    </Label>
+                                                    <Select>
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Theme" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="light">Light</SelectItem>
+                                                            <SelectItem value="dark">Dark</SelectItem>
+                                                            <SelectItem value="system">System</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    <div className="col-span-2 ">
+                                                        <Button className="rounded-full font-bold py-2 px-4 w-full mt-4">Guardar cambios</Button>
+                                                    </div>
+                                                </form>
+                                            </DialogContent>
+                                        </Dialog>
+                                    ) : null}
+                                </div>
+                            </TableCell>
+                            <TableCell>FileIcon</TableCell>
+
+                            <TableCell>
                                 <div className="flex gap-2">
-                                    {/* <ViewIcon /> */}
-                                    <Link href={`/solicitud/${solicitud.id}/editar`}>
-                                        <EditIcon />
-                                    </Link>
-                                    <DeleteButton solicitud={solicitud} />
+                                    <ViewIcon />
+                                    {rolId == adminId && (
+                                        <>
+                                            <Link href={`/solicitud/${solicitud.id}/editar`}>
+                                                <EditIcon />
+                                            </Link>
+                                            <DeleteButton solicitud={solicitud} />
+                                        </>
+                                    )}
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -122,7 +135,7 @@ function DeleteButton({ solicitud }: { solicitud: Solicitud }) {
     const handleClick = async () => {
         const res = await deleteSolicitud(solicitud.id)
 
-        if (res) {
+        if (res.ok) {
             toast({ title: '✔️', description: 'Solicitud eliminada satisfactoriamente' })
         }
 

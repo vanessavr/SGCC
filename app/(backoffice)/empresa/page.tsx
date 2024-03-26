@@ -14,9 +14,11 @@ import { fetcher } from '@/utils/fetcher'
 import CheckIcon from '../components/svg/CheckIcon'
 import { toast } from '@/components/ui/use-toast'
 import { deleteEmpresa } from '@/lib/actions'
+import { useRol } from '@/app/context/AppContext'
 
 export default function Empresa() {
     const { data: empresas, error } = useSWR<Empresa[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`, fetcher)
+    const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
 
     if (error) return <div>Error al cargar los datos</div>
     if (!empresas) return <div>Cargando...</div>
@@ -27,12 +29,14 @@ export default function Empresa() {
                 <h1 className="text-center text-4xl text-white">Empresas</h1>
             </header>
 
-            <div className="my-6">
-                <Link href="/empresa/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
-                    <PlusIcon className="mr-2 inline-block" />
-                    Registrar
-                </Link>
-            </div>
+            {rolId == adminId && (
+                <div className="my-6">
+                    <Link href="/empresa/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                        <PlusIcon className="mr-2 inline-block" />
+                        Registrar
+                    </Link>
+                </div>
+            )}
 
             <Table>
                 <TableHeader>
@@ -51,15 +55,17 @@ export default function Empresa() {
                             <TableCell>{empresa.razonSocial}</TableCell>
                             <TableCell>{empresa.celular}</TableCell>
                             <TableCell>{empresa.correoElectronico}</TableCell>
-                            <TableCell>
-                                <div className="flex gap-2">
-                                    {/* <ViewIcon /> */}
-                                    <Link href={`/empresa/${empresa.id}/editar`}>
-                                        <EditIcon />
-                                    </Link>
-                                    <DeleteButton empresa={empresa} />
-                                </div>
-                            </TableCell>
+                            {rolId == adminId && (
+                                <TableCell>
+                                    <div className="flex gap-2">
+                                        {/* <ViewIcon /> */}
+                                        <Link href={`/empresa/${empresa.id}/editar`}>
+                                            <EditIcon />
+                                        </Link>
+                                        <DeleteButton empresa={empresa} />
+                                    </div>
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -72,7 +78,7 @@ function DeleteButton({ empresa }: { empresa: Empresa }) {
     const handleClick = async () => {
         const res = await deleteEmpresa(empresa.id)
 
-        if (res) {
+        if (res.ok) {
             toast({ title: '✔️', description: 'Empresa eliminada satisfactoriamente' })
         }
 

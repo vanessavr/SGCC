@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { getProfile } from '@/lib/actions'
 import { useRouter } from 'next/navigation'
+import { useRol } from '../context/AppContext'
 
 export default function BackofficeLayout({
     children, // will be a page or nested layout
@@ -24,6 +25,7 @@ export default function BackofficeLayout({
 }) {
     const [authUser, setAuthUser] = useState<any>()
     const router = useRouter()
+    const { rolId, setRolId, adminId, instructorId, empresaId, personaId } = useRol()
 
     const handleSubmit = async () => {
         try {
@@ -54,6 +56,8 @@ export default function BackofficeLayout({
                 }
 
                 setAuthUser(data)
+
+                setRolId(data.rolId)
             } catch (error: any) {
                 console.error('Error al obtener el perfil del usuario:', error.message)
             }
@@ -98,44 +102,60 @@ export default function BackofficeLayout({
                             </Link>
                         </li>
 
-                        <li>
-                            <Link href="/usuario" className="flex items-center text-white">
-                                <UsersIcon className="mr-2 size-6" />
-                                Usuarios
-                            </Link>
-                        </li>
+                        {rolId == adminId && (
+                            <li>
+                                <Link href="/usuario" className="flex items-center text-white">
+                                    <UsersIcon className="mr-2 size-6" />
+                                    Usuarios
+                                </Link>
+                            </li>
+                        )}
 
-                        <li>
-                            <Link href="/curso-asignado" className="flex items-center text-white">
-                                <CalendarIcon className="mr-2 size-6" />
-                                Cursos asignados
-                            </Link>
-                        </li>
+                        {rolId == adminId || rolId == instructorId ? (
+                            <li>
+                                <Link href="/curso-asignado" className="flex items-center text-white">
+                                    <CalendarIcon className="mr-2 size-6" />
+                                    Cursos asignados
+                                </Link>
+                            </li>
+                        ) : null}
 
-                        <li>
-                            <Link href="/curso-complementario" className="flex items-center text-white">
-                                <DocumentIcon className="mr-2 size-6" />
-                                Cursos complementarios
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/solicitud" className="flex items-center text-white">
-                                <CalendarIcon className="mr-2 size-6" />
-                                Solicitudes
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/empresa" className="flex items-center text-white">
-                                <EmpresaIcon className="mr-2 size-6" />
-                                Empresas
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/ambiente" className="flex items-center text-white">
-                                <AmbienteIcon className="mr-2 size-6" />
-                                Ambientes
-                            </Link>
-                        </li>
+                        {rolId == adminId && (
+                            <li>
+                                <Link href="/curso-complementario" className="flex items-center text-white">
+                                    <DocumentIcon className="mr-2 size-6" />
+                                    Cursos complementarios
+                                </Link>
+                            </li>
+                        )}
+
+                        {rolId == adminId || rolId == instructorId || rolId == empresaId || rolId == personaId ? (
+                            <li>
+                                <Link href="/solicitud" className="flex items-center text-white">
+                                    <CalendarIcon className="mr-2 size-6" />
+                                    Solicitudes
+                                </Link>
+                            </li>
+                        ) : null}
+
+                        {rolId == adminId && (
+                            <li>
+                                <Link href="/empresa" className="flex items-center text-white">
+                                    <EmpresaIcon className="mr-2 size-6" />
+                                    Empresas
+                                </Link>
+                            </li>
+                        )}
+
+                        {rolId == adminId && (
+                            <li>
+                                <Link href="/ambiente" className="flex items-center text-white">
+                                    <AmbienteIcon className="mr-2 size-6" />
+                                    Ambientes
+                                </Link>
+                            </li>
+                        )}
+
                         <li>
                             <Link href="/area-de-formacion" className="flex items-center text-white">
                                 <AmbienteIcon className="mr-2 size-6" />

@@ -15,9 +15,11 @@ import { fetcher } from '@/utils/fetcher'
 import CheckIcon from '../components/svg/CheckIcon'
 import { toast } from '@/components/ui/use-toast'
 import { deleteCursoComplementario } from '@/lib/actions'
+import { useRol } from '@/app/context/AppContext'
 
 export default function CursoComplementario() {
     const { data: cursosComplementarios, error } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
+    const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
 
     if (error) return <div>Error al cargar los datos</div>
     if (!cursosComplementarios) return <div>Cargando...</div>
@@ -28,12 +30,14 @@ export default function CursoComplementario() {
                 <h1 className="text-center text-4xl text-white">Cursos complementarios</h1>
             </header>
 
-            <div className="my-6">
-                <Link href="/curso-complementario/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
-                    <PlusIcon className="mr-2 inline-block" />
-                    Registrar
-                </Link>
-            </div>
+            {rolId == adminId && (
+                <div className="my-6">
+                    <Link href="/curso-complementario/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                        <PlusIcon className="mr-2 inline-block" />
+                        Registrar
+                    </Link>
+                </div>
+            )}
 
             <Table>
                 <TableHeader>
@@ -54,15 +58,17 @@ export default function CursoComplementario() {
                             <TableCell>{cursoComplementario.fichaFormacion}</TableCell>
                             <TableCell>{cursoComplementario.instructor.nombres}</TableCell>
                             <TableCell>{cursoComplementario.ambiente.nombre}</TableCell>
-                            <TableCell>
-                                <div className="flex gap-2">
-                                    {/* <ViewIcon /> */}
-                                    <Link href={`/curso-complementario/${cursoComplementario.id}/editar`}>
-                                        <EditIcon />
-                                    </Link>
-                                    <DeleteButton cursoComplementario={cursoComplementario} />
-                                </div>
-                            </TableCell>
+                            {rolId == adminId && (
+                                <TableCell>
+                                    <div className="flex gap-2">
+                                        {/* <ViewIcon /> */}
+                                        <Link href={`/curso-complementario/${cursoComplementario.id}/editar`}>
+                                            <EditIcon />
+                                        </Link>
+                                        <DeleteButton cursoComplementario={cursoComplementario} />
+                                    </div>
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -75,7 +81,7 @@ function DeleteButton({ cursoComplementario }: { cursoComplementario: CursoCompl
     const handleClick = async () => {
         const res = await deleteCursoComplementario(cursoComplementario.id)
 
-        if (res) {
+        if (res.ok) {
             toast({ title: '✔️', description: 'Curso complementario eliminado satisfactoriamente' })
         }
 

@@ -57,11 +57,9 @@ export async function saveAmbiente(data: Ambiente): Promise<void> {
     }
 }
 
-export async function deleteAmbiente(ambienteId: string): Promise<void> {
+export async function deleteAmbiente(ambienteId: string): Promise<Response> {
     try {
-        const res = await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente/${ambienteId || ''}`, 'DELETE')
-
-        return res
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente/${ambienteId || ''}`, 'DELETE')
     } catch (error: any) {
         throw new Error('Error al eliminar el ambiente: ' + error.message)
     }
@@ -75,11 +73,9 @@ export async function saveCursoComplementario(data: CursoComplementario): Promis
     }
 }
 
-export async function deleteCursoComplementario(cursoComplementarioId: string): Promise<void> {
+export async function deleteCursoComplementario(cursoComplementarioId: string): Promise<Response> {
     try {
-        const res = await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${cursoComplementarioId || ''}`, 'DELETE')
-
-        return res
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario/${cursoComplementarioId || ''}`, 'DELETE')
     } catch (error: any) {
         throw new Error('Error al eliminar el curso complementario: ' + error.message)
     }
@@ -93,11 +89,9 @@ export async function saveEmpresa(data: Empresa): Promise<void> {
     }
 }
 
-export async function deleteEmpresa(empresaId: string): Promise<void> {
+export async function deleteEmpresa(empresaId: string): Promise<Response> {
     try {
-        const res = await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/${empresaId || ''}`, 'DELETE')
-
-        return res
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/${empresaId || ''}`, 'DELETE')
     } catch (error: any) {
         throw new Error('Error al eliminar el empresa: ' + error.message)
     }
@@ -111,11 +105,9 @@ export async function saveSolicitud(data: Solicitud): Promise<void> {
     }
 }
 
-export async function deleteSolicitud(solicitud: string): Promise<void> {
+export async function deleteSolicitud(solicitud: string): Promise<Response> {
     try {
-        const res = await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${solicitud || ''}`, 'DELETE')
-
-        return res
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${solicitud || ''}`, 'DELETE')
     } catch (error: any) {
         throw new Error('Error al eliminar el solicitud: ' + error.message)
     }

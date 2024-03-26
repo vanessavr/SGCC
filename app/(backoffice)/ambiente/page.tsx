@@ -14,9 +14,11 @@ import { fetcher } from '@/utils/fetcher'
 import CheckIcon from '../components/svg/CheckIcon'
 import { deleteAmbiente } from '@/lib/actions'
 import { toast } from '@/components/ui/use-toast'
+import { useRol } from '@/app/context/AppContext'
 
 export default function Ambiente() {
     const { data: ambientes, error } = useSWR<Ambiente[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente`, fetcher)
+    const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
 
     if (error) return <div>Error al cargar los datos</div>
     if (!ambientes) return <div>Cargando...</div>
@@ -27,12 +29,14 @@ export default function Ambiente() {
                 <h1 className="text-center text-4xl text-white">Ambientes</h1>
             </header>
 
-            <div className="my-6">
-                <Link href="/ambiente/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
-                    <PlusIcon className="mr-2 inline-block" />
-                    Registrar
-                </Link>
-            </div>
+            {rolId == adminId && (
+                <div className="my-6">
+                    <Link href="/ambiente/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                        <PlusIcon className="mr-2 inline-block" />
+                        Registrar
+                    </Link>
+                </div>
+            )}
 
             <Table>
                 <TableHeader>
@@ -51,15 +55,17 @@ export default function Ambiente() {
                             <TableCell>{ambiente.nombre}</TableCell>
                             <TableCell>{ambiente.capacidad}</TableCell>
                             <TableCell>{ambiente.centroFormacion}</TableCell>
-                            <TableCell>
-                                <div className="flex gap-2">
-                                    {/* <ViewIcon /> */}
-                                    <Link href={`/ambiente/${ambiente.id}/editar`}>
-                                        <EditIcon />
-                                    </Link>
-                                    <DeleteButton ambiente={ambiente} />
-                                </div>
-                            </TableCell>
+                            {rolId == adminId && (
+                                <TableCell>
+                                    <div className="flex gap-2">
+                                        {/* <ViewIcon /> */}
+                                        <Link href={`/ambiente/${ambiente.id}/editar`}>
+                                            <EditIcon />
+                                        </Link>
+                                        <DeleteButton ambiente={ambiente} />
+                                    </div>
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -72,7 +78,7 @@ function DeleteButton({ ambiente }: { ambiente: Ambiente }) {
     const handleClick = async () => {
         const res = await deleteAmbiente(ambiente.id)
 
-        if (res) {
+        if (res.ok) {
             toast({ title: '✔️', description: 'Ambiente eliminado satisfactoriamente' })
         }
 
