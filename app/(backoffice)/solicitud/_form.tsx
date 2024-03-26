@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
 import { saveSolicitud } from '@/lib/actions'
-import { CursoComplementario, Empresa, Persona, Solicitud } from '@/types/MyTypes'
+import { CursoComplementario, Empresa, Persona, Solicitud, UsuarioInvitado } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
@@ -21,6 +21,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
     const { data: cursosComplementarios, error: erroCursosComplementarios } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
     const { data: usuarios, error: erroUsuarios } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/rol/${process.env.NEXT_PUBLIC_NESTJS_ROL_PERSONA_ID}`, fetcher)
     const { data: empresas, error: erroEmpresas } = useSWR<Empresa[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`, fetcher)
+    const { data: usuariosInvitados, error: erroUsuariosInvitados } = useSWR<UsuarioInvitado[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario-invitado`, fetcher)
 
     useEffect(() => {
         if (data) {
@@ -173,6 +174,20 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     {empresas?.map((empresa, index) => (
                         <SelectItem key={empresa.id} value={empresa.id}>
                             {empresa.razonSocial}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+
+            <Label htmlFor="">Usuario invitado solicitante</Label>
+            <Select name="usuarioInvitadoId" value={formData?.usuarioInvitadoId || ''} onValueChange={(value) => handleChange('usuarioInvitadoId', value)}>
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccione una usuario" />
+                </SelectTrigger>
+                <SelectContent>
+                    {usuariosInvitados?.map((usuarioInvitado, index) => (
+                        <SelectItem key={usuarioInvitado.id} value={usuarioInvitado.id}>
+                            {usuarioInvitado.nombres + ' ' + usuarioInvitado.apellidos}
                         </SelectItem>
                     ))}
                 </SelectContent>

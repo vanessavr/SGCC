@@ -16,6 +16,19 @@ export interface Persona {
     rolId: string
 }
 
+interface UsuarioInvitado {
+    id: string
+    nombres: string
+    apellidos: string
+    tipoDocumento: string
+    numeroIdentificacion: string
+    correoElectronico: string
+    celular: string
+    departamento: string
+    ciudad: string
+    cursoComplementarioId: string
+}
+
 interface Instructor {
     nombres: string
     apellidos: string
@@ -57,6 +70,7 @@ interface Solicitud {
     cuposSolicitados: number
     usuarioId: string
     empresaId: string
+    usuarioInvitadoId: string
     tipoSolicitud: string
     cursoComplementarioId: string
     estadoSolicitud: string
@@ -65,6 +79,7 @@ interface Solicitud {
     updatedAt: string
     usuario: Persona
     empresa: Empresa
+    usuarioInvitado: UsuarioInvitado
 }
 
 interface Empresa {

@@ -1,4 +1,4 @@
-import { Persona, Ambiente, Empresa, Solicitud, CursoComplementario } from '@/types/MyTypes'
+import { Persona, Ambiente, Empresa, Solicitud, CursoComplementario, UsuarioInvitado } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 
 export async function getProfile(): Promise<any> {
@@ -46,6 +46,14 @@ export async function deletePersona(personaId: string): Promise<Response> {
         return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${personaId || ''}`, 'DELETE')
     } catch (error: any) {
         throw new Error('Error al eliminar la persona: ' + error.message)
+    }
+}
+
+export async function saveUsuarioInvitado(data: UsuarioInvitado): Promise<void> {
+    try {
+        await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario-invitado/${data.id || ''}`, data.id ? 'PATCH' : 'POST', data)
+    } catch (error: any) {
+        throw new Error('Error al guardar el usuario: ' + error.message)
     }
 }
 
