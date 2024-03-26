@@ -96,12 +96,10 @@ export default function Persona() {
 }
 
 function DeleteButton({ usuario }: { usuario: Persona }) {
-    const [confirmarEliminacion, setConfirmarEliminacion] = useState(true)
-
     const handleClick = async () => {
         const res = await deletePersona(usuario.id)
 
-        if (res) {
+        if (res.ok) {
             toast({ title: '✔️', description: 'Usuario eliminado satisfactoriamente' })
         }
 

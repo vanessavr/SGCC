@@ -3,14 +3,12 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import PlusIcon from '../components/svg/PlusIcon'
 import CalendarIcon from '../components/svg/CalendarIcon'
-import Link from 'next/link'
 import useSWR, { mutate } from 'swr'
 import { CursoComplementario, Persona } from '@/types/MyTypes'
 import { useEffect, useState } from 'react'
 import { fetcher } from '@/utils/fetcher'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { toast } from '@/components/ui/use-toast'
 import { getCursosAsignados } from '@/lib/actions'
 
 export default function CursoAsignado() {
@@ -19,7 +17,9 @@ export default function CursoAsignado() {
         instructorId ? `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${instructorId}/curso-complementario` : null,
         fetcher,
     )
-    const { data: instructores, error: errorInstructores } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
+    const { data: instructores, error: errorInstructores } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/rol/${process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID}`, fetcher)
+
+    instructores
 
     // Efecto para actualizar los cursos complementarios cuando cambia el instructor seleccionado
     useEffect(() => {
@@ -45,7 +45,8 @@ export default function CursoAsignado() {
         fetchCursos()
     }, [instructorId])
 
-    if (errorCursos || errorInstructores) return <div>Error al cargar los datos</div>
+    if (errorCursos) return <div>Error al cargar los cursos</div>
+    if (errorInstructores) return <div>Error al cargar los instructores</div>
     // if (!cursosComplementarios || !instructores) return <div>Cargando...</div>
 
     return (

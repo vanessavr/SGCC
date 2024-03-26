@@ -137,6 +137,12 @@ export default function BackofficeLayout({
                             </Link>
                         </li>
                         <li>
+                            <Link href="/area-de-formacion" className="flex items-center text-white">
+                                <AmbienteIcon className="mr-2 size-6" />
+                                Áreas de formación
+                            </Link>
+                        </li>
+                        <li>
                             <Link href="#" className="flex items-center text-white">
                                 <LoadIcon className="mr-2 size-6" />
                                 Carga de archivos

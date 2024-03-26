@@ -28,7 +28,9 @@ export default function FormularioCursoComplementario() {
             </Label>
             <span>[Duración del programa]</span>
 
-            <Label htmlFor="">Jornada</Label>
+            <Label htmlFor="" className="font-bold">
+                Jornada
+            </Label>
             <Select name="jornada">
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una jornada" />

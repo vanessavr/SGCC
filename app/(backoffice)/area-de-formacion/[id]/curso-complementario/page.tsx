@@ -16,7 +16,7 @@ export default function CursoComplementario({ params }: { params: { id: string }
             </header>
             <div className="flex flex-wrap justify-center">
                 {cursosComplementarios?.map((cursoComplementario, index) => (
-                    <div className="mt-10 bg-gray-300 py-7 px-8 w-60 rounded-xl flex flex-col items-center justify-center mx-4">
+                    <div key={cursoComplementario.id} className="mt-10 bg-gray-300 py-7 px-8 w-60 rounded-xl flex flex-col items-center justify-center mx-4">
                         <h1 className="text-center text-sm mb-2 font-bold">{cursoComplementario.nombre}</h1>
                         <h2 className="text-center text-sm mb-1 mt-4">SENA Regional Caldas</h2>
                         <p className="text-center text-xs mb-1">Cupos: {cursoComplementario.cuposDisponibles}</p>

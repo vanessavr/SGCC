@@ -22,7 +22,7 @@ const FormularioCurso = ({ className, data }: Props) => {
     const { toast } = useToast()
     const [ciudades, setCiudades] = useState<[]>([])
 
-    const { data: instructores } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
+    const { data: instructores } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/rol/${process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID}`, fetcher)
     const { data: ambientes } = useSWR<Ambiente[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente`, fetcher)
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
 

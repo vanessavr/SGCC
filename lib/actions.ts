@@ -41,11 +41,9 @@ export async function savePersona(data: Persona): Promise<void> {
     }
 }
 
-export async function deletePersona(personaId: string): Promise<void> {
+export async function deletePersona(personaId: string): Promise<Response> {
     try {
-        const res = await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${personaId || ''}`, 'DELETE')
-
-        return res
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${personaId || ''}`, 'DELETE')
     } catch (error: any) {
         throw new Error('Error al eliminar la persona: ' + error.message)
     }

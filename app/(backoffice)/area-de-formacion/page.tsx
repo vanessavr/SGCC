@@ -15,7 +15,7 @@ export default function AreaFormacion() {
             </header>
             <div className="grid grid-cols-3">
                 {areasFormacion?.map((areaFormacion, index) => (
-                    <Link href={`/area-de-formacion/${areaFormacion}/curso-complementario`} className="mt-10 bg-sena-800 p-10 rounded-xl flex flex-col items-center justify-center mx-4">
+                    <Link key={index} href={`/area-de-formacion/${areaFormacion}/curso-complementario`} className="mt-10 bg-sena-800 p-10 rounded-xl flex flex-col items-center justify-center mx-4">
                         <h3 className="text-center text-white text-lg">{areaFormacion}</h3>
                     </Link>
                 ))}
