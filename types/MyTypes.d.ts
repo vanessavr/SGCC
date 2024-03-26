@@ -56,6 +56,7 @@ interface Solicitud {
     segmento: string
     cuposSolicitados: number
     usuarioId: string
+    empresaId: string
     tipoSolicitud: string
     cursoComplementarioId: string
     estadoSolicitud: string
@@ -63,6 +64,7 @@ interface Solicitud {
     createdAt: string
     updatedAt: string
     usuario: Persona
+    empresa: Empresa
 }
 
 interface Empresa {

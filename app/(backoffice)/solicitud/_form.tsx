@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
 import { saveSolicitud } from '@/lib/actions'
-import { CursoComplementario, Persona, Solicitud } from '@/types/MyTypes'
+import { CursoComplementario, Empresa, Persona, Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
@@ -19,7 +19,8 @@ export default function FormularioSolicitud({ className, data }: Props) {
     const [formData, setFormData] = useState<Partial<Solicitud>>(data || {})
     const { toast } = useToast()
     const { data: cursosComplementarios, error: erroCursosComplementarios } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/curso-complementario`, fetcher)
-    const { data: usuarios, error: erroUsuarios } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`, fetcher)
+    const { data: usuarios, error: erroUsuarios } = useSWR<Persona[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/rol/${process.env.NEXT_PUBLIC_NESTJS_ROL_PERSONA_ID}`, fetcher)
+    const { data: empresas, error: erroEmpresas } = useSWR<Empresa[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`, fetcher)
 
     useEffect(() => {
         if (data) {
@@ -149,8 +150,8 @@ export default function FormularioSolicitud({ className, data }: Props) {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="">Solicitante *</Label>
-            <Select name="usuarioId" value={formData?.usuarioId || ''} onValueChange={(value) => handleChange('usuarioId', value)} required>
+            <Label htmlFor="">Persona solicitante</Label>
+            <Select name="usuarioId" value={formData?.usuarioId || ''} onValueChange={(value) => handleChange('usuarioId', value)}>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una persona" />
                 </SelectTrigger>
@@ -158,6 +159,20 @@ export default function FormularioSolicitud({ className, data }: Props) {
                     {usuarios?.map((usuario, index) => (
                         <SelectItem key={usuario.id} value={usuario.id}>
                             {usuario.nombres + ' ' + usuario.apellidos}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+
+            <Label htmlFor="">Empresa solicitante</Label>
+            <Select name="empresaId" value={formData?.empresaId || ''} onValueChange={(value) => handleChange('empresaId', value)}>
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccione una empresa" />
+                </SelectTrigger>
+                <SelectContent>
+                    {empresas?.map((empresa, index) => (
+                        <SelectItem key={empresa.id} value={empresa.id}>
+                            {empresa.razonSocial}
                         </SelectItem>
                     ))}
                 </SelectContent>
