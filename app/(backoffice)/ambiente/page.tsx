@@ -78,8 +78,6 @@ function DeleteButton({ ambiente }: { ambiente: Ambiente }) {
     const handleClick = async () => {
         const res = await deleteAmbiente(ambiente.id)
 
-        console.log(res)
-
         if (res.id) {
             toast({ title: '✔️', description: 'Ambiente eliminado satisfactoriamente' })
         }
