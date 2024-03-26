@@ -13,6 +13,7 @@ export interface Persona {
     foto: string
     password: string
     poblacionEspecial: string
+    rolId: string
 }
 
 interface Instructor {
@@ -93,6 +94,12 @@ interface Departamento {
     id: string
     departamento: string
     ciudades: array
+}
+
+interface Rol {
+    id: string
+    nombre: string
+    descripcion: string
 }
 
 interface Login {

@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
-import { Departamento, Persona } from '@/types/MyTypes'
+import { Departamento, Persona, Rol } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { useToast } from '@/components/ui/use-toast'
@@ -15,12 +15,36 @@ import { savePersona } from '@/lib/actions'
 interface Props {
     className?: string
     data?: Persona
+    esRegistro?: boolean
 }
-export default function FormularioPersona({ className, data }: Props) {
+export default function FormularioUsuario({ className, data, esRegistro = false }: Props) {
     const [formData, setFormData] = useState<Partial<Persona>>(data || {})
     const { toast } = useToast()
     const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
+    const [roles, setRoles] = useState<Rol[]>()
+
+    useEffect(() => {
+        if (!esRegistro) {
+            const fetchRoles = async () => {
+                try {
+                    const rolesResponse = await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/rol`)
+
+                    setRoles(rolesResponse)
+                } catch (error) {
+                    console.error('Error al obtener los roles:', error)
+                    // Manejar errores si es necesario
+                }
+            }
+
+            fetchRoles()
+        }
+
+        setFormData((prevData) => ({
+            ...prevData,
+            esRegistro: true,
+        }))
+    }, [esRegistro])
 
     useEffect(() => {
         // Si no hay instructor seleccionado, no es necesario hacer la solicitud
@@ -239,6 +263,24 @@ export default function FormularioPersona({ className, data }: Props) {
                     <SelectItem value="15">Adolescente en conflicto con ley penal</SelectItem>
                 </SelectContent>
             </Select>
+
+            {!esRegistro && roles && (
+                <>
+                    <Label htmlFor="">Rol *</Label>
+                    <Select name="rolId" value={formData?.rolId || ''} onValueChange={(value) => handleChange('rolId', value)} required>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Rol" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {roles?.map((rol, index) => (
+                                <SelectItem key={rol.id} value={rol.id.toString()}>
+                                    {rol.nombre}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </>
+            )}
 
             {!data && (
                 <>

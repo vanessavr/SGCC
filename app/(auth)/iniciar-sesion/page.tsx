@@ -120,7 +120,7 @@ export default function InicioSesion() {
                                                 <DialogTitle className="text-center text-sm text-white"> {selectedOption === 'persona' ? 'Registrar persona' : 'Registrar empresa'}</DialogTitle>
                                             </DialogHeader>
                                             {selectedOption === 'persona' ? (
-                                                <FormularioPersona className="p-8 grid grid-cols-2 space-y-4" />
+                                                <FormularioPersona className="p-8 grid grid-cols-2 space-y-4" esRegistro={true} />
                                             ) : (
                                                 <FormularioEmpresa className="p-8 grid grid-cols-2 space-y-4" />
                                             )}
