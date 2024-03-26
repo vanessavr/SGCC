@@ -82,7 +82,7 @@ export default function UsuarioInvitado() {
     return (
         <>
             <div className="h-[70vh] overflow-hidden">
-                <img src="/cursos.png" className="relative -top-20" alt="" />
+                <img src="/cursos.webp" className="relative -top-20" alt="" />
             </div>
             <h1 className="text-center text-6xl text-sena-600 my-6 mb-20 font-semibold ">Cursos disponibles</h1>
             <div className="grid grid-cols-3 gap-6">

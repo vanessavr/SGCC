@@ -25,7 +25,7 @@ export default function BackofficeLayout({
 }) {
     const [authUser, setAuthUser] = useState<any>()
     const router = useRouter()
-    const { rolId, setRolId, adminId, instructorId, empresaId, personaId } = useRol()
+    const { rolId, setRolId, adminId, instructorId, empresaId, personaId, rolNombre } = useRol()
 
     const handleSubmit = async () => {
         try {
@@ -81,6 +81,10 @@ export default function BackofficeLayout({
                 <div className="flex flex-col items-start justify-center">
                     <div>
                         Bienvenido(a) <span className="uppercase">{authUser?.nombres || authUser?.razonSocial}</span>
+                        <br />
+                        <small>
+                            <strong>Rol:</strong> {rolNombre}
+                        </small>
                     </div>
                     <Button className="mt-4" onClick={handleSubmit}>
                         Cerrar sesión
@@ -99,6 +103,13 @@ export default function BackofficeLayout({
                         <li>
                             <Link href="/perfil" className="flex items-center text-white">
                                 <UserIcon className="mr-2 size-6" /> Perfil
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link href="/area-de-formacion" className="flex items-center text-white">
+                                <AmbienteIcon className="mr-2 size-6" />
+                                Áreas de formación
                             </Link>
                         </li>
 
@@ -156,12 +167,6 @@ export default function BackofficeLayout({
                             </li>
                         )}
 
-                        <li>
-                            <Link href="/area-de-formacion" className="flex items-center text-white">
-                                <AmbienteIcon className="mr-2 size-6" />
-                                Áreas de formación
-                            </Link>
-                        </li>
                         <li>
                             <Link href="#" className="flex items-center text-white">
                                 <LoadIcon className="mr-2 size-6" />
