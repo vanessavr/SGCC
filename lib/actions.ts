@@ -3,7 +3,7 @@ import { fetcher } from '@/utils/fetcher'
 
 export async function getProfile(): Promise<any> {
     try {
-        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/profile`, 'POST')
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/profile`, 'GET')
     } catch (error: any) {
         throw new Error('Error al obtener el perfil: ' + error.message)
     }
@@ -20,6 +20,14 @@ export async function getCursosAsignados(instructorId: string): Promise<any> {
 export async function updateProfilePersona(data: Persona): Promise<void> {
     try {
         await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/profile/update-persona`, 'PATCH', data)
+    } catch (error: any) {
+        throw new Error('Error al actualizar el perfil: ' + error.message)
+    }
+}
+
+export async function updateFotoPerfil(data: any): Promise<void> {
+    try {
+        await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/upload-foto`, 'POST', data)
     } catch (error: any) {
         throw new Error('Error al actualizar el perfil: ' + error.message)
     }

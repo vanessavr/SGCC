@@ -78,3 +78,8 @@
 a {
   display: inline-block;
 }
+
+textarea {
+  resize: none;
+  field-sizing: content;
+}

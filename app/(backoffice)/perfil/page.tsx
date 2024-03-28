@@ -13,7 +13,7 @@ import { Departamento, Empresa, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
-import { getProfile, updateProfilePersona, updateProfileEmpresa, cambiarPassword } from '@/lib/actions'
+import { getProfile, updateProfilePersona, updateProfileEmpresa, cambiarPassword, updateFotoPerfil } from '@/lib/actions'
 import { useRol } from '@/app/context/AppContext'
 
 export default function Perfil() {
@@ -113,6 +113,33 @@ export default function Perfil() {
         }))
     }
 
+    const handleFileSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        
+        // Asegúrate de que el evento proviene de un formulario.
+        if (!(event.target instanceof HTMLFormElement)) return;
+
+        try {
+            const formFileData = new FormData();
+            const fileInput = event.target.elements.namedItem('file') as HTMLInputElement;
+            
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            console.error('No file selected');
+            return;
+            }
+            
+            const file = fileInput.files[0];
+            formFileData.append('file', file);
+
+            await updateFotoPerfil(formFileData)
+         
+            toast({ title: '✔️', description: 'Foto de perfil actualizada satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al actualizar el perfil:', error)
+            toast({ title: '✖️', description: 'Error al actualizar el perfil' })
+        }
+    }
+
     const tipoDocumento = formData?.tipoDocumento == '1' ? 'CC' : formData?.tipoDocumento == '2' ? 'CE' : 'TI'
 
     return (
@@ -135,14 +162,14 @@ export default function Perfil() {
                         </DialogHeader>
                         <form className="px-8 grid grid-cols-2 space-y-6 pb-8" onSubmit={handleChangePassword}>
                             <Label htmlFor="oldPassword" className="font-bold self-center">
-                                Contraseña anterior:
+                                Contraseña anterior *
                             </Label>
-                            <Input id="oldPassword" name="oldPassword" type="password" value={oldPassword || ''} onChange={(event) => setOldPassword(event.target.value)} />
+                            <Input id="oldPassword" name="oldPassword" type="password" value={oldPassword || ''} onChange={(event) => setOldPassword(event.target.value)} required />
 
                             <Label htmlFor="newPassword" className="font-bold self-center">
-                                Contraseña nueva:
+                                Contraseña nueva *
                             </Label>
-                            <Input id="newPassword" name="newPassword" type="password" value={newPassword || ''} onChange={(event) => setNewPassword(event.target.value)} />
+                            <Input id="newPassword" name="newPassword" type="password" value={newPassword || ''} onChange={(event) => setNewPassword(event.target.value)} required />
 
                             <div className="col-span-2">
                                 <Button className="rounded-full font-bold py-2 px-4 w-full">Guardar</Button>
@@ -155,7 +182,7 @@ export default function Perfil() {
                 <div className="flex items-center justify-center">
                     <div className="flex flex-col items-center justify-center">
                         <Avatar className="size-60 mb-5">
-                            <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
+                            <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${formData?.foto}`} />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
 
@@ -167,13 +194,10 @@ export default function Perfil() {
                                     <DialogTitle className="text-center text-md text-white">Cargar foto</DialogTitle>
                                 </DialogHeader>
 
-                                <div className="flex flex-col mt-4 gap-6 items-center justify-center">
-                                    <Button className="rounded-full font-bold py-2 px-4">
-                                        <ClipIcon className="mr-2" />
-                                        Cargar desde el computador
-                                    </Button>
-                                    <Button className="rounded-full font-bold py-2 px-4 w-40">Guardar</Button>
-                                </div>
+                                    <form onSubmit={handleFileSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
+                                        <input type="file" id="fileInput" placeholder='Cargar desde el computador' accept='images/*' name="file" />
+                                        <Button className="rounded-full font-bold py-2 px-4 w-40">Guardar</Button>
+                                    </form>
                             </DialogContent>
                         </Dialog>
                     </div>

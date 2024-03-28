@@ -2,26 +2,39 @@
 
 import { cookies } from 'next/headers'
 
-export const fetcher = async (url: string, method?: string, data?: object) => {
-    const accessToken = getAccessTokenFromCookie()
+export const fetcher = async (url: string, method: string = 'GET', data?: object | FormData) => {
+    const accessToken = getAccessTokenFromCookie();
 
-    const response = await fetch(url, {
-        method: method ? method : 'GET',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(data),
-    })
+    const headers = new Headers({
+        Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+    });
 
-    if (!response.ok) {
-        throw new Error('Error al realizar la acción')
+    let body: BodyInit | undefined;
+
+    if (data instanceof FormData) {
+        // Para FormData, no añadas el 'Content-Type' y prepara `body` directamente con `data`
+        body = data;
+    } else if (data) {
+        // Para los objetos JSON, añade 'Content-Type' y convierte `data` en una cadena JSON para `body`
+        headers.append('Content-Type', 'application/json');
+        body = JSON.stringify(data);
     }
 
-    return response.json()
-}
+    const response = await fetch(url, {
+        method,
+        credentials: 'include',
+        headers,
+        body: body,
+    });
+
+    if (!response.ok) {
+        throw new Error('Error al realizar la acción');
+    }
+
+    return response.json();
+};
+
 
 // Función para obtener el token de acceso de la cookie
 export const getAccessTokenFromCookie = () => {
