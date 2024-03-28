@@ -120,3 +120,11 @@ export async function deleteSolicitud(solicitud: string): Promise<Solicitud> {
         throw new Error('Error al eliminar el solicitud: ' + error.message)
     }
 }
+
+export async function applySolicitud(id: string, data: any): Promise<void> {
+    try {
+        await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/aplicar-curso-complementario/${id}`, 'POST', data)
+    } catch (error: any) {
+        throw new Error('Error al guardar el solicitud: ' + error.message)
+    }
+}

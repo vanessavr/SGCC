@@ -14,7 +14,7 @@ export default function CursoComplementario({ params }: { params: { id: string }
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
-                <h1 className="text-center text-4xl text-white">Áreas de formación</h1>
+                <h1 className="text-center text-4xl text-white">Cursos complementarios</h1>
             </header>
             <div className="flex flex-wrap justify-center">
                 {cursosComplementarios?.map((cursoComplementario, index) => (
@@ -29,7 +29,7 @@ export default function CursoComplementario({ params }: { params: { id: string }
                                 <DialogHeader>
                                     <DialogTitle className="text-center text-sm text-white">{cursoComplementario.nombre}</DialogTitle>
                                 </DialogHeader>
-                                <FormularioCursoComplementario />
+                                <FormularioCursoComplementario cursoComplementario={cursoComplementario} />
                             </DialogContent>
                         </Dialog>
                     </div>

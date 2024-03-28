@@ -25,7 +25,7 @@ export default function BackofficeLayout({
 }) {
     const [authUser, setAuthUser] = useState<any>()
     const router = useRouter()
-    const { rolId, setRolId, adminId, instructorId, empresaId, personaId, rolNombre } = useRol()
+    const { rolId, setRolId, setUserId, adminId, instructorId, empresaId, personaId, rolNombre } = useRol()
 
     const handleSubmit = async () => {
         try {
@@ -58,6 +58,7 @@ export default function BackofficeLayout({
                 setAuthUser(data)
 
                 setRolId(data.rolId)
+                setUserId(data.id)
             } catch (error: any) {
                 console.error('Error al obtener el perfil del usuario:', error.message)
             }

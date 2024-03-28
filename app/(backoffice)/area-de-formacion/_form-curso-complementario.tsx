@@ -1,16 +1,51 @@
+import { useRol } from '@/app/context/AppContext'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { toast } from '@/components/ui/use-toast'
+import { applySolicitud, saveSolicitud } from '@/lib/actions'
+import { CursoComplementario, Solicitud } from '@/types/MyTypes'
+import { useEffect, useState } from 'react'
 
-export default function FormularioCursoComplementario() {
+interface Props {
+    className?: string
+    cursoComplementario?: CursoComplementario
+}
+export default function FormularioCursoComplementario({ cursoComplementario }: Props) {
+    const [formData, setFormData] = useState<Partial<Solicitud>>({})
+    const { userId } = useRol()
+
+    useEffect(() => {
+        setFormData({ usuarioId: userId })
+    }, [])
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        try {
+            if (cursoComplementario) {
+                await applySolicitud(cursoComplementario.id, formData)
+                toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
+            }
+        } catch (error) {
+            console.error('Error al guardar la solicitud:', error)
+            toast({ title: '✖️', description: 'Error al guardar la solicitud' })
+        }
+    }
+
+    const handleChange = (name: string, value: string) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }))
+    }
+
     return (
-        <form className="p-8 grid grid-cols-2 space-y-4">
+        <form className="p-8 grid grid-cols-2 space-y-4" onSubmit={handleSubmit}>
             <Label htmlFor="" className="font-bold">
                 Programa de formación:
             </Label>
-            <span className="!mt-0">Reentrenamiento en trabajo en alturas para trabajador autorizado</span>
+            <span className="!mt-0">{cursoComplementario?.nombre}</span>
             <Label htmlFor="" className="font-bold">
                 Centro de formación:
             </Label>
@@ -26,40 +61,25 @@ export default function FormularioCursoComplementario() {
             <Label htmlFor="" className="font-bold">
                 Duración:
             </Label>
-            <span>[Duración del programa]</span>
+            <span>{cursoComplementario?.duracion}</span>
 
             <Label htmlFor="" className="font-bold">
                 Jornada
             </Label>
-            <Select name="jornada">
-                <SelectTrigger>
-                    <SelectValue placeholder="Seleccione una jornada" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="1">Mañana</SelectItem>
-                    <SelectItem value="2">Tarde</SelectItem>
-                    <SelectItem value="3">Noche</SelectItem>
-                    <SelectItem value="4">Mixta</SelectItem>
-                </SelectContent>
-            </Select>
+            <span>{cursoComplementario?.jornada}</span>
+
             <Label htmlFor="cuposSolicitados" className="font-bold self-center">
                 Cupos solicitados: *
             </Label>
-            <Input id="cuposSolicitados" name="cuposSolicitados" type="number" required />
-            <Dialog>
-                <DialogTrigger className="rounded-full font-bold py-2 px-8 !w-full col-span-2 mt-6 text-white bg-sena-800 ">Aplicar</DialogTrigger>
-                <DialogContent className="pb-20 pt-20 flex items-center justify-center flex-col py-8 ">
-                    <h1 className="font-bold text-md">¡Inscripción exitosa!</h1>
-                    <p className="flex text-center justify-center">
-                        Su inscripción se ha completado con éxito. Pronto recibirá un correo electrónico con detalles importantes para comenzar el programa de formación.
-                    </p>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button className="rounded-full text-center w-40">Cerrar</Button>
-                        </DialogClose>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            <Input
+                id="cuposSolicitados"
+                name="cuposSolicitados"
+                value={formData?.cuposSolicitados || ''}
+                onChange={(event) => handleChange('cuposSolicitados', event.target.value)}
+                type="number"
+                required
+            />
+            <Button className="rounded-full w-full !mt-8 col-span-2">Aplicar</Button>
         </form>
     )
 }
