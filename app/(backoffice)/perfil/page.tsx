@@ -13,10 +13,15 @@ import { Departamento, Empresa, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
-import { getProfile, updateProfilePersona, updateProfileEmpresa } from '@/lib/actions'
+import { getProfile, updateProfilePersona, updateProfileEmpresa, cambiarPassword } from '@/lib/actions'
+import { useRol } from '@/app/context/AppContext'
 
 export default function Perfil() {
+    const { userId } = useRol()
+
     const [formData, setFormData] = useState<any>()
+    const [newPassword, setNewPassword] = useState<any>()
+    const [oldPassword, setOldPassword] = useState<any>()
     const [ciudades, setCiudades] = useState<[]>([])
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
 
@@ -86,6 +91,21 @@ export default function Perfil() {
         }
     }
 
+    const handleChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        try {
+            const res = await cambiarPassword(oldPassword, newPassword, userId)
+
+            if (res.id) {
+                toast({ title: '✔️', description: 'Contraseña actualizada satisfactoriamente' })
+            }
+        } catch (error) {
+            console.error('Error al actualizar el perfil:', error)
+            toast({ title: '✖️', description: 'Error al actualizar el perfil' })
+        }
+    }
+
     const handleChange = (name: string, value: string) => {
         setFormData((prevData: any) => ({
             ...prevData,
@@ -113,16 +133,16 @@ export default function Perfil() {
                         <DialogHeader>
                             <DialogTitle className="text-center text-sm text-white">Cambiar contraseña</DialogTitle>
                         </DialogHeader>
-                        <form className="px-8 grid grid-cols-2 space-y-6 pb-8">
-                            <Label htmlFor="contasenaAnterior" className="font-bold self-center">
+                        <form className="px-8 grid grid-cols-2 space-y-6 pb-8" onSubmit={handleChangePassword}>
+                            <Label htmlFor="oldPassword" className="font-bold self-center">
                                 Contraseña anterior:
                             </Label>
-                            <Input id="contrasenaAnterior" name="contrasenaAnterior" type="password" />
+                            <Input id="oldPassword" name="oldPassword" type="password" value={oldPassword || ''} onChange={(event) => setOldPassword(event.target.value)} />
 
-                            <Label htmlFor="contraseñaNueva" className="font-bold self-center">
+                            <Label htmlFor="newPassword" className="font-bold self-center">
                                 Contraseña nueva:
                             </Label>
-                            <Input id="contraseñaNueva" name="contraseñaNueva" type="password" />
+                            <Input id="newPassword" name="newPassword" type="password" value={newPassword || ''} onChange={(event) => setNewPassword(event.target.value)} />
 
                             <div className="col-span-2">
                                 <Button className="rounded-full font-bold py-2 px-4 w-full">Guardar</Button>

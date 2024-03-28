@@ -6,7 +6,6 @@ import FormularioCursoComplementario from '../../_form-curso-complementario'
 import { CursoComplementario } from '@/types/MyTypes'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
-import { useRol } from '@/app/context/AppContext'
 
 export default function CursoComplementario({ params }: { params: { id: string } }) {
     const { data: cursosComplementarios } = useSWR<CursoComplementario[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/area-formacion/${params.id}/curso-complementario`, fetcher)

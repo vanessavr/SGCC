@@ -128,3 +128,17 @@ export async function applySolicitud(id: string, data: any): Promise<void> {
         throw new Error('Error al guardar el solicitud: ' + error.message)
     }
 }
+
+export async function cambiarPassword(oldPassword: string, newPassword: string, id: string): Promise<Persona> {
+    try {
+        const data = {
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+            userId: id,
+        }
+
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/cambiar-password`, 'POST', data)
+    } catch (error: any) {
+        throw new Error('Error al cambiar la constraseña: ' + error.message)
+    }
+}
