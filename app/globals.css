@@ -83,3 +83,18 @@ textarea {
   resize: none;
   field-sizing: content;
 }
+
+button[role='combobox']:disabled {
+  color: black;
+  opacity: 1;
+  border: 0;
+  text-transform: uppercase;
+    span {
+      overflow: auto;
+      display: block;
+    }
+
+    svg {
+      display: none;
+    }
+}

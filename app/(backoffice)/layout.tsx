@@ -170,12 +170,14 @@ export default function BackofficeLayout({
                             </li>
                         )}
 
-                        <li>
-                            <Link href="#" className="flex items-center text-white">
-                                <LoadIcon className="mr-2 size-6" />
-                                Carga de archivos
-                            </Link>
-                        </li>
+                        {rolId == adminId || rolId == instructorId ? (
+                            <li>
+                                <Link href="#" className="flex items-center text-white">
+                                    <LoadIcon className="mr-2 size-6" />
+                                    Descarga de archivos
+                                </Link>
+                            </li>
+                        ) : null}
                     </ul>
                 </nav>
             </div>
