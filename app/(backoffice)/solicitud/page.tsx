@@ -19,6 +19,7 @@ import { deleteSolicitud, updateEstadoSolicitud, uploadArchivo } from '@/lib/act
 import { useRol } from '@/app/context/AppContext'
 import { useState } from 'react'
 import UploadIcon from '../components/svg/UploadIcon'
+import FormularioVerSolicitud from './_form-ver-solicitud'
 
 export default function Solicitud() {
     const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
@@ -109,7 +110,7 @@ export default function Solicitud() {
                     {solicitudes.map((solicitud, index) => (
                         <TableRow key={solicitud.id}>
                             <TableCell className="font-medium">{index + 1}</TableCell>
-                            <TableCell>{solicitud.radicadoSolicitud ?? 'Sin radicar'}</TableCell>
+                            <TableCell>{solicitud.radicadoSolicitud ?? '⚠️ Sin radicar'}</TableCell>
                             <TableCell>{solicitud.fechaSolicitud}</TableCell>
 
                             <TableCell>
@@ -205,7 +206,19 @@ export default function Solicitud() {
 
                             <TableCell>
                                 <div className="flex gap-2">
-                                    <ViewIcon />
+                                    <Dialog>
+                                        <DialogTrigger>
+                                            <ViewIcon />
+                                        </DialogTrigger>
+
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle className="text-center text-sm text-white">{solicitud?.radicadoSolicitud ?? '⚠️ Sin radicado aún'}</DialogTitle>
+                                            </DialogHeader>
+                                            <FormularioVerSolicitud solicitud={solicitud} />
+                                        </DialogContent>
+                                    </Dialog>
+
                                     {rolId == adminId && (
                                         <>
                                             <Link href={`/solicitud/${solicitud.id}/editar`}>

@@ -84,9 +84,9 @@ textarea {
   field-sizing: content;
 }
 
-button[role='combobox']:disabled {
+button[role='combobox']:disabled, input[disabled] {
   color: black;
-  opacity: 1;
+  opacity: 1 !important;
   border: 0;
   text-transform: uppercase;
     span {

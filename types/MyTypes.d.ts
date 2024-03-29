@@ -95,6 +95,7 @@ interface Empresa {
     departamento: string
     ciudad: string
     password: string
+    foto: string
     createdAt: Date
     updatedAt: Date
 }

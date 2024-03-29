@@ -107,7 +107,7 @@ export default function EditarPersona({ params }: { params: { id: string } }) {
                     <div className="flex items-center justify-center">
                         <div className="flex flex-col items-center justify-center">
                             <Avatar className="size-60 mb-5">
-                                <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${persona?.foto}`} />
+                                <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${persona?.foto}`} className="object-contain" />
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
 

@@ -1,6 +1,5 @@
 'use client'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { CursoComplementario } from '@/types/MyTypes'
+
 import { fetcher } from '@/utils/fetcher'
 import Link from 'next/link'
 import useSWR from 'swr'

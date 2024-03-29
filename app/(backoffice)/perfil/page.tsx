@@ -11,11 +11,11 @@ import { Departamento, Empresa, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
-import { getProfile, updateProfilePersona, updateProfileEmpresa, cambiarPassword, updateFotoPerfil } from '@/lib/actions'
+import { getProfile, updateProfilePersona, updateProfileEmpresa, cambiarPassword, updateFotoPerfil, updateFotoPerfilEmpresa, cambiarPasswordEmpresa } from '@/lib/actions'
 import { useRol } from '@/app/context/AppContext'
 
 export default function Perfil() {
-    const { userId } = useRol()
+    const { userId, empresaId, rolId } = useRol()
 
     const [formData, setFormData] = useState<any>()
     const [newPassword, setNewPassword] = useState<any>()
@@ -93,7 +93,13 @@ export default function Perfil() {
         event.preventDefault()
 
         try {
-            const res = await cambiarPassword(oldPassword, newPassword, userId)
+            let res
+
+            if (formData?.razonSocial) {
+                res = await cambiarPasswordEmpresa(oldPassword, newPassword, userId)
+            } else {
+                res = await cambiarPassword(oldPassword, newPassword, userId)
+            }
 
             if (res.id) {
                 toast({ title: '✔️', description: 'Contraseña actualizada satisfactoriamente' })
@@ -129,7 +135,11 @@ export default function Perfil() {
             const file = fileInput.files[0]
             formFileData.append('file', file)
 
-            await updateFotoPerfil(formFileData)
+            if (empresaId) {
+                await updateFotoPerfilEmpresa(formFileData)
+            } else {
+                await updateFotoPerfil(formFileData)
+            }
 
             toast({ title: '✔️', description: 'Foto de perfil actualizada satisfactoriamente' })
         } catch (error) {
@@ -180,7 +190,7 @@ export default function Perfil() {
                 <div className="flex items-center justify-center">
                     <div className="flex flex-col items-center justify-center">
                         <Avatar className="size-60 mb-5">
-                            <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${formData?.foto}`} />
+                            <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${formData?.foto}`} className="object-contain" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
 

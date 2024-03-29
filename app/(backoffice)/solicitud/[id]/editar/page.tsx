@@ -20,7 +20,7 @@ export default function EditarSolicitud({ params }: { params: { id: string } }) 
                 <h1 className="text-3xl">
                     <span className="uppercase font-bold">Responsable: {solicitud?.usuario?.nombres}</span>
                 </h1>
-                <h5 className="text-2xl">Radicado: #{solicitud?.radicadoSolicitud}</h5>
+                <h5 className="text-2xl">Radicado: #{solicitud?.radicadoSolicitud ?? '⚠️ Sin radicar'}</h5>
             </div>
             <div className="mt-10 bg-gray-300 rounded-md py-16 grid grid-cols-2 gap-6 items-center">
                 <div className="ml-64 w-full">

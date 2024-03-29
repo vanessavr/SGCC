@@ -15,6 +15,7 @@ import CheckIcon from '../components/svg/CheckIcon'
 import { toast } from '@/components/ui/use-toast'
 import { deleteEmpresa } from '@/lib/actions'
 import { useRol } from '@/app/context/AppContext'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export default function Empresa() {
     const { data: empresas, error } = useSWR<Empresa[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa`, fetcher)
@@ -52,7 +53,15 @@ export default function Empresa() {
                     {empresas.map((empresa, index) => (
                         <TableRow key={empresa.id}>
                             <TableCell className="font-medium">{index + 1}</TableCell>
-                            <TableCell>{empresa.razonSocial}</TableCell>
+                            <TableCell>
+                                <div className="flex items-center">
+                                    <Avatar className="size-10 mr-2">
+                                        <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${empresa?.foto}`} className="object-contain" />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                    {empresa.razonSocial}
+                                </div>
+                            </TableCell>
                             <TableCell>{empresa.celular}</TableCell>
                             <TableCell>{empresa.correoElectronico}</TableCell>
                             {rolId == adminId && (

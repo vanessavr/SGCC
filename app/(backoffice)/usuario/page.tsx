@@ -73,7 +73,7 @@ export default function Persona() {
                                     <TableCell>
                                         <div className="flex items-center">
                                             <Avatar className="size-10 mr-2">
-                                                <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${usuario?.foto}`} />
+                                                <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${usuario?.foto}`} className="object-contain" />
                                                 <AvatarFallback>CN</AvatarFallback>
                                             </Avatar>
                                             {usuario.nombres + ' ' + usuario.apellidos}

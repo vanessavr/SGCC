@@ -5,9 +5,32 @@ import FormularioPerfilEmpresa from '../../_form'
 import { Empresa } from '@/types/MyTypes'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { useState } from 'react'
+import { cambiarPasswordEmpresa } from '@/lib/actions'
+import { toast } from '@/components/ui/use-toast'
 
 export default function EditarEmpresa({ params }: { params: { id: string } }) {
     const { data: empresa, error } = useSWR<Empresa>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/${params.id}`, fetcher)
+    const [newPassword, setNewPassword] = useState<any>()
+    const [oldPassword, setOldPassword] = useState<any>()
+
+    const handleChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        try {
+            const res = await cambiarPasswordEmpresa(oldPassword, newPassword, params.id)
+
+            if (res.id) {
+                toast({ title: '✔️', description: 'Contraseña actualizada satisfactoriamente' })
+            }
+        } catch (error) {
+            console.error('Error al actualizar el perfil:', error)
+            toast({ title: '✖️', description: 'Error al actualizar el perfil' })
+        }
+    }
 
     return (
         <div>
@@ -19,7 +42,30 @@ export default function EditarEmpresa({ params }: { params: { id: string } }) {
                 <h5 className="text-2xl">NIT {empresa?.nit}</h5>
 
                 <div>
-                    <Button className="rounded-full">Cambiar contraseña</Button>
+                    <Dialog>
+                        <DialogTrigger className="rounded-full py-2 px-4 mt-6 text-white bg-sena-800">Cambiar contraseña</DialogTrigger>
+
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle className="text-center text-sm text-white">Cambiar contraseña</DialogTitle>
+                            </DialogHeader>
+                            <form className="px-8 grid grid-cols-2 space-y-6 pb-8" onSubmit={handleChangePassword}>
+                                <Label htmlFor="oldPassword" className="font-bold self-center">
+                                    Contraseña anterior *
+                                </Label>
+                                <Input id="oldPassword" name="oldPassword" type="password" value={oldPassword || ''} onChange={(event) => setOldPassword(event.target.value)} required />
+
+                                <Label htmlFor="newPassword" className="font-bold self-center">
+                                    Contraseña nueva *
+                                </Label>
+                                <Input id="newPassword" name="newPassword" type="password" value={newPassword || ''} onChange={(event) => setNewPassword(event.target.value)} required />
+
+                                <div className="col-span-2">
+                                    <Button className="rounded-full font-bold py-2 px-4 w-full">Guardar</Button>
+                                </div>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
             <div className="mt-10 bg-gray-300 rounded-md py-16 grid grid-cols-2 gap-6 items-center">

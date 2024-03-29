@@ -33,6 +33,14 @@ export async function updateFotoPerfil(data: any): Promise<void> {
     }
 }
 
+export async function updateFotoPerfilEmpresa(data: any): Promise<void> {
+    try {
+        await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/upload-foto`, 'POST', data)
+    } catch (error: any) {
+        throw new Error('Error al actualizar el perfil: ' + error.message)
+    }
+}
+
 export async function updateFotoUser(id: string, data: any): Promise<void> {
     try {
         await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/${id}/upload-foto-user`, 'POST', data)
@@ -170,6 +178,20 @@ export async function cambiarPassword(oldPassword: string, newPassword: string, 
         }
 
         return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/cambiar-password`, 'POST', data)
+    } catch (error: any) {
+        throw new Error('Error al cambiar la constraseña: ' + error.message)
+    }
+}
+
+export async function cambiarPasswordEmpresa(oldPassword: string, newPassword: string, id: string): Promise<Persona> {
+    try {
+        const data = {
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+            empresaId: id,
+        }
+
+        return await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/empresa/cambiar-password-empresa`, 'POST', data)
     } catch (error: any) {
         throw new Error('Error al cambiar la constraseña: ' + error.message)
     }
