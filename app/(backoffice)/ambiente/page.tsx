@@ -15,6 +15,7 @@ import CheckIcon from '../components/svg/CheckIcon'
 import { deleteAmbiente } from '@/lib/actions'
 import { toast } from '@/components/ui/use-toast'
 import { useRol } from '@/app/context/AppContext'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export default function Ambiente() {
     const { data: ambientes, error } = useSWR<Ambiente[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/ambiente`, fetcher)
@@ -54,7 +55,20 @@ export default function Ambiente() {
                             <TableCell className="font-medium">{index + 1}</TableCell>
                             <TableCell>{ambiente.nombre}</TableCell>
                             <TableCell>{ambiente.capacidad}</TableCell>
-                            <TableCell>{ambiente.centroFormacion}</TableCell>
+                            <TableCell>
+                                <Select name="centroFormacion" value={ambiente?.centroFormacion || ''} disabled>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione un centro" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="1">Centro de Procesos Industriales y Construcción</SelectItem>
+                                        <SelectItem value="2">Centro de Automatización Industrial</SelectItem>
+                                        <SelectItem value="3">Centro de Comercio y Servicios</SelectItem>
+                                        <SelectItem value="4">Centro Agropecuario</SelectItem>
+                                        <SelectItem value="5">Centro para la Formación Cafetera</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </TableCell>
                             {rolId == adminId && (
                                 <TableCell>
                                     <div className="flex gap-2">
