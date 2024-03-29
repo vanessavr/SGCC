@@ -81,6 +81,7 @@ export default function CursoAsignado() {
                         <TableHead>Ficha de formación</TableHead>
                         <TableHead>Instructor</TableHead>
                         <TableHead>Ambiente</TableHead>
+                        <TableHead>Horario</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -91,6 +92,7 @@ export default function CursoAsignado() {
                             <TableCell>{cursoComplementario.fichaFormacion}</TableCell>
                             <TableCell>{cursoComplementario.instructor.nombres + ' ' + cursoComplementario.instructor.apellidos}</TableCell>
                             <TableCell>{cursoComplementario.ambiente.nombre}</TableCell>
+                            <TableCell>{cursoComplementario.horarioDescripcion}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

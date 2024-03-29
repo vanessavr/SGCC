@@ -15,6 +15,7 @@ import EditIcon from '../components/svg/EditIcon'
 import DeleteIcon from '../components/svg/DeleteIcon'
 import PlusIcon from '../components/svg/PlusIcon'
 import { useRol } from '@/app/context/AppContext'
+import ViewIcon from '../components/svg/ViewIcon'
 
 export default function Persona() {
     const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
@@ -38,7 +39,7 @@ export default function Persona() {
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
-                <h1 className="text-center text-4xl text-white">Usuarios</h1>
+                <h1 className="text-center text-4xl text-white capitalize">{rolUsuarioId === process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID ? 'instructores' : 'Personas'}</h1>
             </header>
 
             {rolId == adminId && (
@@ -49,7 +50,7 @@ export default function Persona() {
                     </Link>
 
                     <Button onClick={toggleRolId} className="rounded-full ml-4 bg-gray-900">
-                        {rolId === process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID ? 'Visualizar Personas' : 'Visualizar instructores'}
+                        <ViewIcon className="mr-2" /> {rolUsuarioId === process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID ? 'Visualizar Personas' : 'Visualizar instructores'}
                     </Button>
                 </div>
             )}

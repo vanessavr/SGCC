@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
-import { applySolicitud } from '@/lib/actions'
+import { applySolicitud, applySolicitudEmpresa } from '@/lib/actions'
 import { CursoComplementario, Departamento, Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { useEffect, useState } from 'react'
@@ -16,7 +16,7 @@ interface Props {
 }
 export default function FormularioCursoComplementario({ cursoComplementario }: Props) {
     const [formData, setFormData] = useState<Partial<Solicitud>>({})
-    const { userId } = useRol()
+    const { userId, empresaId } = useRol()
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
     const { data: ciudadesData } = useSWR(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${cursoComplementario?.departamento}`, fetcher)
     const [ciudades, setCiudades] = useState([])
@@ -34,7 +34,11 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
 
         try {
             if (cursoComplementario) {
-                await applySolicitud(cursoComplementario.id, formData)
+                if (empresaId) {
+                    await applySolicitudEmpresa(cursoComplementario.id, formData)
+                } else {
+                    await applySolicitud(cursoComplementario.id, formData)
+                }
                 toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
             }
         } catch (error) {

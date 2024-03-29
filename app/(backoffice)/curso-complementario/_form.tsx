@@ -237,6 +237,14 @@ const FormularioCurso = ({ className, data }: Props) => {
                 placeholder="Escriba aquí una descripción del curso"
             />
 
+            <Label htmlFor="">Horario</Label>
+            <Textarea
+                name="horarioDescripcion"
+                value={formData?.horarioDescripcion || ''}
+                onChange={(event) => handleChange('horarioDescripcion', event.target.value)}
+                placeholder="Escriba aquí una descripción del horario"
+            />
+
             <Button className="rounded-full w-full !mt-8">Guardar</Button>
         </form>
     )
