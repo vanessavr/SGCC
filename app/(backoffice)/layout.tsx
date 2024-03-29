@@ -172,7 +172,7 @@ export default function BackofficeLayout({
 
                         {rolId == adminId || rolId == instructorId ? (
                             <li>
-                                <Link href="#" className="flex items-center text-white">
+                                <Link href="/descarga-archivos" className="flex items-center text-white">
                                     <LoadIcon className="mr-2 size-6" />
                                     Descarga de archivos
                                 </Link>

@@ -6,8 +6,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import ClickIcon from '../components/svg/ClipIcon'
-import ClipIcon from '../components/svg/ClipIcon'
 import { useEffect, useState } from 'react'
 import { Departamento, Empresa, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
@@ -114,25 +112,25 @@ export default function Perfil() {
     }
 
     const handleFileSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        
+        event.preventDefault()
+
         // Asegúrate de que el evento proviene de un formulario.
-        if (!(event.target instanceof HTMLFormElement)) return;
+        if (!(event.target instanceof HTMLFormElement)) return
 
         try {
-            const formFileData = new FormData();
-            const fileInput = event.target.elements.namedItem('file') as HTMLInputElement;
-            
+            const formFileData = new FormData()
+            const fileInput = event.target.elements.namedItem('file') as HTMLInputElement
+
             if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-            console.error('No file selected');
-            return;
+                console.error('No file selected')
+                return
             }
-            
-            const file = fileInput.files[0];
-            formFileData.append('file', file);
+
+            const file = fileInput.files[0]
+            formFileData.append('file', file)
 
             await updateFotoPerfil(formFileData)
-         
+
             toast({ title: '✔️', description: 'Foto de perfil actualizada satisfactoriamente' })
         } catch (error) {
             console.error('Error al actualizar el perfil:', error)
@@ -194,10 +192,10 @@ export default function Perfil() {
                                     <DialogTitle className="text-center text-md text-white">Cargar foto</DialogTitle>
                                 </DialogHeader>
 
-                                    <form onSubmit={handleFileSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
-                                        <input type="file" id="fileInput" placeholder='Cargar desde el computador' accept='images/*' name="file" />
-                                        <Button className="rounded-full font-bold py-2 px-4 w-40">Guardar</Button>
-                                    </form>
+                                <form onSubmit={handleFileSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
+                                    <input type="file" id="fileInput" placeholder="Cargar desde el computador" accept="images/*" name="file" />
+                                    <Button className="rounded-full font-bold py-2 px-4 w-40">Guardar</Button>
+                                </form>
                             </DialogContent>
                         </Dialog>
                     </div>
