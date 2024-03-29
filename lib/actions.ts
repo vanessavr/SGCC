@@ -137,6 +137,14 @@ export async function applySolicitud(id: string, data: any): Promise<void> {
     }
 }
 
+export async function updateEstadoSolicitud(id: string, data: any): Promise<void> {
+    await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${id}/cambiar-estado`, 'PATCH', data)
+    try {
+    } catch (error: any) {
+        throw new Error('Error al cambiar el estado: ' + error.message)
+    }
+}
+
 export async function uploadArchivo(id: string, data: any): Promise<void> {
     try {
         await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${id}/upload-archivo`, 'POST', data)

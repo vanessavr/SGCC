@@ -7,24 +7,27 @@ import EditIcon from '../components/svg/EditIcon'
 import { Button } from '@/components/ui/button'
 import PlusIcon from '../components/svg/PlusIcon'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import CheckIcon from '../components/svg/CheckIcon'
 import EditEstadoIcon from '../components/svg/EditEstadoIcon'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Link from 'next/link'
 import useSWR, { mutate } from 'swr'
-import { Solicitud } from '@/types/MyTypes'
+import { Solicitud, Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
-import { deleteSolicitud, uploadArchivo } from '@/lib/actions'
+import { deleteSolicitud, updateEstadoSolicitud, uploadArchivo } from '@/lib/actions'
 import { useRol } from '@/app/context/AppContext'
-import UploadIcon from '../components/svg/UploadIcon'
 import { useState } from 'react'
+import UploadIcon from '../components/svg/UploadIcon'
 
 export default function Solicitud() {
     const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
     const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
     const [solicitudId, setSolicitudId] = useState<string>('')
+
+    const [motivoSolicitud, setMotivoSolicitud] = useState<string>('')
+    const [estadoSolicitud, setEstadoSolicitud] = useState<string>('')
+
     if (error) return <div>Error al cargar los datos</div>
     if (!solicitudes) return <div>Cargando...</div>
     const handleFileSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -54,6 +57,28 @@ export default function Solicitud() {
         }
     }
 
+    const handleEstadoSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        try {
+            const data = {
+                estadoSolicitud: estadoSolicitud,
+                motivoSolicitud: motivoSolicitud,
+            }
+            await updateEstadoSolicitud(solicitudId, data)
+            toast({ title: '✔️', description: 'Estado guardado satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al guardar el estado:', error)
+            toast({ title: '✖️', description: 'Error al guardar el estado' })
+        }
+    }
+
+    const setSolicitudData = async (solicitud: Solicitud) => {
+        setSolicitudId(solicitud.id)
+        setEstadoSolicitud(solicitud.estadoSolicitud)
+        setMotivoSolicitud(solicitud.motivoSolicitud)
+    }
+
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
@@ -76,7 +101,7 @@ export default function Solicitud() {
                         <TableHead>Radicado</TableHead>
                         <TableHead>Fecha de la solicitud</TableHead>
                         <TableHead>Estado de solicitud</TableHead>
-                        <TableHead>Cargar archivo</TableHead>
+                        {rolId !== instructorId && <TableHead>Cargar archivo</TableHead>}
                         <TableHead>Acción</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -84,7 +109,7 @@ export default function Solicitud() {
                     {solicitudes.map((solicitud, index) => (
                         <TableRow key={solicitud.id}>
                             <TableCell className="font-medium">{index + 1}</TableCell>
-                            <TableCell>{solicitud.radicadoSolicitud}</TableCell>
+                            <TableCell>{solicitud.radicadoSolicitud ?? 'Sin radicar'}</TableCell>
                             <TableCell>{solicitud.fechaSolicitud}</TableCell>
 
                             <TableCell>
@@ -93,7 +118,9 @@ export default function Solicitud() {
                                     {rolId == adminId || rolId == instructorId ? (
                                         <Dialog>
                                             <DialogTrigger>
-                                                <EditEstadoIcon />
+                                                <Button onClick={() => setSolicitudData(solicitud)} className="ml-6">
+                                                    <EditEstadoIcon />
+                                                </Button>
                                             </DialogTrigger>
 
                                             <DialogContent className="pb-4">
@@ -101,30 +128,47 @@ export default function Solicitud() {
                                                     <DialogTitle className="text-center text-md text-white">Estado de solicitud</DialogTitle>
                                                 </DialogHeader>
 
-                                                <form className="px-8 grid grid-cols-2 space-y-6 pb-8">
+                                                <form onSubmit={handleEstadoSubmit} className="px-8 grid grid-cols-2 space-y-6 pb-8">
                                                     <Label htmlFor="" className="font-bold self-center">
                                                         Estado de solicitud:
                                                     </Label>
-                                                    <Select>
+                                                    <Select name="estadoSolicitud" value={estadoSolicitud || ''} onValueChange={(value) => setEstadoSolicitud(value)} required>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Seleccione el estado" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="abierto">Abierto</SelectItem>
-                                                            <SelectItem value="cerrado">Cerrado</SelectItem>
+                                                            <SelectItem value="1">Abierta</SelectItem>
+                                                            <SelectItem value="0">Cerrada</SelectItem>
                                                         </SelectContent>
                                                     </Select>
+
                                                     <Label htmlFor="" className="font-bold self-center">
                                                         Motivo de estado:
                                                     </Label>
-                                                    <Select>
+                                                    <Select name="motivoSolicitud" value={motivoSolicitud || ''} onValueChange={(value) => setMotivoSolicitud(value)} required>
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Theme" />
+                                                            <SelectValue placeholder="Seleccione un motivo" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="light">Light</SelectItem>
-                                                            <SelectItem value="dark">Dark</SelectItem>
-                                                            <SelectItem value="system">System</SelectItem>
+                                                            <SelectItem value="1">En cola</SelectItem>
+                                                            <SelectItem value="2">En cola - Faltan datos</SelectItem>
+                                                            <SelectItem value="3">Sin respuesta</SelectItem>
+                                                            <SelectItem value="4">No interesado</SelectItem>
+                                                            <SelectItem value="5">Cancelada</SelectItem>
+                                                            <SelectItem value="6">Por convocar</SelectItem>
+                                                            <SelectItem value="7">Programada</SelectItem>
+                                                            <SelectItem value="8">Sin oferta disponible</SelectItem>
+                                                            <SelectItem value="9">Sin instructor disponible</SelectItem>
+                                                            <SelectItem value="10">Instructor asignado</SelectItem>
+                                                            <SelectItem value="11">Satisfecha</SelectItem>
+                                                            <SelectItem value="12">Trasladada</SelectItem>
+                                                            <SelectItem value="13">Pendiente</SelectItem>
+                                                            <SelectItem value="14">Duplicada</SelectItem>
+                                                            <SelectItem value="15">En cola - Aplazada</SelectItem>
+                                                            <SelectItem value="16">Por completar cupo mínimo</SelectItem>
+                                                            <SelectItem value="17">Propuesta de oferta enviada</SelectItem>
+                                                            <SelectItem value="18">Cerrada</SelectItem>
+                                                            <SelectItem value="19">Por enviar listad de interesados</SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                     <div className="col-span-2 ">
@@ -136,26 +180,28 @@ export default function Solicitud() {
                                     ) : null}
                                 </div>
                             </TableCell>
-                            <TableCell>
-                                <Dialog>
-                                    <DialogTrigger>
-                                        <Button onClick={() => setSolicitudId(solicitud.id)} className="ml-6">
-                                            <UploadIcon />
-                                        </Button>
-                                    </DialogTrigger>
+                            {rolId !== instructorId && (
+                                <TableCell>
+                                    <Dialog>
+                                        <DialogTrigger>
+                                            <Button onClick={() => setSolicitudId(solicitud.id)} className="ml-6">
+                                                <UploadIcon />
+                                            </Button>
+                                        </DialogTrigger>
 
-                                    <DialogContent className="pb-10">
-                                        <DialogHeader>
-                                            <DialogTitle className="text-center text-md text-white">Cargar archivo</DialogTitle>
-                                        </DialogHeader>
+                                        <DialogContent className="pb-10">
+                                            <DialogHeader>
+                                                <DialogTitle className="text-center text-md text-white">Cargar archivo</DialogTitle>
+                                            </DialogHeader>
 
-                                        <form onSubmit={handleFileSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
-                                            <input type="file" id="fileInput" placeholder="Cargar desde el computador" accept=".zip,.pdf" name="file" />
-                                            <Button className="rounded-full font-bold py-2 px-4 w-40">Subir</Button>
-                                        </form>
-                                    </DialogContent>
-                                </Dialog>
-                            </TableCell>
+                                            <form onSubmit={handleFileSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
+                                                <input type="file" id="fileInput" placeholder="Cargar desde el computador" accept=".zip,.pdf" name="file" />
+                                                <Button className="rounded-full font-bold py-2 px-4 w-40">Subir</Button>
+                                            </form>
+                                        </DialogContent>
+                                    </Dialog>
+                                </TableCell>
+                            )}
 
                             <TableCell>
                                 <div className="flex gap-2">
