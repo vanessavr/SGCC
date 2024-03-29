@@ -16,15 +16,43 @@ import useSWR, { mutate } from 'swr'
 import { Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
-import { deleteSolicitud } from '@/lib/actions'
+import { deleteSolicitud, uploadArchivo } from '@/lib/actions'
 import { useRol } from '@/app/context/AppContext'
+import UploadIcon from '../components/svg/UploadIcon'
+import { useState } from 'react'
 
 export default function Solicitud() {
     const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
     const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
-
+    const [solicitudId, setSolicitudId] = useState<string>('')
     if (error) return <div>Error al cargar los datos</div>
     if (!solicitudes) return <div>Cargando...</div>
+    const handleFileSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        // Asegúrate de que el evento proviene de un formulario.
+        if (!(event.target instanceof HTMLFormElement)) return
+
+        try {
+            const formFileData = new FormData()
+            const fileInput = event.target.elements.namedItem('file') as HTMLInputElement
+
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                console.error('No file selected')
+                return
+            }
+
+            const file = fileInput.files[0]
+            formFileData.append('file', file)
+
+            await uploadArchivo(solicitudId, formFileData)
+
+            toast({ title: '✔️', description: 'Archivo cargado satisfactoriamente' })
+        } catch (error) {
+            console.error('Error al cargar el archivo:', error)
+            toast({ title: '✖️', description: 'Error al cargar el archivo' })
+        }
+    }
 
     return (
         <div>
@@ -108,7 +136,26 @@ export default function Solicitud() {
                                     ) : null}
                                 </div>
                             </TableCell>
-                            <TableCell>FileIcon</TableCell>
+                            <TableCell>
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <Button onClick={() => setSolicitudId(solicitud.id)} className="ml-6">
+                                            <UploadIcon />
+                                        </Button>
+                                    </DialogTrigger>
+
+                                    <DialogContent className="pb-10">
+                                        <DialogHeader>
+                                            <DialogTitle className="text-center text-md text-white">Cargar archivo</DialogTitle>
+                                        </DialogHeader>
+
+                                        <form onSubmit={handleFileSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
+                                            <input type="file" id="fileInput" placeholder="Cargar desde el computador" accept=".zip,.pdf" name="file" />
+                                            <Button className="rounded-full font-bold py-2 px-4 w-40">Subir</Button>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
+                            </TableCell>
 
                             <TableCell>
                                 <div className="flex gap-2">

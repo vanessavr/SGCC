@@ -75,6 +75,7 @@ interface Solicitud {
     cursoComplementarioId: string
     estadoSolicitud: string
     motivoSolicitud: string
+    archivo: string
     createdAt: string
     updatedAt: string
     usuario: Persona

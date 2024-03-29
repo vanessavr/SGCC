@@ -137,6 +137,14 @@ export async function applySolicitud(id: string, data: any): Promise<void> {
     }
 }
 
+export async function uploadArchivo(id: string, data: any): Promise<void> {
+    try {
+        await fetcher(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud/${id}/upload-archivo`, 'POST', data)
+    } catch (error: any) {
+        throw new Error('Error al cargar el archivo: ' + error.message)
+    }
+}
+
 export async function cambiarPassword(oldPassword: string, newPassword: string, id: string): Promise<Persona> {
     try {
         const data = {
