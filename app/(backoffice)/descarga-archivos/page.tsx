@@ -2,15 +2,9 @@
 
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
-import useSWR, { mutate } from 'swr'
+import useSWR from 'swr'
 import { Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
-import { toast } from '@/components/ui/use-toast'
-import { uploadArchivo } from '@/lib/actions'
-import { useRol } from '@/app/context/AppContext'
-import { useState } from 'react'
-import { DownloadIcon } from 'lucide-react'
-import UploadIcon from '../components/svg/UploadIcon'
 import LoadIcon from '../components/svg/LoadIcon'
 
 export default function Solicitud() {
@@ -47,8 +41,8 @@ export default function Solicitud() {
                             </TableCell>
                             <TableCell>
                                 {solicitud.archivo ? (
-                                    <a className='ml-16' href={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${solicitud.archivo}`} target="_blank" download>
-                                        <LoadIcon className="size-6" /> 
+                                    <a className="ml-16" href={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${solicitud.archivo}`} target="_blank" download>
+                                        <LoadIcon className="size-6" />
                                     </a>
                                 ) : (
                                     <small>No se ha cargado un archivo aún</small>

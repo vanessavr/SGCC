@@ -111,7 +111,7 @@ export default function Perfil() {
         }))
     }
 
-    const handleFileSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleFotoSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         // Asegúrate de que el evento proviene de un formulario.
@@ -192,7 +192,7 @@ export default function Perfil() {
                                     <DialogTitle className="text-center text-md text-white">Cargar foto</DialogTitle>
                                 </DialogHeader>
 
-                                <form onSubmit={handleFileSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
+                                <form onSubmit={handleFotoSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
                                     <input type="file" id="fileInput" placeholder="Cargar desde el computador" accept="images/*" name="file" />
                                     <Button className="rounded-full font-bold py-2 px-4 w-40">Guardar</Button>
                                 </form>

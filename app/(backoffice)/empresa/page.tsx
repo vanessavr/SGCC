@@ -78,7 +78,7 @@ function DeleteButton({ empresa }: { empresa: Empresa }) {
     const handleClick = async () => {
         const res = await deleteEmpresa(empresa.id)
 
-        if (res.id) {
+        if (res[1]) {
             toast({ title: '✔️', description: 'Empresa eliminada satisfactoriamente' })
         }
 

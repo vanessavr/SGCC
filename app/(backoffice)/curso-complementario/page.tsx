@@ -81,7 +81,7 @@ function DeleteButton({ cursoComplementario }: { cursoComplementario: CursoCompl
     const handleClick = async () => {
         const res = await deleteCursoComplementario(cursoComplementario.id)
 
-        if (res.id) {
+        if (res[1]) {
             toast({ title: '✔️', description: 'Curso complementario eliminado satisfactoriamente' })
         }
 

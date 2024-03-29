@@ -228,7 +228,7 @@ function DeleteButton({ solicitud }: { solicitud: Solicitud }) {
     const handleClick = async () => {
         const res = await deleteSolicitud(solicitud.id)
 
-        if (res.id) {
+        if (res[1]) {
             toast({ title: '✔️', description: 'Solicitud eliminada satisfactoriamente' })
         }
 

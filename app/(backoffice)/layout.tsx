@@ -101,11 +101,14 @@ export default function BackofficeLayout({
                             </Link>
                         </li>
 
-                        <li>
-                            <Link href="/perfil" className="flex items-center text-white">
-                                <UserIcon className="mr-2 size-6" /> Perfil
-                            </Link>
-                        </li>
+                        {rolId == adminId && (
+                            <li>
+                                <Link href="/ambiente" className="flex items-center text-white">
+                                    <AmbienteIcon className="mr-2 size-6" />
+                                    Ambientes
+                                </Link>
+                            </li>
+                        )}
 
                         {rolId == adminId || rolId == empresaId || rolId == personaId ? (
                             <li>
@@ -115,15 +118,6 @@ export default function BackofficeLayout({
                                 </Link>
                             </li>
                         ) : null}
-
-                        {rolId == adminId && (
-                            <li>
-                                <Link href="/usuario" className="flex items-center text-white">
-                                    <UsersIcon className="mr-2 size-6" />
-                                    Usuarios
-                                </Link>
-                            </li>
-                        )}
 
                         {rolId == adminId || rolId == instructorId ? (
                             <li>
@@ -143,11 +137,11 @@ export default function BackofficeLayout({
                             </li>
                         )}
 
-                        {rolId == adminId || rolId == instructorId || rolId == empresaId || rolId == personaId ? (
+                        {rolId == adminId || rolId == instructorId ? (
                             <li>
-                                <Link href="/solicitud" className="flex items-center text-white">
-                                    <CalendarIcon className="mr-2 size-6" />
-                                    Solicitudes
+                                <Link href="/descarga-archivos" className="flex items-center text-white">
+                                    <LoadIcon className="mr-2 size-6" />
+                                    Descarga de archivos
                                 </Link>
                             </li>
                         ) : null}
@@ -161,23 +155,29 @@ export default function BackofficeLayout({
                             </li>
                         )}
 
-                        {rolId == adminId && (
-                            <li>
-                                <Link href="/ambiente" className="flex items-center text-white">
-                                    <AmbienteIcon className="mr-2 size-6" />
-                                    Ambientes
-                                </Link>
-                            </li>
-                        )}
+                        <li>
+                            <Link href="/perfil" className="flex items-center text-white">
+                                <UserIcon className="mr-2 size-6" /> Perfil
+                            </Link>
+                        </li>
 
-                        {rolId == adminId || rolId == instructorId ? (
+                        {rolId == adminId || rolId == instructorId || rolId == empresaId || rolId == personaId ? (
                             <li>
-                                <Link href="/descarga-archivos" className="flex items-center text-white">
-                                    <LoadIcon className="mr-2 size-6" />
-                                    Descarga de archivos
+                                <Link href="/solicitud" className="flex items-center text-white">
+                                    <CalendarIcon className="mr-2 size-6" />
+                                    Solicitudes
                                 </Link>
                             </li>
                         ) : null}
+
+                        {rolId == adminId && (
+                            <li>
+                                <Link href="/usuario" className="flex items-center text-white">
+                                    <UsersIcon className="mr-2 size-6" />
+                                    Usuarios
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </nav>
             </div>

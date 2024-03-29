@@ -20,7 +20,7 @@ export default function Persona() {
     const { rolId, adminId, instructorId, empresaId, personaId } = useRol()
 
     // Estado para almacenar el parámetro de URL actual
-    const [rolUsuarioId, setRolUsuarioId] = useState(process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID)
+    const [rolUsuarioId, setRolUsuarioId] = useState(process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID || '' || undefined)
 
     // Función para cambiar entre los valores de los parámetros de URL
     const toggleRolId = () => {
@@ -73,7 +73,7 @@ export default function Persona() {
                                     <TableCell>
                                         <div className="flex items-center">
                                             <Avatar className="size-10 mr-2">
-                                                <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
+                                                <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${usuario?.foto}`} />
                                                 <AvatarFallback>CN</AvatarFallback>
                                             </Avatar>
                                             {usuario.nombres + ' ' + usuario.apellidos}
@@ -88,7 +88,7 @@ export default function Persona() {
                                                 <Link href={`/usuario/${usuario.id}/editar`}>
                                                     <EditIcon />
                                                 </Link>
-                                                <DeleteButton usuario={usuario} />
+                                                <DeleteButton usuario={usuario} rolUsuarioId={rolUsuarioId} />
                                             </div>
                                         </TableCell>
                                     )}
@@ -102,15 +102,15 @@ export default function Persona() {
     )
 }
 
-function DeleteButton({ usuario }: { usuario: Persona }) {
+function DeleteButton({ usuario, rolUsuarioId }: { usuario: Persona; rolUsuarioId: string | undefined }) {
     const handleClick = async () => {
         const res = await deletePersona(usuario.id)
 
-        if (res.id) {
+        if (res[1]) {
             toast({ title: '✔️', description: 'Usuario eliminado satisfactoriamente' })
         }
 
-        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario`)
+        mutate(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/usuario/rol/${rolUsuarioId}`)
     }
 
     return (
