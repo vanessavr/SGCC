@@ -2,7 +2,7 @@
 
 import useSWR from 'swr'
 import FormularioSolicitud from '../../_form'
-import { Solicitud } from '@/types/MyTypes'
+import type { Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 
 export default function EditarSolicitud({ params }: { params: { id: string } }) {

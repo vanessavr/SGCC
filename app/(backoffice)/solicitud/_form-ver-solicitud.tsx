@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { saveSolicitud } from '@/lib/actions'
-import { CursoComplementario, Empresa, Persona, Solicitud, UsuarioInvitado } from '@/types/MyTypes'
+import type { CursoComplementario, Empresa, Persona, Solicitud, UsuarioInvitado } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import useSWR from 'swr'
 
@@ -23,7 +23,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Origen de solicitud:
             </Label>
-            <Select name="origenSolicitud" value={solicitud?.origenSolicitud || ''} disabled>
+            <Select name="origenSolicitud" value={solicitud?.origenSolicitud || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una opción" />
                 </SelectTrigger>
@@ -43,7 +43,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Segmento:
             </Label>
-            <Select name="segmento" value={solicitud?.segmento || ''} disabled>
+            <Select name="segmento" value={solicitud?.segmento || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Segmento" />
                 </SelectTrigger>
@@ -61,7 +61,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Tipo de solicitud:
             </Label>
-            <Select name="tipoSolicitud" value={solicitud?.tipoSolicitud || ''} disabled>
+            <Select name="tipoSolicitud" value={solicitud?.tipoSolicitud || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Tipo de solicitud " />
                 </SelectTrigger>
@@ -78,7 +78,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Estado de solicitud:
             </Label>
-            <Select name="estadoSolicitud" value={solicitud?.estadoSolicitud || ''} disabled>
+            <Select name="estadoSolicitud" value={solicitud?.estadoSolicitud || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Estado" />
                 </SelectTrigger>
@@ -91,7 +91,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Motivo de solicitud:
             </Label>
-            <Select name="motivoSolicitud" value={solicitud?.motivoSolicitud || ''} disabled>
+            <Select name="motivoSolicitud" value={solicitud?.motivoSolicitud || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Motivo de solicitud" />
                 </SelectTrigger>
@@ -121,7 +121,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Persona solicitante:
             </Label>
-            <Select name="usuarioId" value={solicitud?.usuarioId || ''} disabled>
+            <Select name="usuarioId" value={solicitud?.usuarioId || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una persona" />
                 </SelectTrigger>
@@ -137,7 +137,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Empresa solicitante:
             </Label>
-            <Select name="empresaId" value={solicitud?.empresaId || ''} disabled>
+            <Select name="empresaId" value={solicitud?.empresaId || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una empresa" />
                 </SelectTrigger>
@@ -153,7 +153,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Usuario invitado solicitante:
             </Label>
-            <Select name="usuarioInvitadoId" value={solicitud?.usuarioInvitadoId || ''} disabled>
+            <Select name="usuarioInvitadoId" value={solicitud?.usuarioInvitadoId || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una usuario" />
                 </SelectTrigger>
@@ -169,7 +169,7 @@ export default function FormularioVerSolicitud({ className, solicitud }: Props) 
             <Label htmlFor="" className="font-bold self-center">
                 Curso complementario:
             </Label>
-            <Select name="cursoComplementarioId" value={solicitud?.cursoComplementarioId || ''} disabled>
+            <Select name="cursoComplementarioId" value={solicitud?.cursoComplementarioId || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione un curso" />
                 </SelectTrigger>

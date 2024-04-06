@@ -6,8 +6,9 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
 import { saveSolicitud } from '@/lib/actions'
-import { CursoComplementario, Empresa, Persona, Solicitud, UsuarioInvitado } from '@/types/MyTypes'
+import type { CursoComplementario, Empresa, Persona, Solicitud, UsuarioInvitado } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
+import { handleErrorsToast } from '@/utils/handleErrorsToast'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -35,8 +36,15 @@ export default function FormularioSolicitud({ className, data }: Props) {
         event.preventDefault()
 
         try {
-            await saveSolicitud(formData as Solicitud)
-            toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
+            let response: any
+
+            response = await saveSolicitud(formData as Solicitud)
+
+            if (response?.statusCode) {
+                handleErrorsToast(response)
+            } else {
+                toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
+            }
         } catch (error) {
             console.error('Error al guardar la solicitud:', error)
             toast({ title: '✖️', description: 'Error al guardar la solicitud' })
@@ -52,7 +60,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
     return (
         <form onSubmit={handleSubmit} className={`${className}`}>
             <Label htmlFor="">Origen de solicitud *</Label>
-            <Select name="origenSolicitud" value={formData?.origenSolicitud || ''} onValueChange={(value) => handleChange('origenSolicitud', value)} required>
+            <Select name="origenSolicitud" value={formData?.origenSolicitud || undefined} onValueChange={(value) => handleChange('origenSolicitud', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una opción" />
                 </SelectTrigger>
@@ -76,7 +84,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
             />
 
             <Label htmlFor="">Segmento *</Label>
-            <Select name="segmento" value={formData?.segmento || ''} onValueChange={(value) => handleChange('segmento', value)} required>
+            <Select name="segmento" value={formData?.segmento || undefined} onValueChange={(value) => handleChange('segmento', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Segmento" />
                 </SelectTrigger>
@@ -92,7 +100,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="">Tipo de solicitud *</Label>
-            <Select name="tipoSolicitud" value={formData?.tipoSolicitud || ''} onValueChange={(value) => handleChange('tipoSolicitud', value)} required>
+            <Select name="tipoSolicitud" value={formData?.tipoSolicitud || undefined} onValueChange={(value) => handleChange('tipoSolicitud', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Tipo de solicitud " />
                 </SelectTrigger>
@@ -113,7 +121,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
             />
 
             <Label htmlFor="">Estado de solicitud *</Label>
-            <Select name="estadoSolicitud" value={formData?.estadoSolicitud || ''} onValueChange={(value) => handleChange('estadoSolicitud', value)} required>
+            <Select name="estadoSolicitud" value={formData?.estadoSolicitud || undefined} onValueChange={(value) => handleChange('estadoSolicitud', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Estado" />
                 </SelectTrigger>
@@ -124,7 +132,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="">Motivo de solicitud *</Label>
-            <Select name="motivoSolicitud" value={formData?.motivoSolicitud || ''} onValueChange={(value) => handleChange('motivoSolicitud', value)} required>
+            <Select name="motivoSolicitud" value={formData?.motivoSolicitud || undefined} onValueChange={(value) => handleChange('motivoSolicitud', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Motivo de solicitud" />
                 </SelectTrigger>
@@ -152,7 +160,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="">Persona solicitante</Label>
-            <Select name="usuarioId" value={formData?.usuarioId || ''} onValueChange={(value) => handleChange('usuarioId', value)}>
+            <Select name="usuarioId" value={formData?.usuarioId || undefined} onValueChange={(value) => handleChange('usuarioId', value)}>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una persona" />
                 </SelectTrigger>
@@ -166,7 +174,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="">Empresa solicitante</Label>
-            <Select name="empresaId" value={formData?.empresaId || ''} onValueChange={(value) => handleChange('empresaId', value)}>
+            <Select name="empresaId" value={formData?.empresaId || undefined} onValueChange={(value) => handleChange('empresaId', value)}>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una empresa" />
                 </SelectTrigger>
@@ -180,7 +188,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="">Usuario invitado solicitante</Label>
-            <Select name="usuarioInvitadoId" value={formData?.usuarioInvitadoId || ''} onValueChange={(value) => handleChange('usuarioInvitadoId', value)}>
+            <Select name="usuarioInvitadoId" value={formData?.usuarioInvitadoId || undefined} onValueChange={(value) => handleChange('usuarioInvitadoId', value)}>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una usuario" />
                 </SelectTrigger>
@@ -194,7 +202,7 @@ export default function FormularioSolicitud({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="">Curso complementario *</Label>
-            <Select name="cursoComplementarioId" value={formData?.cursoComplementarioId || ''} onValueChange={(value) => handleChange('cursoComplementarioId', value)} required>
+            <Select name="cursoComplementarioId" value={formData?.cursoComplementarioId || undefined} onValueChange={(value) => handleChange('cursoComplementarioId', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione un curso" />
                 </SelectTrigger>

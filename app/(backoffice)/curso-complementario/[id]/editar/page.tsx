@@ -2,7 +2,7 @@
 
 import useSWR from 'swr'
 import FormularioCurso from '../../_form'
-import { CursoComplementario } from '@/types/MyTypes'
+import type { CursoComplementario } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 
 export default function EditarCursoComplementario({ params }: { params: { id: string } }) {

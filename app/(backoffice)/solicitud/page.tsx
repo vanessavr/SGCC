@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Link from 'next/link'
 import useSWR, { mutate } from 'swr'
-import { Solicitud } from '@/types/MyTypes'
+import type { Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
 import { deleteSolicitud, updateEstadoSolicitud, uploadArchivo } from '@/lib/actions'
@@ -133,7 +133,7 @@ export default function Solicitud() {
                                                     <Label htmlFor="" className="font-bold self-center">
                                                         Estado de solicitud:
                                                     </Label>
-                                                    <Select name="estadoSolicitud" value={estadoSolicitud || ''} onValueChange={(value) => setEstadoSolicitud(value)} required>
+                                                    <Select name="estadoSolicitud" value={estadoSolicitud || undefined} onValueChange={(value) => setEstadoSolicitud(value)} required>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Seleccione el estado" />
                                                         </SelectTrigger>
@@ -146,7 +146,7 @@ export default function Solicitud() {
                                                     <Label htmlFor="" className="font-bold self-center">
                                                         Motivo de estado:
                                                     </Label>
-                                                    <Select name="motivoSolicitud" value={motivoSolicitud || ''} onValueChange={(value) => setMotivoSolicitud(value)} required>
+                                                    <Select name="motivoSolicitud" value={motivoSolicitud || undefined} onValueChange={(value) => setMotivoSolicitud(value)} required>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Seleccione un motivo" />
                                                         </SelectTrigger>

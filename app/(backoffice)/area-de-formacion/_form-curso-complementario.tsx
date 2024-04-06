@@ -5,8 +5,9 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { applySolicitud, applySolicitudEmpresa } from '@/lib/actions'
-import { CursoComplementario, Departamento, Solicitud } from '@/types/MyTypes'
+import type { CursoComplementario, Departamento, Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
+import { handleErrorsToast } from '@/utils/handleErrorsToast'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -32,17 +33,21 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        if (cursoComplementario) {
-            const response = await applySolicitud(cursoComplementario.id, formData)
-        }
-
         try {
             if (cursoComplementario) {
+                let response: any
+
                 if (rolId == empresaId) {
-                    await applySolicitudEmpresa(cursoComplementario.id, formData)
+                    response = await applySolicitudEmpresa(cursoComplementario.id, formData)
                 } else {
+                    response = await applySolicitud(cursoComplementario.id, formData)
                 }
-                toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
+
+                if (response?.statusCode) {
+                    handleErrorsToast(response)
+                } else {
+                    toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
+                }
             }
         } catch (error) {
             console.error('Error al guardar la solicitud:', error)
@@ -67,7 +72,7 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
             <Label htmlFor="" className="font-bold self-center">
                 Centro de formación:
             </Label>
-            <Select name="centroFormacion" value={cursoComplementario?.centroFormacion || ''} disabled>
+            <Select name="centroFormacion" value={cursoComplementario?.centroFormacion || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Centro de formación" />
                 </SelectTrigger>
@@ -83,7 +88,7 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
             <Label htmlFor="" className="font-bold self-center">
                 Departamento:
             </Label>
-            <Select name="departamento" value={cursoComplementario?.departamento || ''} disabled>
+            <Select name="departamento" value={cursoComplementario?.departamento || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -101,7 +106,7 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
                     <Label htmlFor="" className="font-bold self-center">
                         Ciudad:
                     </Label>
-                    <Select name="ciudad" value={cursoComplementario?.ciudad || ''} disabled>
+                    <Select name="ciudad" value={cursoComplementario?.ciudad || undefined} disabled>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
@@ -124,7 +129,7 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
             <Label htmlFor="" className="font-bold self-center">
                 Jornada:
             </Label>
-            <Select name="jornada" value={cursoComplementario?.jornada || ''} disabled>
+            <Select name="jornada" value={cursoComplementario?.jornada || undefined} disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Jornada" />
                 </SelectTrigger>

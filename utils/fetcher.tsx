@@ -28,9 +28,9 @@ export const fetcher = async (url: string, method: string = 'GET', data?: object
         body: body,
     })
 
-    if (!response.ok) {
-        throw new Error('Error al realizar la acción')
-    }
+    // if (!response.ok) {
+    //     throw new Error('Error al realizar la acción')
+    // }
 
     return response.json()
 }

@@ -10,6 +10,7 @@ import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { useToast } from '@/components/ui/use-toast'
 import { saveUsuarioInvitado } from '@/lib/actions'
+import { handleErrorsToast } from '@/utils/handleErrorsToast'
 
 interface Props {
     className?: string
@@ -55,11 +56,18 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
         event.preventDefault()
 
         try {
-            await saveUsuarioInvitado(formData as UsuarioInvitado)
-            toast({ title: '✔️', description: 'Usuario guardado satisfactoriamente' })
+            let response: any
+
+            response = await saveUsuarioInvitado(formData as UsuarioInvitado)
+
+            if (response?.statusCode) {
+                handleErrorsToast(response)
+            } else {
+                toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
+            }
         } catch (error) {
-            console.error('Error al guardar el usuario:', error)
-            toast({ title: '✖️', description: 'Error al guardar el usuario' })
+            console.error('Error al guardar la solicitud:', error)
+            toast({ title: '✖️', description: 'Error al guardar la solicitud' })
         }
     }
 

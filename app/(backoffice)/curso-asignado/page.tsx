@@ -4,7 +4,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import PlusIcon from '../components/svg/PlusIcon'
 import CalendarIcon from '../components/svg/CalendarIcon'
 import useSWR, { mutate } from 'swr'
-import { CursoComplementario, Persona } from '@/types/MyTypes'
+import type { CursoComplementario, Persona } from '@/types/MyTypes'
 import { useEffect, useState } from 'react'
 import { fetcher } from '@/utils/fetcher'
 import { Label } from '@/components/ui/label'

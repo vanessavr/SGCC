@@ -2,7 +2,7 @@
 
 import useSWR from 'swr'
 import FormularioAmbiente from '../../_form'
-import { Ambiente } from '@/types/MyTypes'
+import type { Ambiente } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 
 export default function EditarAmbiente({ params }: { params: { id: string } }) {

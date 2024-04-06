@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import FormularioCursoComplementario from '../../_form-curso-complementario'
-import { CursoComplementario } from '@/types/MyTypes'
+import type { CursoComplementario } from '@/types/MyTypes'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 

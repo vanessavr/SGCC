@@ -4,12 +4,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Departamento, Empresa } from '@/types/MyTypes'
+import type { Departamento, Empresa } from '@/types/MyTypes'
 import { useEffect, useState } from 'react'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { useToast } from '@/components/ui/use-toast'
 import { saveEmpresa } from '@/lib/actions'
+import { handleErrorsToast } from '@/utils/handleErrorsToast'
 
 interface Props {
     className?: string
@@ -56,8 +57,15 @@ export default function FormularioEmpresa({ className, data }: Props) {
         event.preventDefault()
 
         try {
-            await saveEmpresa(formData as Empresa)
-            toast({ title: '✔️', description: 'Empresa guardada satisfactoriamente' })
+            let response: any
+
+            response = await saveEmpresa(formData as Empresa)
+
+            if (response?.statusCode) {
+                handleErrorsToast(response)
+            } else {
+                toast({ title: '✔️', description: 'Empresa guardada satisfactoriamente' })
+            }
         } catch (error) {
             console.error('Error al guardar la empresa:', error)
             toast({ title: '✖️', description: 'Error al guardar la empresa' })
@@ -139,7 +147,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
             />
 
             <Label htmlFor="">Actividad económica *</Label>
-            <Select name="actividadEconomica" value={formData?.actividadEconomica || ''} onValueChange={(value) => handleChange('actividadEconomica', value)} required>
+            <Select name="actividadEconomica" value={formData?.actividadEconomica || undefined} onValueChange={(value) => handleChange('actividadEconomica', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una actividad" />
                 </SelectTrigger>
@@ -153,7 +161,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="">Departamento *</Label>
-            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)} required>
+            <Select name="departamento" value={formData?.departamento || undefined} onValueChange={(value) => handleChange('departamento', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -169,7 +177,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
             {ciudades?.length > 0 && (
                 <>
                     <Label htmlFor="">Ciudad *</Label>
-                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)} required>
+                    <Select name="ciudad" value={formData?.ciudad || undefined} onValueChange={(value) => handleChange('ciudad', value)} required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>

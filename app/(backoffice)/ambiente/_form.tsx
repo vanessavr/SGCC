@@ -4,10 +4,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Ambiente } from '@/types/MyTypes'
+import type { Ambiente } from '@/types/MyTypes'
 import { useEffect, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { saveAmbiente } from '@/lib/actions'
+import { handleErrorsToast } from '@/utils/handleErrorsToast'
 
 interface Props {
     className?: string
@@ -28,8 +29,15 @@ export default function FormularioAmbiente({ className, data }: Props) {
         event.preventDefault()
 
         try {
-            await saveAmbiente(formData as Ambiente)
-            toast({ title: '✔️', description: 'Ambiente guardado satisfactoriamente' })
+            let response: any
+
+            response = await saveAmbiente(formData as Ambiente)
+
+            if (response?.statusCode) {
+                handleErrorsToast(response)
+            } else {
+                toast({ title: '✔️', description: 'Ambiente guardado satisfactoriamente' })
+            }
         } catch (error) {
             console.error('Error al guardar el ambiente:', error)
             toast({ title: '✖️', description: 'Error al guardar el ambiente' })
@@ -66,19 +74,21 @@ export default function FormularioAmbiente({ className, data }: Props) {
                 required
             />
 
-            <Label htmlFor="">Centro de formación *</Label>
-            <Select name="centroFormacion" value={formData?.centroFormacion || ''} onValueChange={(value) => handleChange('centroFormacion', value)} required>
-                <SelectTrigger>
-                    <SelectValue placeholder="Seleccione un centro" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="1">Centro de Procesos Industriales y Construcción</SelectItem>
-                    <SelectItem value="2">Centro de Automatización Industrial</SelectItem>
-                    <SelectItem value="3">Centro de Comercio y Servicios</SelectItem>
-                    <SelectItem value="4">Centro Agropecuario</SelectItem>
-                    <SelectItem value="5">Centro para la Formación Cafetera</SelectItem>
-                </SelectContent>
-            </Select>
+            <div>
+                <Label htmlFor="">Centro de formación *</Label>
+                <Select name="centroFormacion" value={formData?.centroFormacion || undefined} onValueChange={(value) => handleChange('centroFormacion', value)} required>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Seleccione un centro" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="1">Centro de Procesos Industriales y Construcción</SelectItem>
+                        <SelectItem value="2">Centro de Automatización Industrial</SelectItem>
+                        <SelectItem value="3">Centro de Comercio y Servicios</SelectItem>
+                        <SelectItem value="4">Centro Agropecuario</SelectItem>
+                        <SelectItem value="5">Centro para la Formación Cafetera</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
 
             <Button className="rounded-full w-full">Guardar</Button>
         </form>

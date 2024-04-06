@@ -7,12 +7,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useEffect, useState } from 'react'
-import { Departamento, Empresa, Persona } from '@/types/MyTypes'
+import type { Departamento, Empresa, Persona } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { toast } from '@/components/ui/use-toast'
 import { getProfile, updateProfilePersona, updateProfileEmpresa, cambiarPassword, updateFotoPerfil, updateFotoPerfilEmpresa, cambiarPasswordEmpresa } from '@/lib/actions'
 import { useRol } from '@/app/context/AppContext'
+import { handleErrorsToast } from '@/utils/handleErrorsToast'
 
 export default function Perfil() {
     const { userId, empresaId, rolId } = useRol()
@@ -75,14 +76,21 @@ export default function Perfil() {
         event.preventDefault()
 
         try {
+            let response: any
+
             if (formData?.fechaNacimiento) {
-                await updateProfilePersona(formData as Persona)
+                response = await updateProfilePersona(formData as Persona)
             }
 
             if (formData?.razonSocial) {
-                await updateProfileEmpresa(formData as Empresa)
+                response = await updateProfileEmpresa(formData as Empresa)
             }
-            toast({ title: '✔️', description: 'Perfil actualizado satisfactoriamente' })
+
+            if (response?.statusCode) {
+                handleErrorsToast(response)
+            } else {
+                toast({ title: '✔️', description: 'Perfil actualizado satisfactoriamente' })
+            }
         } catch (error) {
             console.error('Error al actualizar el perfil:', error)
             toast({ title: '✖️', description: 'Error al actualizar el perfil' })
@@ -240,7 +248,7 @@ export default function Perfil() {
                         <Input type="number" placeholder="Celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} className="rounded-full" />
 
                         <Label htmlFor="">Departamento</Label>
-                        <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)}>
+                        <Select name="departamento" value={formData?.departamento || undefined} onValueChange={(value) => handleChange('departamento', value)}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Departamento" />
                             </SelectTrigger>
@@ -256,7 +264,7 @@ export default function Perfil() {
                         {ciudades?.length > 0 && (
                             <>
                                 <Label htmlFor="">Ciudad</Label>
-                                <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)}>
+                                <Select name="ciudad" value={formData?.ciudad || undefined} onValueChange={(value) => handleChange('ciudad', value)}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Ciudad" />
                                     </SelectTrigger>

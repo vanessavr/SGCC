@@ -3,7 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import FormularioPersona from '../../_form'
-import { Persona } from '@/types/MyTypes'
+import type { Persona } from '@/types/MyTypes'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'

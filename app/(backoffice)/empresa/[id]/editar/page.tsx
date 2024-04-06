@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import FormularioPerfilEmpresa from '../../_form'
-import { Empresa } from '@/types/MyTypes'
+import type { Empresa } from '@/types/MyTypes'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'

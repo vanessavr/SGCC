@@ -3,7 +3,7 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 import useSWR from 'swr'
-import { Solicitud } from '@/types/MyTypes'
+import type { Solicitud } from '@/types/MyTypes'
 import { fetcher } from '@/utils/fetcher'
 import LoadIcon from '../components/svg/LoadIcon'
 

@@ -7,7 +7,7 @@ import ViewIcon from '../components/svg/ViewIcon'
 import EditIcon from '../components/svg/EditIcon'
 import PlusIcon from '../components/svg/PlusIcon'
 import Link from 'next/link'
-import { Ambiente } from '@/types/MyTypes'
+import type { Ambiente } from '@/types/MyTypes'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { fetcher } from '@/utils/fetcher'
@@ -56,7 +56,7 @@ export default function Ambiente() {
                             <TableCell>{ambiente.nombre}</TableCell>
                             <TableCell>{ambiente.capacidad}</TableCell>
                             <TableCell>
-                                <Select name="centroFormacion" value={ambiente?.centroFormacion || ''} disabled>
+                                <Select name="centroFormacion" value={ambiente?.centroFormacion || undefined} disabled>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Seleccione un centro" />
                                     </SelectTrigger>

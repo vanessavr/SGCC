@@ -6,11 +6,12 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
-import { Departamento, Persona, Rol } from '@/types/MyTypes'
+import type { Departamento, Persona, Rol } from '@/types/MyTypes'
 import useSWR, { mutate } from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { useToast } from '@/components/ui/use-toast'
 import { savePersona } from '@/lib/actions'
+import { handleErrorsToast } from '@/utils/handleErrorsToast'
 
 interface Props {
     className?: string
@@ -79,8 +80,15 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
         event.preventDefault()
 
         try {
-            await savePersona(formData as Persona)
-            toast({ title: '✔️', description: 'Usuario guardado satisfactoriamente' })
+            let response: any
+
+            response = await savePersona(formData as Persona)
+
+            if (response?.statusCode) {
+                handleErrorsToast(response)
+            } else {
+                toast({ title: '✔️', description: 'Usuario guardado satisfactoriamente' })
+            }
         } catch (error) {
             console.error('Error al guardar el usuario:', error)
             toast({ title: '✖️', description: 'Error al guardar el usuario' })
@@ -125,7 +133,7 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
             <Label htmlFor="" className="self-center">
                 Tipo de documento *
             </Label>
-            <Select name="tipoDocumento" value={formData?.tipoDocumento || ''} onValueChange={(value) => handleChange('tipoDocumento', value)} required>
+            <Select name="tipoDocumento" value={formData?.tipoDocumento || undefined} onValueChange={(value) => handleChange('tipoDocumento', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Tipo de documento" />
                 </SelectTrigger>
@@ -207,7 +215,7 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
             />
 
             <Label htmlFor="">Departamento *</Label>
-            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)} required>
+            <Select name="departamento" value={formData?.departamento || undefined} onValueChange={(value) => handleChange('departamento', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
@@ -223,7 +231,7 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
             {ciudades?.length > 0 && (
                 <>
                     <Label htmlFor="">Ciudad *</Label>
-                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)} required>
+                    <Select name="ciudad" value={formData?.ciudad || undefined} onValueChange={(value) => handleChange('ciudad', value)} required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
@@ -241,7 +249,7 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
             <Label htmlFor="" className="self-center">
                 Población especial *
             </Label>
-            <Select name="poblacionEspecial" value={formData?.poblacionEspecial || ''} onValueChange={(value) => handleChange('poblacionEspecial', value)} required>
+            <Select name="poblacionEspecial" value={formData?.poblacionEspecial || undefined} onValueChange={(value) => handleChange('poblacionEspecial', value)} required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una población..." />
                 </SelectTrigger>
@@ -267,7 +275,7 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
             {!esRegistro && roles && (
                 <>
                     <Label htmlFor="">Rol *</Label>
-                    <Select name="rolId" value={formData?.rolId || ''} onValueChange={(value) => handleChange('rolId', value)} required>
+                    <Select name="rolId" value={formData?.rolId || undefined} onValueChange={(value) => handleChange('rolId', value)} required>
                         <SelectTrigger>
                             <SelectValue placeholder="Rol" />
                         </SelectTrigger>
