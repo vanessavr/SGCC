@@ -56,6 +56,7 @@ interface CursoComplementario {
     imagen: string
     descripcion: string
     horarioDescripcion: string
+    flyer: string
     createdAt: string
     updatedAt: string
     instructor: Instructor

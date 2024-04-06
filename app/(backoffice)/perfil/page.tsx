@@ -135,7 +135,7 @@ export default function Perfil() {
             const file = fileInput.files[0]
             formFileData.append('file', file)
 
-            if (empresaId) {
+            if (rolId == empresaId) {
                 await updateFotoPerfilEmpresa(formFileData)
             } else {
                 await updateFotoPerfil(formFileData)

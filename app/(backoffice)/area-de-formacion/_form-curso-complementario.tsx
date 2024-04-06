@@ -16,7 +16,7 @@ interface Props {
 }
 export default function FormularioCursoComplementario({ cursoComplementario }: Props) {
     const [formData, setFormData] = useState<Partial<Solicitud>>({})
-    const { userId, empresaId } = useRol()
+    const { userId, empresaId, rolId } = useRol()
     const { data: departamentos } = useSWR<Departamento[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento`, fetcher)
     const { data: ciudadesData } = useSWR(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/listas/departamento/${cursoComplementario?.departamento}`, fetcher)
     const [ciudades, setCiudades] = useState([])
@@ -32,12 +32,15 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
+        if (cursoComplementario) {
+            const response = await applySolicitud(cursoComplementario.id, formData)
+        }
+
         try {
             if (cursoComplementario) {
-                if (empresaId) {
+                if (rolId == empresaId) {
                     await applySolicitudEmpresa(cursoComplementario.id, formData)
                 } else {
-                    await applySolicitud(cursoComplementario.id, formData)
                 }
                 toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
             }
