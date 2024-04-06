@@ -43,7 +43,7 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
                     response = await applySolicitud(cursoComplementario.id, formData)
                 }
 
-                if (response?.statusCode) {
+                if (response?.statusCode === 400) {
                     handleErrorsToast(response)
                 } else {
                     toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
@@ -63,16 +63,25 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
     }
 
     return (
-        <form className="p-8 grid grid-cols-2 space-y-4" onSubmit={handleSubmit}>
-            <Label htmlFor="" className="font-bold self-center">
+        <form
+            className="p-8 grid grid-cols-2 space-y-4"
+            onSubmit={handleSubmit}>
+            <Label
+                htmlFor=""
+                className="font-bold self-center">
                 Programa de formación:
             </Label>
             <span className="ml-3 !mt-0">{cursoComplementario?.nombre}</span>
 
-            <Label htmlFor="" className="font-bold self-center">
+            <Label
+                htmlFor=""
+                className="font-bold self-center">
                 Centro de formación:
             </Label>
-            <Select name="centroFormacion" value={cursoComplementario?.centroFormacion || undefined} disabled>
+            <Select
+                name="centroFormacion"
+                value={cursoComplementario?.centroFormacion || undefined}
+                disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Centro de formación" />
                 </SelectTrigger>
@@ -85,16 +94,23 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="" className="font-bold self-center">
+            <Label
+                htmlFor=""
+                className="font-bold self-center">
                 Departamento:
             </Label>
-            <Select name="departamento" value={cursoComplementario?.departamento || undefined} disabled>
+            <Select
+                name="departamento"
+                value={cursoComplementario?.departamento || undefined}
+                disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
                 <SelectContent>
                     {departamentos?.map((departamento, index) => (
-                        <SelectItem key={departamento.id} value={departamento.id.toString()}>
+                        <SelectItem
+                            key={departamento.id}
+                            value={departamento.id.toString()}>
                             {departamento.departamento}
                         </SelectItem>
                     ))}
@@ -103,16 +119,23 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
 
             {ciudades?.length > 0 && (
                 <>
-                    <Label htmlFor="" className="font-bold self-center">
+                    <Label
+                        htmlFor=""
+                        className="font-bold self-center">
                         Ciudad:
                     </Label>
-                    <Select name="ciudad" value={cursoComplementario?.ciudad || undefined} disabled>
+                    <Select
+                        name="ciudad"
+                        value={cursoComplementario?.ciudad || undefined}
+                        disabled>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
                         <SelectContent>
                             {ciudades?.map((ciudad, index) => (
-                                <SelectItem key={index} value={index.toString()}>
+                                <SelectItem
+                                    key={index}
+                                    value={index.toString()}>
                                     {ciudad}
                                 </SelectItem>
                             ))}
@@ -121,15 +144,22 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
                 </>
             )}
 
-            <Label htmlFor="" className="font-bold self-center">
+            <Label
+                htmlFor=""
+                className="font-bold self-center">
                 Duración:
             </Label>
             <span className="ml-3">{cursoComplementario?.duracion} horas</span>
 
-            <Label htmlFor="" className="font-bold self-center">
+            <Label
+                htmlFor=""
+                className="font-bold self-center">
                 Jornada:
             </Label>
-            <Select name="jornada" value={cursoComplementario?.jornada || undefined} disabled>
+            <Select
+                name="jornada"
+                value={cursoComplementario?.jornada || undefined}
+                disabled>
                 <SelectTrigger>
                     <SelectValue placeholder="Jornada" />
                 </SelectTrigger>
@@ -144,7 +174,9 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
             <Label className="font-bold self-center">Descripción</Label>
             <p className="text-xs">{cursoComplementario?.descripcion}</p>
 
-            <Label htmlFor="cuposSolicitados" className="font-bold self-center">
+            <Label
+                htmlFor="cuposSolicitados"
+                className="font-bold self-center">
                 Cupos solicitados: *
             </Label>
             <Input

@@ -33,7 +33,7 @@ export default function FormularioAmbiente({ className, data }: Props) {
 
             response = await saveAmbiente(formData as Ambiente)
 
-            if (response?.statusCode) {
+            if (response?.statusCode === 400) {
                 handleErrorsToast(response)
             } else {
                 toast({ title: '✔️', description: 'Ambiente guardado satisfactoriamente' })
@@ -51,7 +51,9 @@ export default function FormularioAmbiente({ className, data }: Props) {
         }))
     }
     return (
-        <form onSubmit={handleSubmit} className={`${className}`}>
+        <form
+            onSubmit={handleSubmit}
+            className={`${className}`}>
             <Label htmlFor="">Nombre *</Label>
             <Input
                 type="text"
@@ -76,7 +78,11 @@ export default function FormularioAmbiente({ className, data }: Props) {
 
             <div>
                 <Label htmlFor="">Centro de formación *</Label>
-                <Select name="centroFormacion" value={formData?.centroFormacion || undefined} onValueChange={(value) => handleChange('centroFormacion', value)} required>
+                <Select
+                    name="centroFormacion"
+                    value={formData?.centroFormacion || undefined}
+                    onValueChange={(value) => handleChange('centroFormacion', value)}
+                    required>
                     <SelectTrigger>
                         <SelectValue placeholder="Seleccione un centro" />
                     </SelectTrigger>

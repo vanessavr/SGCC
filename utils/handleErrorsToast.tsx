@@ -3,20 +3,32 @@ import { toast } from '@/components/ui/use-toast'
 
 interface ErrorResponse {
     statusCode: number
-    message: Array<{ property: string; message: string }>
+    message: string
+    errors: Array<{
+        children: []
+        constraints: {
+            [key: string]: string
+        }
+        property: string
+        message: string
+    }>
 }
 
 export const handleErrorsToast = (response: ErrorResponse | null | undefined) => {
-    if (response && response.message.length > 0) {
+    if (response && response.errors && response.errors.length > 0) {
         toast({
             description: (
-                <Accordion type="single" collapsible>
+                <Accordion
+                    type="single"
+                    collapsible>
                     <AccordionItem value="item-1">
-                        <AccordionTrigger>✖️ Tiene {response.message.length} errores en el formulario: Ver más</AccordionTrigger>
+                        <AccordionTrigger>✖️ Tiene {response.errors.length} errores en el formulario: Ver más</AccordionTrigger>
                         <AccordionContent>
                             <ul className="list-disc">
-                                {response.message.map((error, index) => (
-                                    <li key={index}>{error.message}</li>
+                                {response.errors.map((error, index) => (
+                                    <li key={index}>
+                                        {index + 1}. {Object.values(error.constraints)[0]}
+                                    </li>
                                 ))}
                             </ul>
                         </AccordionContent>
@@ -25,6 +37,8 @@ export const handleErrorsToast = (response: ErrorResponse | null | undefined) =>
             ),
         })
     } else {
-        toast({ title: '✖️', description: 'Error al guardar el ambiente' })
+        if (response) {
+            toast({ title: '✖️', description: response.message })
+        }
     }
 }

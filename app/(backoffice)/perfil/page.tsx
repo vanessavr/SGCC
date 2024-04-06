@@ -86,7 +86,7 @@ export default function Perfil() {
                 response = await updateProfileEmpresa(formData as Empresa)
             }
 
-            if (response?.statusCode) {
+            if (response?.statusCode === 400) {
                 handleErrorsToast(response)
             } else {
                 toast({ title: '✔️', description: 'Perfil actualizado satisfactoriamente' })
@@ -176,16 +176,36 @@ export default function Perfil() {
                         <DialogHeader>
                             <DialogTitle className="text-center text-sm text-white">Cambiar contraseña</DialogTitle>
                         </DialogHeader>
-                        <form className="px-8 grid grid-cols-2 space-y-6 pb-8" onSubmit={handleChangePassword}>
-                            <Label htmlFor="oldPassword" className="font-bold self-center">
+                        <form
+                            className="px-8 grid grid-cols-2 space-y-6 pb-8"
+                            onSubmit={handleChangePassword}>
+                            <Label
+                                htmlFor="oldPassword"
+                                className="font-bold self-center">
                                 Contraseña anterior *
                             </Label>
-                            <Input id="oldPassword" name="oldPassword" type="password" value={oldPassword || ''} onChange={(event) => setOldPassword(event.target.value)} required />
+                            <Input
+                                id="oldPassword"
+                                name="oldPassword"
+                                type="password"
+                                value={oldPassword || ''}
+                                onChange={(event) => setOldPassword(event.target.value)}
+                                required
+                            />
 
-                            <Label htmlFor="newPassword" className="font-bold self-center">
+                            <Label
+                                htmlFor="newPassword"
+                                className="font-bold self-center">
                                 Contraseña nueva *
                             </Label>
-                            <Input id="newPassword" name="newPassword" type="password" value={newPassword || ''} onChange={(event) => setNewPassword(event.target.value)} required />
+                            <Input
+                                id="newPassword"
+                                name="newPassword"
+                                type="password"
+                                value={newPassword || ''}
+                                onChange={(event) => setNewPassword(event.target.value)}
+                                required
+                            />
 
                             <div className="col-span-2">
                                 <Button className="rounded-full font-bold py-2 px-4 w-full">Guardar</Button>
@@ -198,7 +218,10 @@ export default function Perfil() {
                 <div className="flex items-center justify-center">
                     <div className="flex flex-col items-center justify-center">
                         <Avatar className="size-60 mb-5">
-                            <AvatarImage src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${formData?.foto}`} className="object-contain" />
+                            <AvatarImage
+                                src={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${formData?.foto}`}
+                                className="object-contain"
+                            />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
 
@@ -210,8 +233,16 @@ export default function Perfil() {
                                     <DialogTitle className="text-center text-md text-white">Cargar foto</DialogTitle>
                                 </DialogHeader>
 
-                                <form onSubmit={handleFotoSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
-                                    <input type="file" id="fileInput" placeholder="Cargar desde el computador" accept="images/*" name="file" />
+                                <form
+                                    onSubmit={handleFotoSubmit}
+                                    className="flex flex-col mt-4 gap-6 items-center justify-center">
+                                    <input
+                                        type="file"
+                                        id="fileInput"
+                                        placeholder="Cargar desde el computador"
+                                        accept="images/*"
+                                        name="file"
+                                    />
                                     <Button className="rounded-full font-bold py-2 px-4 w-40">Guardar</Button>
                                 </form>
                             </DialogContent>
@@ -220,7 +251,9 @@ export default function Perfil() {
                 </div>
 
                 <div>
-                    <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
+                    <form
+                        onSubmit={handleSubmit}
+                        className="flex flex-col space-y-3">
                         {formData?.fechaNacimiento && (
                             <>
                                 <Label htmlFor="">Fecha de nacimiento</Label>
@@ -245,16 +278,27 @@ export default function Perfil() {
                         />
 
                         <Label htmlFor="">Celular</Label>
-                        <Input type="number" placeholder="Celular" value={formData?.celular || ''} onChange={(event) => handleChange('celular', event.target.value)} className="rounded-full" />
+                        <Input
+                            type="number"
+                            placeholder="Celular"
+                            value={formData?.celular || ''}
+                            onChange={(event) => handleChange('celular', event.target.value)}
+                            className="rounded-full"
+                        />
 
                         <Label htmlFor="">Departamento</Label>
-                        <Select name="departamento" value={formData?.departamento || undefined} onValueChange={(value) => handleChange('departamento', value)}>
+                        <Select
+                            name="departamento"
+                            value={formData?.departamento || undefined}
+                            onValueChange={(value) => handleChange('departamento', value)}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Departamento" />
                             </SelectTrigger>
                             <SelectContent>
                                 {departamentos?.map((departamento, index) => (
-                                    <SelectItem key={departamento.id} value={departamento.id.toString()}>
+                                    <SelectItem
+                                        key={departamento.id}
+                                        value={departamento.id.toString()}>
                                         {departamento.departamento}
                                     </SelectItem>
                                 ))}
@@ -264,13 +308,18 @@ export default function Perfil() {
                         {ciudades?.length > 0 && (
                             <>
                                 <Label htmlFor="">Ciudad</Label>
-                                <Select name="ciudad" value={formData?.ciudad || undefined} onValueChange={(value) => handleChange('ciudad', value)}>
+                                <Select
+                                    name="ciudad"
+                                    value={formData?.ciudad || undefined}
+                                    onValueChange={(value) => handleChange('ciudad', value)}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Ciudad" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {ciudades?.map((ciudad, index) => (
-                                            <SelectItem key={index} value={index.toString()}>
+                                            <SelectItem
+                                                key={index}
+                                                value={index.toString()}>
                                                 {ciudad}
                                             </SelectItem>
                                         ))}

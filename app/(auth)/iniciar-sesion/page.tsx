@@ -63,9 +63,13 @@ export default function InicioSesion() {
     return (
         <div className="h-[69.9vh] flex items-center justify-center">
             <div className="bg-gray-300 p-8 w-[50vw] rounded-xl">
-                <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
+                <form
+                    className="flex flex-col space-y-6"
+                    onSubmit={handleSubmit}>
                     <div>
-                        <Label htmlFor="" className="mb-2 ml-2">
+                        <Label
+                            htmlFor=""
+                            className="mb-2 ml-2">
                             N° de Documento / NIT
                         </Label>
                         <Input
@@ -79,7 +83,9 @@ export default function InicioSesion() {
                     </div>
 
                     <div>
-                        <Label htmlFor="" className="mb-2 ml-2">
+                        <Label
+                            htmlFor=""
+                            className="mb-2 ml-2">
                             Contraseña
                         </Label>
                         <Input
@@ -100,14 +106,23 @@ export default function InicioSesion() {
 
                             <DialogContent className="pb-10 pt-10">
                                 <p className="flex text-center justify-center mb-6">Elige una de las siguientes opciones:</p>
-                                <RadioGroup defaultValue="empresa" className="flex items-center justify-center gap-10" onValueChange={(value: string) => setSelectedOption(value)}>
+                                <RadioGroup
+                                    defaultValue="empresa"
+                                    className="flex items-center justify-center gap-10"
+                                    onValueChange={(value: string) => setSelectedOption(value)}>
                                     <div className="flex items-center space-x-2">
                                         <Label htmlFor="empresa">Empresa</Label>
-                                        <RadioGroupItem value="empresa" id="empresa" />
+                                        <RadioGroupItem
+                                            value="empresa"
+                                            id="empresa"
+                                        />
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <Label htmlFor="persona">Persona</Label>
-                                        <RadioGroupItem value="persona" id="persona" />
+                                        <RadioGroupItem
+                                            value="persona"
+                                            id="persona"
+                                        />
                                     </div>
                                 </RadioGroup>
 
@@ -120,7 +135,10 @@ export default function InicioSesion() {
                                                 <DialogTitle className="text-center text-sm text-white"> {selectedOption === 'persona' ? 'Registrar persona' : 'Registrar empresa'}</DialogTitle>
                                             </DialogHeader>
                                             {selectedOption === 'persona' ? (
-                                                <FormularioPersona className="p-8 grid grid-cols-2 space-y-4" esRegistro={true} />
+                                                <FormularioPersona
+                                                    className="p-8 grid grid-cols-2 space-y-4"
+                                                    esRegistro={true}
+                                                />
                                             ) : (
                                                 <FormularioEmpresa className="p-8 grid grid-cols-2 space-y-4" />
                                             )}
@@ -129,7 +147,9 @@ export default function InicioSesion() {
                                 </div>
                             </DialogContent>
                         </Dialog>
-                        <Link href="/usuario-invitado" className="rounded-full px-6 py-2 text-white bg-sena-800">
+                        <Link
+                            href="/usuario-invitado"
+                            className="rounded-full px-6 py-2 text-white bg-sena-800">
                             Usuario invitado
                         </Link>
                     </div>
@@ -141,10 +161,16 @@ export default function InicioSesion() {
                                 <DialogTitle className="text-center text-sm text-white">¿Has olvidado tu contraseña?</DialogTitle>
                             </DialogHeader>
                             <form className="px-8 grid grid-cols-2 space-y-6 pb-8">
-                                <Label htmlFor="numeroIdentificacion" className="font-bold self-center">
+                                <Label
+                                    htmlFor="numeroIdentificacion"
+                                    className="font-bold self-center">
                                     Digite su C.C o NIT:
                                 </Label>
-                                <Input id="numeroIdentificacion" name="numeroIdentificacion" type="text" />
+                                <Input
+                                    id="numeroIdentificacion"
+                                    name="numeroIdentificacion"
+                                    type="text"
+                                />
 
                                 <Dialog>
                                     <DialogTrigger className="rounded-full py-2 px-4 mt-8 text-white bg-sena-800 col-span-2 ">Recuperar contraseña</DialogTrigger>

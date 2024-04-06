@@ -65,7 +65,7 @@ const FormularioCurso = ({ className, data }: Props) => {
 
             response = await saveCursoComplementario(formData as CursoComplementario)
 
-            if (response?.statusCode) {
+            if (response?.statusCode === 400) {
                 handleErrorsToast(response)
             } else {
                 toast({ title: '✔️', description: 'Curso complementario guardado satisfactoriamente' })
@@ -84,7 +84,9 @@ const FormularioCurso = ({ className, data }: Props) => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className={`${className}`}>
+        <form
+            onSubmit={handleSubmit}
+            className={`${className}`}>
             <Label htmlFor="">Área de formación *</Label>
             <Input
                 type="text"
@@ -97,7 +99,15 @@ const FormularioCurso = ({ className, data }: Props) => {
             />
 
             <Label htmlFor="">Nombre *</Label>
-            <Input type="text" placeholder="Nombre" name="nombre" value={formData?.nombre || ''} onChange={(event) => handleChange('nombre', event.target.value)} className="rounded-full" required />
+            <Input
+                type="text"
+                placeholder="Nombre"
+                name="nombre"
+                value={formData?.nombre || ''}
+                onChange={(event) => handleChange('nombre', event.target.value)}
+                className="rounded-full"
+                required
+            />
 
             <Label htmlFor="">Ficha de formación *</Label>
             <Input
@@ -110,7 +120,11 @@ const FormularioCurso = ({ className, data }: Props) => {
             />
 
             <Label htmlFor="">Centro de formación *</Label>
-            <Select name="centroFormacion" value={formData?.centroFormacion || undefined} onValueChange={(value) => handleChange('centroFormacion', value)} required>
+            <Select
+                name="centroFormacion"
+                value={formData?.centroFormacion || undefined}
+                onValueChange={(value) => handleChange('centroFormacion', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Centro de formación" />
                 </SelectTrigger>
@@ -124,13 +138,19 @@ const FormularioCurso = ({ className, data }: Props) => {
             </Select>
 
             <Label htmlFor="">Instructor *</Label>
-            <Select name="instructorId" value={formData?.instructorId || undefined} onValueChange={(value) => handleChange('instructorId', value)} required>
+            <Select
+                name="instructorId"
+                value={formData?.instructorId || undefined}
+                onValueChange={(value) => handleChange('instructorId', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Instructor" />
                 </SelectTrigger>
                 <SelectContent>
                     {instructores?.map((instructor, index) => (
-                        <SelectItem key={instructor.id} value={instructor.id}>
+                        <SelectItem
+                            key={instructor.id}
+                            value={instructor.id}>
                             {instructor.nombres}
                         </SelectItem>
                     ))}
@@ -138,13 +158,19 @@ const FormularioCurso = ({ className, data }: Props) => {
             </Select>
 
             <Label htmlFor="">Ambiente *</Label>
-            <Select name="ambienteId" value={formData?.ambienteId || undefined} onValueChange={(value) => handleChange('ambienteId', value)} required>
+            <Select
+                name="ambienteId"
+                value={formData?.ambienteId || undefined}
+                onValueChange={(value) => handleChange('ambienteId', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Ambiente" />
                 </SelectTrigger>
                 <SelectContent>
                     {ambientes?.map((ambiente, index) => (
-                        <SelectItem key={ambiente.id} value={ambiente.id}>
+                        <SelectItem
+                            key={ambiente.id}
+                            value={ambiente.id}>
                             {ambiente.nombre}
                         </SelectItem>
                     ))}
@@ -152,7 +178,11 @@ const FormularioCurso = ({ className, data }: Props) => {
             </Select>
 
             <Label htmlFor="">Jornada *</Label>
-            <Select name="jornada" value={formData?.jornada || undefined} onValueChange={(value) => handleChange('jornada', value)} required>
+            <Select
+                name="jornada"
+                value={formData?.jornada || undefined}
+                onValueChange={(value) => handleChange('jornada', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Jornada" />
                 </SelectTrigger>
@@ -165,13 +195,19 @@ const FormularioCurso = ({ className, data }: Props) => {
             </Select>
 
             <Label htmlFor="">Departamento *</Label>
-            <Select name="departamento" value={formData?.departamento || undefined} onValueChange={(value) => handleChange('departamento', value)} required>
+            <Select
+                name="departamento"
+                value={formData?.departamento || undefined}
+                onValueChange={(value) => handleChange('departamento', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
                 <SelectContent>
                     {departamentos?.map((departamento, index) => (
-                        <SelectItem key={departamento.id} value={departamento.id.toString()}>
+                        <SelectItem
+                            key={departamento.id}
+                            value={departamento.id.toString()}>
                             {departamento.departamento}
                         </SelectItem>
                     ))}
@@ -181,13 +217,19 @@ const FormularioCurso = ({ className, data }: Props) => {
             {ciudades?.length > 0 && (
                 <>
                     <Label htmlFor="">Ciudad *</Label>
-                    <Select name="ciudad" value={formData?.ciudad || undefined} onValueChange={(value) => handleChange('ciudad', value)} required>
+                    <Select
+                        name="ciudad"
+                        value={formData?.ciudad || undefined}
+                        onValueChange={(value) => handleChange('ciudad', value)}
+                        required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
                         <SelectContent>
                             {ciudades?.map((ciudad, index) => (
-                                <SelectItem key={index} value={index.toString()}>
+                                <SelectItem
+                                    key={index}
+                                    value={index.toString()}>
                                     {ciudad}
                                 </SelectItem>
                             ))}

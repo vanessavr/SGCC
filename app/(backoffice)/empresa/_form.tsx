@@ -61,7 +61,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
 
             response = await saveEmpresa(formData as Empresa)
 
-            if (response?.statusCode) {
+            if (response?.statusCode === 400) {
                 handleErrorsToast(response)
             } else {
                 toast({ title: '✔️', description: 'Empresa guardada satisfactoriamente' })
@@ -79,7 +79,10 @@ export default function FormularioEmpresa({ className, data }: Props) {
         }))
     }
     return (
-        <form onSubmit={handleSubmit} className={`${className}`} id="form-empresa">
+        <form
+            onSubmit={handleSubmit}
+            className={`${className}`}
+            id="form-empresa">
             <Label htmlFor="">Razón social *</Label>
             <Input
                 type="text"
@@ -147,13 +150,19 @@ export default function FormularioEmpresa({ className, data }: Props) {
             />
 
             <Label htmlFor="">Actividad económica *</Label>
-            <Select name="actividadEconomica" value={formData?.actividadEconomica || undefined} onValueChange={(value) => handleChange('actividadEconomica', value)} required>
+            <Select
+                name="actividadEconomica"
+                value={formData?.actividadEconomica || undefined}
+                onValueChange={(value) => handleChange('actividadEconomica', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una actividad" />
                 </SelectTrigger>
                 <SelectContent>
                     {actividadesEconomicas?.map((actividadEconomica: string, index: number) => (
-                        <SelectItem key={index} value={index.toString()}>
+                        <SelectItem
+                            key={index}
+                            value={index.toString()}>
                             {actividadEconomica}
                         </SelectItem>
                     ))}
@@ -161,13 +170,19 @@ export default function FormularioEmpresa({ className, data }: Props) {
             </Select>
 
             <Label htmlFor="">Departamento *</Label>
-            <Select name="departamento" value={formData?.departamento || undefined} onValueChange={(value) => handleChange('departamento', value)} required>
+            <Select
+                name="departamento"
+                value={formData?.departamento || undefined}
+                onValueChange={(value) => handleChange('departamento', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
                 <SelectContent>
                     {departamentos?.map((departamento, index) => (
-                        <SelectItem key={departamento.id} value={departamento.id.toString()}>
+                        <SelectItem
+                            key={departamento.id}
+                            value={departamento.id.toString()}>
                             {departamento.departamento}
                         </SelectItem>
                     ))}
@@ -177,13 +192,19 @@ export default function FormularioEmpresa({ className, data }: Props) {
             {ciudades?.length > 0 && (
                 <>
                     <Label htmlFor="">Ciudad *</Label>
-                    <Select name="ciudad" value={formData?.ciudad || undefined} onValueChange={(value) => handleChange('ciudad', value)} required>
+                    <Select
+                        name="ciudad"
+                        value={formData?.ciudad || undefined}
+                        onValueChange={(value) => handleChange('ciudad', value)}
+                        required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
                         <SelectContent>
                             {ciudades?.map((ciudad, index) => (
-                                <SelectItem key={index} value={index.toString()}>
+                                <SelectItem
+                                    key={index}
+                                    value={index.toString()}>
                                     {ciudad}
                                 </SelectItem>
                             ))}
@@ -206,7 +227,9 @@ export default function FormularioEmpresa({ className, data }: Props) {
                     />
                 </>
             )}
-            <Button className="rounded-full w-full col-span-2" form="form-empresa">
+            <Button
+                className="rounded-full w-full col-span-2"
+                form="form-empresa">
                 Registrar
             </Button>
         </form>

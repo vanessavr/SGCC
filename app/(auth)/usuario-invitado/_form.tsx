@@ -60,9 +60,13 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
 
             response = await saveUsuarioInvitado(formData as UsuarioInvitado)
 
-            if (response?.statusCode) {
+            let statusCode = response?.statusCode > 0
+
+            if (response?.statusCode === 400) {
                 handleErrorsToast(response)
-            } else {
+            }
+
+            if (!statusCode) {
                 toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
             }
         } catch (error) {
@@ -79,8 +83,12 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className={`${className}`}>
-            <Label htmlFor="" className="self-center">
+        <form
+            onSubmit={handleSubmit}
+            className={`${className}`}>
+            <Label
+                htmlFor=""
+                className="self-center">
                 Nombres *
             </Label>
             <Input
@@ -93,7 +101,9 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Apellidos *
             </Label>
             <Input
@@ -106,10 +116,16 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Tipo de documento *
             </Label>
-            <Select name="tipoDocumento" value={formData?.tipoDocumento || ''} onValueChange={(value) => handleChange('tipoDocumento', value)} required>
+            <Select
+                name="tipoDocumento"
+                value={formData?.tipoDocumento || undefined}
+                onValueChange={(value) => handleChange('tipoDocumento', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Tipo de documento" />
                 </SelectTrigger>
@@ -120,7 +136,9 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Número de identificación *
             </Label>
             <Input
@@ -133,7 +151,9 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Correo electrónico *
             </Label>
             <Input
@@ -146,7 +166,9 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Celular *
             </Label>
             <Input
@@ -160,13 +182,19 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
             />
 
             <Label htmlFor="">Departamento *</Label>
-            <Select name="departamento" value={formData?.departamento || ''} onValueChange={(value) => handleChange('departamento', value)} required>
+            <Select
+                name="departamento"
+                value={formData?.departamento || undefined}
+                onValueChange={(value) => handleChange('departamento', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
                 <SelectContent>
                     {departamentos?.map((departamento, index) => (
-                        <SelectItem key={departamento.id} value={departamento.id.toString()}>
+                        <SelectItem
+                            key={departamento.id}
+                            value={departamento.id.toString()}>
                             {departamento.departamento}
                         </SelectItem>
                     ))}
@@ -176,13 +204,19 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
             {ciudades?.length > 0 && (
                 <>
                     <Label htmlFor="">Ciudad *</Label>
-                    <Select name="ciudad" value={formData?.ciudad || ''} onValueChange={(value) => handleChange('ciudad', value)} required>
+                    <Select
+                        name="ciudad"
+                        value={formData?.ciudad || undefined}
+                        onValueChange={(value) => handleChange('ciudad', value)}
+                        required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
                         <SelectContent>
                             {ciudades?.map((ciudad, index) => (
-                                <SelectItem key={index} value={index.toString()}>
+                                <SelectItem
+                                    key={index}
+                                    value={index.toString()}>
                                     {ciudad}
                                 </SelectItem>
                             ))}
@@ -192,13 +226,19 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
             )}
 
             <Label htmlFor="">Curso complementario *</Label>
-            <Select name="cursoComplementarioId" value={formData?.cursoComplementarioId || ''} onValueChange={(value) => handleChange('cursoComplementarioId', value)} required>
+            <Select
+                name="cursoComplementarioId"
+                value={formData?.cursoComplementarioId || undefined}
+                onValueChange={(value) => handleChange('cursoComplementarioId', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione un curso" />
                 </SelectTrigger>
                 <SelectContent>
                     {cursosComplementarios?.map((cursoComplementario, index) => (
-                        <SelectItem key={cursoComplementario.id} value={cursoComplementario.id}>
+                        <SelectItem
+                            key={cursoComplementario.id}
+                            value={cursoComplementario.id}>
                             {cursoComplementario.nombre}
                         </SelectItem>
                     ))}

@@ -84,7 +84,7 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
 
             response = await savePersona(formData as Persona)
 
-            if (response?.statusCode) {
+            if (response?.statusCode === 400) {
                 handleErrorsToast(response)
             } else {
                 toast({ title: '✔️', description: 'Usuario guardado satisfactoriamente' })
@@ -103,8 +103,12 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
     }
 
     return (
-        <form onSubmit={handleSubmit} className={`${className}`}>
-            <Label htmlFor="" className="self-center">
+        <form
+            onSubmit={handleSubmit}
+            className={`${className}`}>
+            <Label
+                htmlFor=""
+                className="self-center">
                 Nombres *
             </Label>
             <Input
@@ -117,7 +121,9 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Apellidos *
             </Label>
             <Input
@@ -130,10 +136,16 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Tipo de documento *
             </Label>
-            <Select name="tipoDocumento" value={formData?.tipoDocumento || undefined} onValueChange={(value) => handleChange('tipoDocumento', value)} required>
+            <Select
+                name="tipoDocumento"
+                value={formData?.tipoDocumento || undefined}
+                onValueChange={(value) => handleChange('tipoDocumento', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Tipo de documento" />
                 </SelectTrigger>
@@ -144,7 +156,9 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
                 </SelectContent>
             </Select>
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Número de identificación *
             </Label>
             <Input
@@ -157,7 +171,9 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Fecha de nacimiento *
             </Label>
             <input
@@ -170,25 +186,43 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Género *
             </Label>
-            <RadioGroup name="genero" value={formData?.genero} onValueChange={(value) => handleChange('genero', value)} className="flex items-center gap-10" required>
+            <RadioGroup
+                name="genero"
+                value={formData?.genero}
+                onValueChange={(value) => handleChange('genero', value)}
+                className="flex items-center gap-10"
+                required>
                 <div className="space-x-2">
                     <Label htmlFor="option-m">M:</Label>
-                    <RadioGroupItem value="1" id="option-m" />
+                    <RadioGroupItem
+                        value="1"
+                        id="option-m"
+                    />
                 </div>
                 <div className="space-x-2">
                     <Label htmlFor="option-f">F:</Label>
-                    <RadioGroupItem value="2" id="option-f" />
+                    <RadioGroupItem
+                        value="2"
+                        id="option-f"
+                    />
                 </div>
                 <div className="space-x-2">
                     <Label htmlFor="option-o">O:</Label>
-                    <RadioGroupItem value="3" id="option-o" />
+                    <RadioGroupItem
+                        value="3"
+                        id="option-o"
+                    />
                 </div>
             </RadioGroup>
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Correo electrónico *
             </Label>
             <Input
@@ -201,7 +235,9 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
                 required
             />
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Celular *
             </Label>
             <Input
@@ -215,13 +251,19 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
             />
 
             <Label htmlFor="">Departamento *</Label>
-            <Select name="departamento" value={formData?.departamento || undefined} onValueChange={(value) => handleChange('departamento', value)} required>
+            <Select
+                name="departamento"
+                value={formData?.departamento || undefined}
+                onValueChange={(value) => handleChange('departamento', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Departamento" />
                 </SelectTrigger>
                 <SelectContent>
                     {departamentos?.map((departamento, index) => (
-                        <SelectItem key={departamento.id} value={departamento.id.toString()}>
+                        <SelectItem
+                            key={departamento.id}
+                            value={departamento.id.toString()}>
                             {departamento.departamento}
                         </SelectItem>
                     ))}
@@ -231,13 +273,19 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
             {ciudades?.length > 0 && (
                 <>
                     <Label htmlFor="">Ciudad *</Label>
-                    <Select name="ciudad" value={formData?.ciudad || undefined} onValueChange={(value) => handleChange('ciudad', value)} required>
+                    <Select
+                        name="ciudad"
+                        value={formData?.ciudad || undefined}
+                        onValueChange={(value) => handleChange('ciudad', value)}
+                        required>
                         <SelectTrigger>
                             <SelectValue placeholder="Ciudad" />
                         </SelectTrigger>
                         <SelectContent>
                             {ciudades?.map((ciudad, index) => (
-                                <SelectItem key={index} value={index.toString()}>
+                                <SelectItem
+                                    key={index}
+                                    value={index.toString()}>
                                     {ciudad}
                                 </SelectItem>
                             ))}
@@ -246,10 +294,16 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
                 </>
             )}
 
-            <Label htmlFor="" className="self-center">
+            <Label
+                htmlFor=""
+                className="self-center">
                 Población especial *
             </Label>
-            <Select name="poblacionEspecial" value={formData?.poblacionEspecial || undefined} onValueChange={(value) => handleChange('poblacionEspecial', value)} required>
+            <Select
+                name="poblacionEspecial"
+                value={formData?.poblacionEspecial || undefined}
+                onValueChange={(value) => handleChange('poblacionEspecial', value)}
+                required>
                 <SelectTrigger>
                     <SelectValue placeholder="Seleccione una población..." />
                 </SelectTrigger>
@@ -275,13 +329,19 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
             {!esRegistro && roles && (
                 <>
                     <Label htmlFor="">Rol *</Label>
-                    <Select name="rolId" value={formData?.rolId || undefined} onValueChange={(value) => handleChange('rolId', value)} required>
+                    <Select
+                        name="rolId"
+                        value={formData?.rolId || undefined}
+                        onValueChange={(value) => handleChange('rolId', value)}
+                        required>
                         <SelectTrigger>
                             <SelectValue placeholder="Rol" />
                         </SelectTrigger>
                         <SelectContent>
                             {roles?.map((rol, index) => (
-                                <SelectItem key={rol.id} value={rol.id.toString()}>
+                                <SelectItem
+                                    key={rol.id}
+                                    value={rol.id.toString()}>
                                     {rol.nombre}
                                 </SelectItem>
                             ))}
@@ -292,10 +352,19 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
 
             {!data && (
                 <>
-                    <Label htmlFor="" className="self-center">
+                    <Label
+                        htmlFor=""
+                        className="self-center">
                         Contraseña *
                     </Label>
-                    <Input type="password" name="password" placeholder="Contraseña" onChange={(event) => handleChange('password', event.target.value)} className="rounded-full" required />
+                    <Input
+                        type="password"
+                        name="password"
+                        placeholder="Contraseña"
+                        onChange={(event) => handleChange('password', event.target.value)}
+                        className="rounded-full"
+                        required
+                    />
                 </>
             )}
             <Button className="rounded-full w-full col-span-2">{data ? 'Guardar' : 'Registrar'}</Button>
