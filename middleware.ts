@@ -21,9 +21,14 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/iniciar-sesion', request.url))
     }
 
+    const ADMIN_ID = process.env.NEXT_PUBLIC_NESTJS_ROL_ADMIN_ID || ''
+    const INSTRUCTOR_ID = process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID || ''
+    const EMPRESA_ID = process.env.NEXT_PUBLIC_NESTJS_ROL_EMPRESA_ID || ''
+    const PERSONA_ID = process.env.NEXT_PUBLIC_NESTJS_ROL_PERSONA_ID || ''
+
     // Definir las URLs permitidas para cada rol
     const allowedURLs: { [rolId: string]: string[] } = {
-        '1a364153-2864-461c-996a-d4382ac63aa2': [
+        [ADMIN_ID]: [
             '/iniciar-sesion',
             '/panel-principal',
             '/acceso-no-autorizado',
@@ -37,9 +42,9 @@ export function middleware(request: NextRequest) {
             '/solicitud',
             '/descarga-archivos',
         ],
-        'b202d04e-eb12-4cf5-9c2d-d382536e7ff4': ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
-        'd7f72697-7937-490a-953d-26bd122d6c3e': ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
-        '4a29d9e1-76aa-49ff-9ccc-e0a3d2ec90c9': ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/curso-asignado', '/solicitud', '/descarga-archivos'],
+        [PERSONA_ID]: ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
+        [EMPRESA_ID]: ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
+        [INSTRUCTOR_ID]: ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/curso-asignado', '/solicitud', '/descarga-archivos'],
     }
 
     const allowedURLsForRole = allowedURLs[tokenData?.rolId]
