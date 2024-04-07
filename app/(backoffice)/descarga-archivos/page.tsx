@@ -16,7 +16,7 @@ export default function Solicitud() {
     return (
         <div>
             <header className="bg-sena-600 p-2 rounded-sm">
-                <h1 className="text-center text-4xl text-white">Solicitudes</h1>
+                <h1 className="text-center text-4xl text-white">Archivos de solicitudes</h1>
             </header>
 
             <Table>
@@ -41,7 +41,11 @@ export default function Solicitud() {
                             </TableCell>
                             <TableCell>
                                 {solicitud.archivo ? (
-                                    <a className="ml-16" href={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${solicitud.archivo}`} target="_blank" download>
+                                    <a
+                                        className="ml-16"
+                                        href={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${solicitud.archivo}`}
+                                        target="_blank"
+                                        download>
                                         <LoadIcon className="size-6" />
                                     </a>
                                 ) : (
