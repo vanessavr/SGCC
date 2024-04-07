@@ -21,14 +21,10 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/iniciar-sesion', request.url))
     }
 
-    const ADMIN_ID = process.env.NEXT_PUBLIC_NESTJS_ROL_ADMIN_ID || ''
-    const INSTRUCTOR_ID = process.env.NEXT_PUBLIC_NESTJS_ROL_INSTRUCTOR_ID || ''
-    const EMPRESA_ID = process.env.NEXT_PUBLIC_NESTJS_ROL_EMPRESA_ID || ''
-    const PERSONA_ID = process.env.NEXT_PUBLIC_NESTJS_ROL_PERSONA_ID || ''
-
     // Definir las URLs permitidas para cada rol
     const allowedURLs: { [rolId: string]: string[] } = {
-        [ADMIN_ID]: [
+        'f8063ac9-1e73-4d60-a264-c736da396523': [
+            '/',
             '/iniciar-sesion',
             '/panel-principal',
             '/acceso-no-autorizado',
@@ -42,9 +38,19 @@ export function middleware(request: NextRequest) {
             '/solicitud',
             '/descarga-archivos',
         ],
-        [PERSONA_ID]: ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
-        [EMPRESA_ID]: ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
-        [INSTRUCTOR_ID]: ['/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/curso-asignado', '/solicitud', '/descarga-archivos'],
+        '78790651-423e-4adb-966a-6dc3351f0404': ['/', '/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
+        '1c62a88d-5d56-432c-a51c-a0273cab7d1d': ['/', '/iniciar-sesion', '/usuario-invitado', '/panel-principal', '/acceso-no-autorizado', '/perfil', '/area-de-formacion', '/solicitud'],
+        '9f8bcbb9-fa25-47d5-8317-f1d0498e6c4c': [
+            '/',
+            '/iniciar-sesion',
+            '/usuario-invitado',
+            '/panel-principal',
+            '/acceso-no-autorizado',
+            '/perfil',
+            '/curso-asignado',
+            '/solicitud',
+            '/descarga-archivos',
+        ],
     }
 
     const allowedURLsForRole = allowedURLs[tokenData?.rolId]
@@ -61,7 +67,10 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/acceso-no-autorizado', request.url))
     }
 
-    // Permitir el acceso si la URL está permitida para el rol actual
+    if (request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/iniciar-sesion' || request.nextUrl.pathname === '/usuario-invitado') {
+        // Si la URL es la raíz, redirigir a /panel-principal
+        return NextResponse.redirect(new URL('/panel-principal', request.url))
+    }
 }
 
 export const config = {
