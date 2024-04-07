@@ -87,7 +87,9 @@ export default function BackofficeLayout({
                             <strong>Rol:</strong> {rolNombre}
                         </small>
                     </div>
-                    <Button className="mt-4" onClick={handleSubmit}>
+                    <Button
+                        className="mt-4"
+                        onClick={handleSubmit}>
                         Cerrar sesión
                     </Button>
                 </div>
@@ -96,14 +98,18 @@ export default function BackofficeLayout({
                 <nav className="p-6">
                     <ul className="flex flex-col space-y-7 text-sm">
                         <li>
-                            <Link href="/panel-principal" className="flex items-center text-white">
+                            <Link
+                                href="/panel-principal"
+                                className="flex items-center text-white">
                                 <HomeIcon className=" mr-2 size-6" /> Inicio
                             </Link>
                         </li>
 
                         {rolId == adminId && (
                             <li>
-                                <Link href="/ambiente" className="flex items-center text-white">
+                                <Link
+                                    href="/ambiente"
+                                    className="flex items-center text-white">
                                     <AmbienteIcon className="mr-2 size-6" />
                                     Ambientes
                                 </Link>
@@ -112,7 +118,9 @@ export default function BackofficeLayout({
 
                         {rolId == adminId || rolId == empresaId || rolId == personaId ? (
                             <li>
-                                <Link href="/area-de-formacion" className="flex items-center text-white">
+                                <Link
+                                    href="/area-de-formacion"
+                                    className="flex items-center text-white">
                                     <AmbienteIcon className="mr-2 size-6" />
                                     Áreas de formación
                                 </Link>
@@ -121,7 +129,9 @@ export default function BackofficeLayout({
 
                         {rolId == adminId || rolId == instructorId ? (
                             <li>
-                                <Link href="/curso-asignado" className="flex items-center text-white">
+                                <Link
+                                    href="/curso-asignado"
+                                    className="flex items-center text-white">
                                     <CalendarIcon className="mr-2 size-6" />
                                     Cursos asignados
                                 </Link>
@@ -130,7 +140,9 @@ export default function BackofficeLayout({
 
                         {rolId == adminId && (
                             <li>
-                                <Link href="/curso-complementario" className="flex items-center text-white">
+                                <Link
+                                    href="/curso-complementario"
+                                    className="flex items-center text-white">
                                     <DocumentIcon className="mr-2 size-6" />
                                     Cursos complementarios
                                 </Link>
@@ -139,7 +151,9 @@ export default function BackofficeLayout({
 
                         {rolId == adminId || rolId == instructorId ? (
                             <li>
-                                <Link href="/descarga-archivos" className="flex items-center text-white">
+                                <Link
+                                    href="/descarga-archivos"
+                                    className="flex items-center text-white">
                                     <LoadIcon className="mr-2 size-6" />
                                     Descarga de archivos
                                 </Link>
@@ -148,7 +162,9 @@ export default function BackofficeLayout({
 
                         {rolId == adminId && (
                             <li>
-                                <Link href="/empresa" className="flex items-center text-white">
+                                <Link
+                                    href="/empresa"
+                                    className="flex items-center text-white">
                                     <EmpresaIcon className="mr-2 size-6" />
                                     Empresas
                                 </Link>
@@ -156,14 +172,18 @@ export default function BackofficeLayout({
                         )}
 
                         <li>
-                            <Link href="/perfil" className="flex items-center text-white">
+                            <Link
+                                href="/perfil"
+                                className="flex items-center text-white">
                                 <UserIcon className="mr-2 size-6" /> Perfil
                             </Link>
                         </li>
 
                         {rolId == adminId || rolId == instructorId || rolId == empresaId || rolId == personaId ? (
                             <li>
-                                <Link href="/solicitud" className="flex items-center text-white">
+                                <Link
+                                    href="/solicitud"
+                                    className="flex items-center text-white">
                                     <CalendarIcon className="mr-2 size-6" />
                                     Solicitudes
                                 </Link>
@@ -172,7 +192,9 @@ export default function BackofficeLayout({
 
                         {rolId == adminId && (
                             <li>
-                                <Link href="/usuario" className="flex items-center text-white">
+                                <Link
+                                    href="/usuario"
+                                    className="flex items-center text-white">
                                     <UsersIcon className="mr-2 size-6" />
                                     Usuarios
                                 </Link>

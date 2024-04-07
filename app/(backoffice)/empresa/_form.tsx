@@ -48,8 +48,8 @@ export default function FormularioEmpresa({ className, data }: Props) {
 
     useEffect(() => {
         if (data) {
-            // const { ambiente, ...formDataWithoutAmbiente } = data
-            setFormData(data)
+            const { rolId, ...formDataWithoutRolId } = data
+            setFormData(formDataWithoutRolId)
         }
     }, [data])
 

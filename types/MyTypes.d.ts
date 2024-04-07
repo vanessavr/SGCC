@@ -98,6 +98,7 @@ interface Empresa {
     ciudad: string
     password: string
     foto: string
+    rolId?: string
     createdAt: Date
     updatedAt: Date
 }
