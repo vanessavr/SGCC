@@ -20,6 +20,7 @@ import { useRol } from '@/app/context/AppContext'
 import { useState } from 'react'
 import UploadIcon from '../components/svg/UploadIcon'
 import FormularioVerSolicitud from './_form-ver-solicitud'
+import LoadIcon from '../components/svg/LoadIcon'
 
 export default function Solicitud() {
     const { data: solicitudes, error } = useSWR<Solicitud[]>(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/solicitud`, fetcher)
@@ -88,7 +89,9 @@ export default function Solicitud() {
 
             {rolId == adminId && (
                 <div className="my-6">
-                    <Link href="/solicitud/crear" className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
+                    <Link
+                        href="/solicitud/crear"
+                        className="rounded-full pl-4 pr-6 py-2 text-white bg-sena-800">
                         <PlusIcon className="mr-2 inline-block" />
                         Registrar
                     </Link>
@@ -103,6 +106,7 @@ export default function Solicitud() {
                         <TableHead>Fecha de la solicitud</TableHead>
                         <TableHead>Estado de solicitud</TableHead>
                         {rolId !== instructorId && <TableHead>Cargar archivo</TableHead>}
+                        {rolId == instructorId && <TableHead>Descarga de archivo</TableHead>}
                         <TableHead>Acción</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -119,7 +123,9 @@ export default function Solicitud() {
                                     {rolId == adminId || rolId == instructorId ? (
                                         <Dialog>
                                             <DialogTrigger>
-                                                <Button onClick={() => setSolicitudData(solicitud)} className="ml-6">
+                                                <Button
+                                                    onClick={() => setSolicitudData(solicitud)}
+                                                    className="ml-6">
                                                     <EditEstadoIcon />
                                                 </Button>
                                             </DialogTrigger>
@@ -129,11 +135,19 @@ export default function Solicitud() {
                                                     <DialogTitle className="text-center text-md text-white">Estado de solicitud</DialogTitle>
                                                 </DialogHeader>
 
-                                                <form onSubmit={handleEstadoSubmit} className="px-8 grid grid-cols-2 space-y-6 pb-8">
-                                                    <Label htmlFor="" className="font-bold self-center">
+                                                <form
+                                                    onSubmit={handleEstadoSubmit}
+                                                    className="px-8 grid grid-cols-2 space-y-6 pb-8">
+                                                    <Label
+                                                        htmlFor=""
+                                                        className="font-bold self-center">
                                                         Estado de solicitud:
                                                     </Label>
-                                                    <Select name="estadoSolicitud" value={estadoSolicitud || undefined} onValueChange={(value) => setEstadoSolicitud(value)} required>
+                                                    <Select
+                                                        name="estadoSolicitud"
+                                                        value={estadoSolicitud || undefined}
+                                                        onValueChange={(value) => setEstadoSolicitud(value)}
+                                                        required>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Seleccione el estado" />
                                                         </SelectTrigger>
@@ -143,10 +157,16 @@ export default function Solicitud() {
                                                         </SelectContent>
                                                     </Select>
 
-                                                    <Label htmlFor="" className="font-bold self-center">
+                                                    <Label
+                                                        htmlFor=""
+                                                        className="font-bold self-center">
                                                         Motivo de estado:
                                                     </Label>
-                                                    <Select name="motivoSolicitud" value={motivoSolicitud || undefined} onValueChange={(value) => setMotivoSolicitud(value)} required>
+                                                    <Select
+                                                        name="motivoSolicitud"
+                                                        value={motivoSolicitud || undefined}
+                                                        onValueChange={(value) => setMotivoSolicitud(value)}
+                                                        required>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Seleccione un motivo" />
                                                         </SelectTrigger>
@@ -185,7 +205,9 @@ export default function Solicitud() {
                                 <TableCell>
                                     <Dialog>
                                         <DialogTrigger>
-                                            <Button onClick={() => setSolicitudId(solicitud.id)} className="ml-6">
+                                            <Button
+                                                onClick={() => setSolicitudId(solicitud.id)}
+                                                className="ml-6">
                                                 <UploadIcon />
                                             </Button>
                                         </DialogTrigger>
@@ -195,14 +217,38 @@ export default function Solicitud() {
                                                 <DialogTitle className="text-center text-md text-white">Cargar archivo</DialogTitle>
                                             </DialogHeader>
 
-                                            <form onSubmit={handleFileSubmit} className="flex flex-col mt-4 gap-6 items-center justify-center">
-                                                <input type="file" id="fileInput" placeholder="Cargar desde el computador" accept=".zip,.pdf" name="file" />
+                                            <form
+                                                onSubmit={handleFileSubmit}
+                                                className="flex flex-col mt-4 gap-6 items-center justify-center">
+                                                <input
+                                                    type="file"
+                                                    id="fileInput"
+                                                    placeholder="Cargar desde el computador"
+                                                    accept=".zip,.pdf"
+                                                    name="file"
+                                                />
                                                 <Button className="rounded-full font-bold py-2 px-4 w-40">Subir</Button>
                                             </form>
                                         </DialogContent>
                                     </Dialog>
                                 </TableCell>
                             )}
+
+                            {rolId == adminId || rolId == instructorId ? (
+                                <TableCell>
+                                    {solicitud.archivo ? (
+                                        <a
+                                            className="ml-16"
+                                            href={`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/uploads/${solicitud.archivo}`}
+                                            target="_blank"
+                                            download>
+                                            <LoadIcon className="size-6" />
+                                        </a>
+                                    ) : (
+                                        <small>No se ha cargado un archivo aún</small>
+                                    )}
+                                </TableCell>
+                            ) : null}
 
                             <TableCell>
                                 <div className="flex gap-2">
@@ -263,7 +309,9 @@ function DeleteButton({ solicitud }: { solicitud: Solicitud }) {
                     <DialogClose asChild>
                         <Button className="rounded-full text-center bg-gray-200 text-black border-">Cancelar</Button>
                     </DialogClose>
-                    <Button className="rounded-full items-center text-center bg-red-500" onClick={handleClick}>
+                    <Button
+                        className="rounded-full items-center text-center bg-red-500"
+                        onClick={handleClick}>
                         Confirmar
                     </Button>
                 </DialogFooter>
