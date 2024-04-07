@@ -40,9 +40,13 @@ export default function FormularioSolicitud({ className, data }: Props) {
 
             response = await saveSolicitud(formData as Solicitud)
 
-            if (response?.statusCode === 400) {
+            let statusCode = response?.statusCode > 0
+
+            if (response?.statusCode) {
                 handleErrorsToast(response)
-            } else {
+            }
+
+            if (!statusCode) {
                 toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
             }
         } catch (error) {

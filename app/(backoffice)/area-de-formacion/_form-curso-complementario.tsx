@@ -43,9 +43,13 @@ export default function FormularioCursoComplementario({ cursoComplementario }: P
                     response = await applySolicitud(cursoComplementario.id, formData)
                 }
 
-                if (response?.statusCode === 400) {
+                let statusCode = response?.statusCode > 0
+
+                if (response?.statusCode) {
                     handleErrorsToast(response)
-                } else {
+                }
+
+                if (!statusCode) {
                     toast({ title: '✔️', description: 'Solicitud guardada satisfactoriamente' })
                 }
             }

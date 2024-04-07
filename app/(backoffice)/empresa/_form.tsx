@@ -61,9 +61,13 @@ export default function FormularioEmpresa({ className, data }: Props) {
 
             response = await saveEmpresa(formData as Empresa)
 
-            if (response?.statusCode === 400) {
+            let statusCode = response?.statusCode > 0
+
+            if (response?.statusCode) {
                 handleErrorsToast(response)
-            } else {
+            }
+
+            if (!statusCode) {
                 toast({ title: '✔️', description: 'Empresa guardada satisfactoriamente' })
             }
         } catch (error) {

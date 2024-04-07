@@ -84,9 +84,13 @@ export default function FormularioUsuario({ className, data, esRegistro = false 
 
             response = await savePersona(formData as Persona)
 
-            if (response?.statusCode === 400) {
+            let statusCode = response?.statusCode > 0
+
+            if (response?.statusCode) {
                 handleErrorsToast(response)
-            } else {
+            }
+
+            if (!statusCode) {
                 toast({ title: '✔️', description: 'Usuario guardado satisfactoriamente' })
             }
         } catch (error) {

@@ -65,9 +65,13 @@ const FormularioCurso = ({ className, data }: Props) => {
 
             response = await saveCursoComplementario(formData as CursoComplementario)
 
-            if (response?.statusCode === 400) {
+            let statusCode = response?.statusCode > 0
+
+            if (response?.statusCode) {
                 handleErrorsToast(response)
-            } else {
+            }
+
+            if (!statusCode) {
                 toast({ title: '✔️', description: 'Curso complementario guardado satisfactoriamente' })
             }
         } catch (error) {

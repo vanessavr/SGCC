@@ -62,7 +62,7 @@ export default function FormularioUsuarioInvitado({ className, data }: Props) {
 
             let statusCode = response?.statusCode > 0
 
-            if (response?.statusCode === 400) {
+            if (response?.statusCode) {
                 handleErrorsToast(response)
             }
 

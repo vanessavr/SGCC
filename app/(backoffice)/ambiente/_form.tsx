@@ -33,9 +33,13 @@ export default function FormularioAmbiente({ className, data }: Props) {
 
             response = await saveAmbiente(formData as Ambiente)
 
-            if (response?.statusCode === 400) {
+            let statusCode = response?.statusCode > 0
+
+            if (response?.statusCode) {
                 handleErrorsToast(response)
-            } else {
+            }
+
+            if (!statusCode) {
                 toast({ title: '✔️', description: 'Ambiente guardado satisfactoriamente' })
             }
         } catch (error) {
