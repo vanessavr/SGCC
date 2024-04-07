@@ -38,6 +38,8 @@ export default function BackofficeLayout({
                 },
             })
 
+            document.cookie = `accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+
             // Redireccionar a la página de inicio de sesión
             router.push('/iniciar-sesion')
         } catch (error: any) {
