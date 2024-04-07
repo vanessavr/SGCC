@@ -40,6 +40,16 @@ export default function InicioSesion() {
             const token = data.token // Suponiendo que el token está en la propiedad 'token'
 
             if (token) {
+                const cookieOptions = {
+                    domain: process.env.NEXT_PUBLIC_DOMAIN,
+                    secure: true,
+                    httpOnly: true,
+                    maxAge: 24 * 60 * 60,
+                }
+
+                const cookieString = `accessToken=${token}; domain=${cookieOptions.domain}; maxAge=${cookieOptions.maxAge}; secure;`
+                document.cookie = cookieString
+
                 // Redireccionar al panel principal
                 router.push('/panel-principal')
             } else {
