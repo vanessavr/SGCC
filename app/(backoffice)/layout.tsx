@@ -29,16 +29,16 @@ export default function BackofficeLayout({
 
     const handleSubmit = async () => {
         try {
-            await fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/logout`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            })
+            // await fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/logout`, {
+            //     method: 'POST',
+            //     credentials: 'include',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         Accept: 'application/json',
+            //     },
+            // })
 
-            document.cookie = `accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+            document.cookie = `accessToken=; domain=${process.env.NEXT_PUBLIC_DOMAIN}; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure;`
 
             // Redireccionar a la página de inicio de sesión
             router.push('/iniciar-sesion')
