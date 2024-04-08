@@ -115,7 +115,7 @@ export default function FormularioEmpresa({ className, data }: Props) {
                 name="representanteLegal"
                 value={formData?.representanteLegal || ''}
                 onChange={(event) => handleChange('representanteLegal', event.target.value)}
-                placeholder="Nombre del representante legal"
+                placeholder="Nombre de la persona a cargo"
                 className="rounded-full"
                 required
             />
